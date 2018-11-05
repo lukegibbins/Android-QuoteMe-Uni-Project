@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">QuoteMe</string>
+    <string name="app_login">Login</string>
+    <string name="app_password">Password</string>
+    <string name="app_email">Email</string>
+    <string name="app_notMember">Not a member? Sign up now</string>
+</resources>
