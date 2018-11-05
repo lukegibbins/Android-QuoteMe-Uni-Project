@@ -20,6 +20,9 @@
         </activity>
         <activity android:name=".SignUpActivity"
             android:label="@string/app_signup">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LoginActivity" />
         </activity>
     </application>
 
