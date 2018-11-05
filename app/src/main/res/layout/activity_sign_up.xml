@@ -88,8 +88,8 @@
 
     <Button
         android:id="@+id/buttonSignUp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="214dp"
+        android:layout_height="72dp"
         android:layout_marginBottom="50dp"
         android:text="@string/app_submit"
         app:layout_constraintBottom_toBottomOf="parent"
