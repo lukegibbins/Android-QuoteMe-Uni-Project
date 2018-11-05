@@ -5,4 +5,8 @@
     <string name="app_email">Email</string>
     <string name="app_notMember">Not a member? Sign up now</string>
     <string name="app_signup">Sign Up</string>
+    <string name="app_firstName">First Name</string>
+    <string name="app_surname">Surname</string>
+    <string name="app_confirmPassword">Confirm Password</string>
+    <string name="app_submit">Submit</string>
 </resources>
