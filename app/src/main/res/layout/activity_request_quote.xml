@@ -171,14 +171,15 @@
 
     <Button
         android:id="@+id/buttonSubmit"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_width="194dp"
+        android:layout_height="52dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/custom_edit_text_bg_blue"
         android:text="@string/app_submit"
         android:textColor="@color/primaryTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.557"
         app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
