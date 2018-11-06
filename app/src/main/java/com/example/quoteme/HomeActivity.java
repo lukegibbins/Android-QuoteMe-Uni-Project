@@ -37,14 +37,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch(item.getItemId()){
-//            case R.id.action_background_red:
-//                relativeLayout.setBackgroundColor(getResources().getColor(R.color.colorRed));
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.action_manageQuotes:
+                Intent i = new Intent(this, ManageQuoteActivity.class);
+                startActivity(i);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
