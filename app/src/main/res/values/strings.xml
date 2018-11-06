@@ -17,4 +17,5 @@
     <string name="app_premium">Premium</string>
     <string name="app_signout">Sign Out</string>
     <string name="app_manageQuotes">Manage My Quotes</string>
+    <string name="app_requestQuote">Request Quote</string>
 </resources>
