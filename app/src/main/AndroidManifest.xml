@@ -35,13 +35,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomeActivity" />
         </activity>
-        <activity
-            android:name=".ManageQuoteActivity"
-            android:label="@string/app_manageQuotes"
-            android:parentActivityName=".HomeActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".HomeActivity" />
+        <activity android:name=".ManageQuoteActivity"
+            android:label="@string/app_manageQuotes">
         </activity>
     </application>
 

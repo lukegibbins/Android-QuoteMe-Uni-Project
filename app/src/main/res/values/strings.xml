@@ -32,7 +32,24 @@
         <item>Electrician</item>
         <item>Other</item>
     </string-array>
+    <string-array name="app_listMyQuotes">
+        <item>Can somebody fix my shed?</item>
+        <item>Plumber wanted! Toilets leaking</item>
+        <item>Need a gardener ASAP. Running low on connifer trees</item>
+        <item>Pigeons have been pecking at the tiles on the roof. Send help!</item>
+        <item>Pigeons have been pecking at the tiles on the roof. Send help!</item>
+        <item>Pigeons have been pecking at the tiles on the roof. Send help!</item>
+        <item>Pigeons have been pecking at the tiles on the roof. Send help!</item>
+        <item>Pigeons have been pecking at the tiles on the roof. Send help!</item>
+        <item>Pigeons have been pecking at the tiles on the roof. Send help!</item>
+        <item>Pigeons have been pecking at the tiles on the roof. Send help!</item>
+    </string-array>
     <string name="app_success">Successfully Submitted</string>
     <string name="title_activity_manage_quote">ManageQuoteActivity</string>
+    <string name="app_actionAdd">Action</string>
+    <string name="app_actionClick">Click \'Action\' to request new quote</string>
+    <string name="app_editQuotes">Edit</string>
+    <string name="app_deleteQuotes">Delete</string>
+
 
 </resources>
