@@ -9,4 +9,12 @@
     <string name="app_surname">Surname</string>
     <string name="app_confirmPassword">Confirm Password</string>
     <string name="app_submit">Submit</string>
+    <string name="app_requestWork">Request Work</string>
+    <string name="app_searchWork">Search Work</string>
+    <string name="app_quoteMeTitle">Welcome to QuoteMe!</string>
+    <string name="app_notif">Notifications</string>
+    <string name="app_account">Account</string>
+    <string name="app_premium">Premium</string>
+    <string name="app_signout">Sign Out</string>
+    <string name="app_manageQuotes">Manage My Quotes</string>
 </resources>
