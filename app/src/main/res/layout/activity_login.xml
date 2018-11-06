@@ -54,7 +54,7 @@
         android:layout_width="214dp"
         android:layout_height="72dp"
         android:layout_marginTop="96dp"
-        android:background="@color/primaryDarkColor"
+        android:background="@drawable/custom_edit_text_bg_blue"
         android:text="@string/app_login"
         android:textColor="@color/primaryTextColor"
         app:layout_constraintEnd_toEndOf="@+id/editPassword"

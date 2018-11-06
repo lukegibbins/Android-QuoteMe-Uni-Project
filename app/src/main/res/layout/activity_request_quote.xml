@@ -127,6 +127,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:entries="@array/app_vendors"
+        android:background="@drawable/custom_edit_text_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView5"
         app:layout_constraintTop_toBottomOf="@+id/editTel" />
@@ -156,17 +157,21 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
+        android:background="@drawable/custom_edit_text_bg_blue"
         android:text="@string/app_imageHint"
+        android:textColor="@color/primaryTextColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageCam"
         app:layout_constraintTop_toBottomOf="@+id/editDesc" />
 
     <Button
         android:id="@+id/buttonSubmit"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/custom_edit_text_bg_blue"
         android:text="@string/app_submit"
+        android:textColor="@color/primaryTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
