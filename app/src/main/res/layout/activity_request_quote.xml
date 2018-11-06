@@ -8,14 +8,14 @@
     tools:layout_editor_absoluteY="81dp">
 
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/imageCam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/button5"
-        app:srcCompat="@drawable/baseline_title_black_18dp" />
+        app:layout_constraintTop_toTopOf="@+id/buttonImageUp"
+        app:srcCompat="@drawable/baseline_photo_camera_black_18dp" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -24,7 +24,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editText21"
+        app:layout_constraintTop_toTopOf="@+id/editDesc"
         app:srcCompat="@drawable/baseline_description_black_18dp" />
 
     <ImageView
@@ -34,7 +34,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/spinner4"
+        app:layout_constraintTop_toTopOf="@+id/spinnerVendors"
         app:srcCompat="@drawable/baseline_build_black_18dp" />
 
     <ImageView
@@ -45,9 +45,8 @@
         android:layout_marginLeft="24dp"
         android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editText19"
-        app:srcCompat="@drawable/baseline_title_black_18dp"
-        tools:srcCompat="@drawable/baseline_phone_black_18dp" />
+        app:layout_constraintTop_toTopOf="@+id/editTel"
+        app:srcCompat="@drawable/baseline_title_black_18dp" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -57,7 +56,7 @@
         android:layout_marginLeft="24dp"
         android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editText17"
+        app:layout_constraintTop_toTopOf="@+id/editTitle"
         app:srcCompat="@drawable/baseline_title_black_18dp" />
 
     <ImageView
@@ -67,11 +66,11 @@
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editText18"
+        app:layout_constraintTop_toTopOf="@+id/editLocation"
         app:srcCompat="@drawable/baseline_location_on_black_18dp" />
 
     <EditText
-        android:id="@+id/editText19"
+        android:id="@+id/editTel"
         android:layout_width="278dp"
         android:layout_height="42dp"
         android:layout_marginStart="16dp"
@@ -84,10 +83,10 @@
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toBottomOf="@+id/editText18" />
+        app:layout_constraintTop_toBottomOf="@+id/editLocation" />
 
     <EditText
-        android:id="@+id/editText17"
+        android:id="@+id/editTitle"
         android:layout_width="278dp"
         android:layout_height="42dp"
         android:layout_marginStart="16dp"
@@ -103,7 +102,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editText18"
+        android:id="@+id/editLocation"
         android:layout_width="278dp"
         android:layout_height="42dp"
         android:layout_marginStart="16dp"
@@ -116,10 +115,10 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toBottomOf="@+id/editText17" />
+        app:layout_constraintTop_toBottomOf="@+id/editTitle" />
 
     <Spinner
-        android:id="@+id/spinner4"
+        android:id="@+id/spinnerVendors"
         android:layout_width="276dp"
         android:layout_height="61dp"
         android:layout_marginStart="16dp"
@@ -130,10 +129,10 @@
         android:entries="@array/app_vendors"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView5"
-        app:layout_constraintTop_toBottomOf="@+id/editText19" />
+        app:layout_constraintTop_toBottomOf="@+id/editTel" />
 
     <EditText
-        android:id="@+id/editText21"
+        android:id="@+id/editDesc"
         android:layout_width="273dp"
         android:layout_height="59dp"
         android:layout_marginStart="16dp"
@@ -146,10 +145,10 @@
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView6"
-        app:layout_constraintTop_toBottomOf="@+id/spinner4" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerVendors" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/buttonImageUp"
         android:layout_width="287dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -159,11 +158,11 @@
         android:layout_marginRight="16dp"
         android:text="@string/app_imageHint"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView7"
-        app:layout_constraintTop_toBottomOf="@+id/editText21" />
+        app:layout_constraintStart_toEndOf="@+id/imageCam"
+        app:layout_constraintTop_toBottomOf="@+id/editDesc" />
 
     <Button
-        android:id="@+id/button6"
+        android:id="@+id/buttonSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
