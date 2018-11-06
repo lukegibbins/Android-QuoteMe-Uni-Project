@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".SignUpActivity">
 
+    <!--*** THIS IS THE SIGN UP XML WHICH ALLOWS USERS TO SIGN UP.
+            IT USES A CONSTRAINT LAYOUT AND HAS A CUSTOM DESIGNED BUTTON
+            AT THE BOTTOM. THIS IS THE CHILD CLASS OF ITS PARENT, 'LOGIN'.
+            ***-->
+
     <EditText
         android:id="@+id/editFirstName"
         android:layout_width="wrap_content"

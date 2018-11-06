@@ -1,3 +1,5 @@
+<!--THESE ARE THE STRING VARIABLES WHICH HAVE BEEN REFERENCED THROUGHOUT THE APPLICATION-->
+
 <resources>
     <string name="app_name">QuoteMe</string>
     <string name="app_login">Login</string>

@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
+    <!--*** THIS IS THE LOGIN XML WHICH ALLOWS USERS TO LOGIN TO THE HOME SCREEN.
+            IT USES A CONSTRAINT LAYOUT AND HAS A CUSTOM DESIGNED BUTTON
+            AT THE BOTTOM. THIS IS THE LANDING SCREEN
+            ***-->
 
     <EditText
         android:id="@+id/editEmail"

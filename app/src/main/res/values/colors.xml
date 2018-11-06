@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--*** THIS XML DISPLAYS THE RANGE OF COLOUR USED IN THE APPLICATION. THE COLOURS HAVE BEEN TAKEN FROM MATERIAL.IO
+        WHERE THEY HAVE BEEN TESTED
+         ***-->
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
         <color name="primaryColor">#0d47a1</color>
         <color name="primaryLightColor">#5472d3</color>
-        <color name="primaryDarkColor">#002171</color>
+        <color name="primaryDarkColor">#002171</color>   <!--USED IN APP BAR AND BUTTONS-->
         <color name="secondaryColor">#ff9800</color>
         <color name="secondaryLightColor">#ffc947</color>
-        <color name="secondaryDarkColor">#c66900</color>
-        <color name="primaryTextColor">#ffffff</color>
+        <color name="secondaryDarkColor">#c66900</color>  <!--USED IN APP BAR AND BORDERING-->
+        <color name="primaryTextColor">#ffffff</color>    <!--USED IN TEXT-->
         <color name="secondaryTextColor">#000000</color>
 </resources>
 

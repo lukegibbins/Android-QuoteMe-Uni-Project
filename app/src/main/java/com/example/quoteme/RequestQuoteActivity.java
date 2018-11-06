@@ -15,12 +15,16 @@ import es.dmoral.toasty.Toasty;
 public class RequestQuoteActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button buttonSubmit;
+    Button buttonImageUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_quote);
 
+
+        buttonImageUp = findViewById(R.id.buttonImageUp);
+        buttonImageUp.setOnClickListener(this);
 
         buttonSubmit = findViewById(R.id.buttonSubmit);
         buttonSubmit.setOnClickListener(this);
@@ -29,7 +33,10 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         if (v == buttonSubmit) {
-            Toasty.info(this, getString(R.string.app_success), Toast.LENGTH_SHORT).show();
+            Toasty.success(this, getString(R.string.app_success), Toast.LENGTH_SHORT).show();
+        }
+        else if (v == buttonImageUp){
+            Toasty.success(this, getString(R.string.app_success), Toast.LENGTH_SHORT).show();
         }
     }
 
