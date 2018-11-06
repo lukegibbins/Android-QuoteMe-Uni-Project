@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- ***MENU***-->
-<menu xmlns:tools="http://schemas.android.com/tools"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <item android:id="@+id/action_account"
-        android:title="@string/app_account"
+    <item
+        android:id="@+id/action_notification"
+        android:icon="@drawable/baseline_notification_important_white_36"
+        android:title="@string/app_notif"
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/action_account"
         android:icon="@drawable/outline_account_circle_white_36"
+        android:title="@string/app_account"
         app:showAsAction="always">
         <!-- ***SUB MENU***-->
         <menu>
-        <item android:id="@+id/action_signout"
-        android:title="@string/app_signout" />
-            <item android:id="@+id/action_manageQuotes"
-                android:title="@string/app_manageQuotes" />
+            <item
+                android:id="@+id/action_signout"
+                android:title="@string/app_signout"></item>
+            <item
+                android:id="@+id/action_manageQuotes"
+                android:title="@string/app_manageQuotes"></item>
         </menu>
+        <!-- ***SUB MENU***-->
     </item>
 
-    <item android:id="@+id/action_premium"
+    <item
+        android:id="@+id/action_premium"
         android:title="@string/app_premium"
-        android:icon="@drawable/baseline_star_black_36"
-        app:showAsAction="never"/>
-</menu>
-    <!-- ***MENU***-->
+        app:showAsAction="never" />
+</menu><!-- ***MENU***-->
