@@ -25,4 +25,12 @@
     <string name="app_description">Description of Work</string>
     <string name="app_imageUpload">Image Upload</string>
     <string name="app_imageHint">Add image of required work...</string>
+    <string-array name="app_vendors">
+        <item>Building</item>
+        <item>Gardening</item>
+        <item>Pluming</item>
+        <item>Electrician</item>
+        <item>Other</item>
+    </string-array>
+
 </resources>
