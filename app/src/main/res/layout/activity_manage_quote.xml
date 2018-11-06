@@ -13,7 +13,7 @@
     tools:layout_editor_absoluteY="81dp">
 
     <Button
-        android:id="@+id/buttonDelete"
+        android:id="@+id/buttonDelete234"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -23,10 +23,10 @@
         android:text="@string/app_deleteQuotes"
         android:textColor="@color/primaryTextColor"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonEdit2" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonEdit234" />
 
     <Button
-        android:id="@+id/buttonEdit2"
+        android:id="@+id/buttonEdit234"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
