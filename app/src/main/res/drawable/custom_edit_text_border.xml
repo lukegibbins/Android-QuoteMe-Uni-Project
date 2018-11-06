@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--***CUSTOM XML SHAPE CREATED TO DEFINE THE BORDER AND BACKGROUND
+       OF SPECIFIC VIEWS. THIS HAS BEEN USED ON VARIOUS TEXT VIEWS.
+       THIS CAN ALLOW THE MANIPULATING OF CORNERS AND COLOUR***-->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
 
+    <!--***DEFINES CORNERS***-->
     <corners
         android:bottomRightRadius="15dp"
         android:bottomLeftRadius="15dp"
         android:topLeftRadius="15dp"
         android:topRightRadius="15dp"/>
+
+    <!--***DEFINES BORDERS***-->
     <stroke
         android:color="#D3D3D3"
         android:width="2dp" />

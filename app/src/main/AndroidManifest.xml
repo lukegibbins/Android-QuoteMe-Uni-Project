@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.quoteme">
 
+
+    <!--*** This is he manifest file which contains data regarding each activity ***-->
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,6 +24,10 @@
         <activity
             android:name=".SignUpActivity"
             android:label="@string/app_signup">
+
+            <!--***DEFINES PARENT ACTIVITY TO ALL YOU GO GO BACK TO WHERE YOU LAST CAME***-->
+            <!--***ANDROID:LABEL DEFINES THE NAME AT THE TOP OF THE APP BAR***-->
+            <!--***SAME APPLIES TO ALL**-->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".LoginActivity" />

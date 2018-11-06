@@ -45,6 +45,7 @@
         android:gravity="center"
         android:text="@string/app_notMember"
         android:textAllCaps="false"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/buttonLogin"
         app:layout_constraintStart_toStartOf="@+id/buttonLogin"
         app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
