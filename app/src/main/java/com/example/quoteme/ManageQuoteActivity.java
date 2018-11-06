@@ -25,7 +25,7 @@ public class ManageQuoteActivity extends AppCompatActivity implements View.OnCli
         buttonDel = findViewById(R.id.buttonDelete234);
         buttonEdit = findViewById(R.id.buttonEdit234);
 
-        buttonDel.setOnClickListener(this);
+        buttonEdit.setOnClickListener(this);
         buttonDel.setOnClickListener(this);
 
 
