@@ -12,6 +12,23 @@
     tools:context=".ManageQuoteActivity"
     tools:layout_editor_absoluteY="81dp">
 
+    <TextView
+        android:id="@+id/textTitle2"
+        android:layout_width="354dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Select Quote"
+        android:textSize="30sp"
+        app:fontFamily="sans-serif"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.428"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/buttonDelete234"
         android:layout_width="wrap_content"
@@ -29,6 +46,7 @@
         android:id="@+id/buttonEdit234"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:background="@drawable/custom_edit_text_bg_blue"
@@ -39,18 +57,17 @@
 
     <ListView
         android:id="@+id/_dynamicQuotes"
-        android:layout_width="264dp"
-        android:layout_height="432dp"
+        android:layout_width="261dp"
+        android:layout_height="440dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/custom_edit_text_border"
         android:entries="@array/app_listMyQuotes"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.418" />
+        app:layout_constraintTop_toBottomOf="@+id/textTitle2" />
 
 
 </android.support.constraint.ConstraintLayout>
