@@ -18,7 +18,7 @@
     <string name="app_account">Account</string>
     <string name="app_premium">Premium</string>
     <string name="app_signout">Sign Out</string>
-    <string name="app_manageQuotes">Manage My Quotes</string>
+    <string name="app_manageQuotes">Manage Quotes</string>
     <string name="app_requestQuote">Request Quote</string>
     <string name="app_quoteTitle">Quote Title</string>
     <string name="app_trade">Trade</string>
@@ -52,6 +52,7 @@
     <string name="app_actionClick">Click \'Action\' to request new quote</string>
     <string name="app_editQuotes">Edit</string>
     <string name="app_deleteQuotes">Delete</string>
+    <string name="app_selectQuote">Select Quote</string>
 
 
 </resources>
