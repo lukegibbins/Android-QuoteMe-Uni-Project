@@ -14,6 +14,7 @@
             android:label="@string/app_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -26,13 +27,22 @@
         </activity>
         <activity
             android:name=".HomeActivity"
-            android:label="Home"></activity>
-        <activity android:name=".RequestQuoteActivity"
+            android:label="Home" />
+        <activity
+            android:name=".RequestQuoteActivity"
             android:label="@string/app_requestQuote">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomeActivity" />
+        </activity>
+        <activity
+            android:name=".ManageQuoteActivity"
+            android:label="@string/title_activity_manage_quote"
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.quoteme.HomeActivity" />
         </activity>
     </application>
 

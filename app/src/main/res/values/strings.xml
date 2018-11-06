@@ -33,5 +33,6 @@
         <item>Other</item>
     </string-array>
     <string name="app_success">Successfully Submitted</string>
+    <string name="title_activity_manage_quote">ManageQuoteActivity</string>
 
 </resources>
