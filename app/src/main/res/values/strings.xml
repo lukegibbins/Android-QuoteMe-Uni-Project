@@ -32,5 +32,6 @@
         <item>Electrician</item>
         <item>Other</item>
     </string-array>
+    <string name="app_success">Successfully Submitted</string>
 
 </resources>
