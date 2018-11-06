@@ -18,4 +18,11 @@
     <string name="app_signout">Sign Out</string>
     <string name="app_manageQuotes">Manage My Quotes</string>
     <string name="app_requestQuote">Request Quote</string>
+    <string name="app_quoteTitle">Quote Title</string>
+    <string name="app_trade">Trade</string>
+    <string name="app_Location">Location</string>
+    <string name="app_tel">Contact Number</string>
+    <string name="app_description">Description of Work</string>
+    <string name="app_imageUpload">Image Upload</string>
+    <string name="app_imageHint">Add image of required work...</string>
 </resources>
