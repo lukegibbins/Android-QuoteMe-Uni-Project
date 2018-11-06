@@ -37,12 +37,11 @@
         </activity>
         <activity
             android:name=".ManageQuoteActivity"
-            android:label="@string/title_activity_manage_quote"
-            android:parentActivityName=".HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/app_manageQuotes"
+            android:parentActivityName=".HomeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.quoteme.HomeActivity" />
+                android:value=".HomeActivity" />
         </activity>
     </application>
 
