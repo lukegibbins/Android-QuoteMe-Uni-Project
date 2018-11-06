@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!--THIS REPRESENTS THE NOTIFICATION ICON AS PART OF THE EXTENDED TASK-->
     <item
         android:id="@+id/action_notification"
         android:icon="@drawable/baseline_notification_important_white_24"
@@ -12,12 +13,15 @@
         app:showAsAction="always">
     </item>
 
+    <!--THIS REPRESENTS THE PROFILE ICON. WHEN IT IS CLICKED A SUBMENU WILL APPEAR
+       CONTAINED 2 ITEMS. SEE SUBMENU BELOW-->
     <item
         android:id="@+id/action_account"
         android:icon="@drawable/outline_account_circle_white_36"
         android:title="@string/app_account"
         app:showAsAction="always">
         <!-- ***SUB MENU***-->
+        <!-- ***THE SUB MENU HERE ALLOW THE USERS TO SIGN OUT OR MANAGE THEIR QUOTES***-->
         <menu>
             <item
                 android:id="@+id/action_signout"
@@ -28,9 +32,10 @@
         </menu>
         <!-- ***SUB MENU***-->
     </item>
-
+    <!-- ***THIS IS THE OPTION FOR PREMIUM USERS IN THE STANDARD OPTIONS BAR***-->
     <item
         android:id="@+id/action_premium"
         android:title="@string/app_premium"
         app:showAsAction="never" />
-</menu><!-- ***MENU***-->
+</menu>
+    <!-- ***MENU***-->
