@@ -44,6 +44,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 Intent i = new Intent(this, ManageQuoteActivity.class);
                 startActivity(i);
                 return true;
+            case R.id.action_signout:
+                Intent ii = new Intent(this, LoginActivity.class);
+                startActivity(ii);
             default:
                 return super.onOptionsItemSelected(item);
         }
