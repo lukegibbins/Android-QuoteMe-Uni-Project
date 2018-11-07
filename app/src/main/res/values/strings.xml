@@ -35,16 +35,16 @@
         <item>Other</item>
     </string-array>
     <string-array name="app_listMyQuotes">
-        <item>Can somebody fix my shed?</item>
-        <item>Plumber wanted! Toilets leaking</item>
-        <item>Need a gardener ASAP. Running low on connifer trees</item>
-        <item>Pigeons have been pecking at the tiles on the roof. Send help!</item>
-        <item>Pigeons have been pecking at the tiles on the roof. Send help!</item>
-        <item>Pigeons have been pecking at the tiles on the roof. Send help!</item>
-        <item>Pigeons have been pecking at the tiles on the roof. Send help!</item>
-        <item>Pigeons have been pecking at the tiles on the roof. Send help!</item>
-        <item>Pigeons have been pecking at the tiles on the roof. Send help!</item>
-        <item>Pigeons have been pecking at the tiles on the roof. Send help!</item>
+        <item>Plumber Needed?</item>
+        <item>Builder wanted! New conservatory</item>
+        <item>Gardner Required</item>
+        <item>My tiles have blew of my roof!</item>
+        <item>I need electrical work completing in the kitchen</item>
+        <item>Plumber Needed?</item>
+        <item>Builder wanted! New conservatory</item>
+        <item>Gardner Required</item>
+        <item>My tiles have blew of my roof!</item>
+        <item>I need electrical work completing in the kitchen</item>
     </string-array>
     <string name="app_success">Successfully Submitted</string>
     <string name="title_activity_manage_quote">ManageQuoteActivity</string>
