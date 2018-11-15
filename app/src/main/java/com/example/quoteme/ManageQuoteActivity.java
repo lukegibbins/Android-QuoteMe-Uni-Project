@@ -11,24 +11,13 @@ import android.widget.Toast;
 
 import es.dmoral.toasty.Toasty;
 
-public class ManageQuoteActivity extends AppCompatActivity implements View.OnClickListener {
-
-    Button buttonDel;
-    Button buttonEdit;
+public class ManageQuoteActivity extends AppCompatActivity {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_quote);
-
-        buttonDel = findViewById(R.id.buttonDelete234);
-        buttonEdit = findViewById(R.id.buttonEdit234);
-
-        buttonEdit.setOnClickListener(this);
-        buttonDel.setOnClickListener(this);
-
-
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,15 +38,6 @@ public class ManageQuoteActivity extends AppCompatActivity implements View.OnCli
                 startActivity(ii);
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        if(v == buttonDel){
-            Toasty.success(this, getString(R.string.app_success), Toast.LENGTH_SHORT).show();
-        } else if (v == buttonEdit) {
-            Toasty.success(this, getString(R.string.app_success), Toast.LENGTH_SHORT).show();
         }
     }
 }
