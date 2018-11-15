@@ -9,15 +9,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
+
 
 import static com.example.quoteme.QuoteData.QuoteContract.QuoteEntry.TABLE_NAME;
 
 public class QuoteProvider extends ContentProvider {
 
-    public static final String LOG_TAG = QuoteProvider.class.getSimpleName();
-
-    private QuoteDbHelper quoteDBhelper;
+    private QuoteDbHelper quoteDbHelper;
 
     private static final int ALL_QUOTES = 100;
     private static final int SINGLE_QUOTE_ID = 101;
@@ -30,7 +28,8 @@ public class QuoteProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        return false;
+        quoteDbHelper = new QuoteDbHelper(getContext());
+        return true;
     }
 
     @Nullable
@@ -59,11 +58,10 @@ public class QuoteProvider extends ContentProvider {
     }
 
     private Uri insertPet(Uri uri, ContentValues values){
+        SQLiteDatabase database = quoteDbHelper.getWritableDatabase();
+        long id = database.insert(TABLE_NAME, null, values);
 
-        SQLiteDatabase writeToDatabase = quoteDBhelper.getWritableDatabase();
-        long id = writeToDatabase.insert(TABLE_NAME, null, values);
         if (id == -1) {
-            Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         }
         return ContentUris.withAppendedId(uri, id);

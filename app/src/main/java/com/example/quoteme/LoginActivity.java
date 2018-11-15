@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         buttonLogin = findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(this);
 
+        insertQuote();
     }
 
     @Override
@@ -40,6 +41,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
          else if (v == buttonLogin){
             Intent i = new Intent(this, HomeActivity.class);
+            insertQuote();
             startActivity(i);
         }
     }
@@ -50,10 +52,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE, "Building Required");
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION, "I need a builder");
-        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION, "Sunderland");
+        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE, "image.png");
+        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS, 1);
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE, "07854919121");
-        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS, 0);
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR, "Builder");
+        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION, "Sunderland");
 
         getContentResolver().insert(QuoteContract.QuoteEntry.CONTENT_URI, values);
     }
