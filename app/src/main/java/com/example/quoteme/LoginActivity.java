@@ -9,17 +9,20 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.quoteme.QuoteData.QuoteContract;
-import com.example.quoteme.QuoteData.QuoteDBhelper;
+import com.example.quoteme.QuoteData.QuoteDbHelper;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView textSignUpNow;
     Button buttonLogin;
+    QuoteDbHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        db = new QuoteDbHelper(this);
 
         textSignUpNow = findViewById(R.id.textSignUpNow);
         textSignUpNow.setOnClickListener(this);

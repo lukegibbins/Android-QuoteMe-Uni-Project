@@ -17,7 +17,7 @@ public class QuoteProvider extends ContentProvider {
 
     public static final String LOG_TAG = QuoteProvider.class.getSimpleName();
 
-    private QuoteDBhelper quoteDBhelper;
+    private QuoteDbHelper quoteDBhelper;
 
     private static final int ALL_QUOTES = 100;
     private static final int SINGLE_QUOTE_ID = 101;

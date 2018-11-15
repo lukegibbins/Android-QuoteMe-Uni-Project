@@ -3,16 +3,17 @@ package com.example.quoteme.QuoteData;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.Nullable;
 
 import static com.example.quoteme.CommonUtils.DBhelper.DATABASE_NAME;
 import static com.example.quoteme.CommonUtils.DBhelper.DATABASE_VERSION;
 import static com.example.quoteme.QuoteData.QuoteContract.QuoteEntry.TABLE_NAME;
 
-public class QuoteDBhelper extends SQLiteOpenHelper {
+public class QuoteDbHelper extends SQLiteOpenHelper {
 
-    //Constructor
-    public QuoteDBhelper(Context context){
+    public QuoteDbHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        SQLiteDatabase db = this.getWritableDatabase();
     }
 
     @Override
