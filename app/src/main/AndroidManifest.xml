@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.quoteme">
 
-
     <!--*** This is he manifest file which contains data regarding each activity ***-->
 
     <application
