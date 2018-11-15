@@ -23,14 +23,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         db = new QuoteDbHelper(this);
+        insertQuote();
 
         textSignUpNow = findViewById(R.id.textSignUpNow);
         textSignUpNow.setOnClickListener(this);
 
         buttonLogin = findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(this);
-
-        insertQuote();
     }
 
     @Override

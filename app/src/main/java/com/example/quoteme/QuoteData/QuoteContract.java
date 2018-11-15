@@ -12,12 +12,9 @@ public class QuoteContract  {
     public static final String PATH_QUOTES = "quotes";
 
     //Constructor
-    private QuoteContract(){
-
-    }
+    private QuoteContract(){ }
 
     public static final class QuoteEntry implements BaseColumns{
-
         //For cursor
         public static final String CONTENT_LIST_TYPE =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_QUOTES;
@@ -27,7 +24,6 @@ public class QuoteContract  {
 
         //URI path
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_QUOTES);
-
 
         //Table Name
         public final static String TABLE_NAME = "quotes";
