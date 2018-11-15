@@ -47,6 +47,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomeActivity" />
         </activity>
+
+        <!--Register Provider-->
+        <provider
+            android:name=".QuoteData.QuoteProvider"
+            android:authorities="com.example.quoteme"
+            android:exported="false" />
     </application>
 
 </manifest>

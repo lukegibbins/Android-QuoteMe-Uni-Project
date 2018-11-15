@@ -15,6 +15,7 @@ public class QuoteContract  {
     private QuoteContract(){
 
     }
+
     public static final class QuoteEntry implements BaseColumns{
 
         //For cursor
