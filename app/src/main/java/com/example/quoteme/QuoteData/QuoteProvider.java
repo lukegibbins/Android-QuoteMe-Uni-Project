@@ -116,7 +116,36 @@ public class QuoteProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        // Get database instance to write to
+        SQLiteDatabase database = quoteDbHelper.getWritableDatabase();
+
+        // Track the number of rows that were deleted
+        int rowsDeleted;
+
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case ALL_QUOTES:
+                // Delete all rows that match the selection and selection args
+                rowsDeleted = database.delete(QuoteContract.QuoteEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case SINGLE_QUOTE_ID:
+                // Delete a single row given by the ID in the URI
+                selection = QuoteContract.QuoteEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                rowsDeleted = database.delete(QuoteContract.QuoteEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
+
+        // If 1 or more rows were deleted, then notify all listeners that the data at the
+        // given URI has changed
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        // Return the number of rows deleted
+        return rowsDeleted;
     }
 
     @Override

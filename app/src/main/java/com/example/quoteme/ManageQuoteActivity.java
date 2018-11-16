@@ -16,9 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.quoteme.QuoteData.QuoteContract;
 import com.example.quoteme.QuoteData.QuoteCursorAdapter;
+
+import es.dmoral.toasty.Toasty;
 
 public class ManageQuoteActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -44,7 +47,7 @@ public class ManageQuoteActivity extends AppCompatActivity implements LoaderMana
                                             RequestQuoteActivity.class);
                                     startActivity(launchAddQuoteIntent);
                                 } else if(which == 1){
-                                    //delete all
+                                   deleteAllQuotes();
                                 } else {
                                     //Cancel
                                 }
@@ -73,6 +76,11 @@ public class ManageQuoteActivity extends AppCompatActivity implements LoaderMana
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    private void deleteAllQuotes(){
+        int deletedCount = getContentResolver().delete(QuoteContract.QuoteEntry.CONTENT_URI,null,null);
+        Toasty.info(this, deletedCount + " "+getString(R.string.app_deleteQuotesInfo), Toast.LENGTH_LONG).show();
     }
 
     @Override

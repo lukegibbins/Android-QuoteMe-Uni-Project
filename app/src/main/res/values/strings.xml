@@ -52,5 +52,6 @@
         <item>Cancel</item>
     </string-array>
 
+    <string name="app_deleteQuotesInfo">quotes have been deleted</string>
 
 </resources>
