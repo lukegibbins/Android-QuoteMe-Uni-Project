@@ -27,6 +27,7 @@
     <string name="app_description">Description of Work</string>
     <string name="app_imageUpload">Image Upload</string>
     <string name="app_imageHint">Add image of required work...</string>
+
     <string-array name="app_vendors">
         <item>Building</item>
         <item>Gardening</item>
@@ -34,18 +35,7 @@
         <item>Electrician</item>
         <item>Other</item>
     </string-array>
-    <string-array name="app_listMyQuotes">
-        <item>Plumber Needed?</item>
-        <item>Builder wanted! New conservatory</item>
-        <item>Gardner Required</item>
-        <item>My tiles have blew of my roof!</item>
-        <item>I need electrical work completing in the kitchen</item>
-        <item>Plumber Needed?</item>
-        <item>Builder wanted! New conservatory</item>
-        <item>Gardner Required</item>
-        <item>My tiles have blew of my roof!</item>
-        <item>I need electrical work completing in the kitchen</item>
-    </string-array>
+
     <string name="app_success">Successfully Submitted</string>
     <string name="title_activity_manage_quote">ManageQuoteActivity</string>
     <string name="app_actionAdd">Action</string>
@@ -53,6 +43,14 @@
     <string name="app_editQuotes">Edit</string>
     <string name="app_deleteQuotes">Delete</string>
     <string name="app_selectQuote">Select Quote</string>
+
+    <string name="app_float_options_title">Choose an Action</string>
+    <string-array
+        name="app_float_options">
+        <item>Add a Quote</item>
+        <item>Delete all Quotes</item>
+        <item>Cancel</item>
+    </string-array>
 
 
 </resources>

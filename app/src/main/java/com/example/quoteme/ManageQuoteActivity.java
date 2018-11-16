@@ -1,5 +1,6 @@
 package com.example.quoteme;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
@@ -8,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -23,6 +25,7 @@ public class ManageQuoteActivity extends AppCompatActivity implements LoaderMana
     private static final int QUOTE_LOADER = 0;
     private QuoteCursorAdapter quoteCursorAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +35,23 @@ public class ManageQuoteActivity extends AppCompatActivity implements LoaderMana
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ManageQuoteActivity.this, RequestQuoteActivity.class);
-                startActivity(intent);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ManageQuoteActivity.this);
+                builder.setTitle(R.string.app_float_options_title)
+                        .setItems(R.array.app_float_options, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(which == 0){
+                                    Intent launchAddQuoteIntent = new Intent(ManageQuoteActivity.this,
+                                            RequestQuoteActivity.class);
+                                    startActivity(launchAddQuoteIntent);
+                                } else if(which == 1){
+                                    //delete all
+                                } else {
+                                    //Cancel
+                                }
+                            }
+                        });
+                AlertDialog ad = builder.create();
+                ad.show();
             }
         });
 

@@ -8,7 +8,7 @@
     tools:context=".ManageQuoteActivity">
 
     <!-- Used to populate items for list_view, which is populated
-         by the cursorAdapter using column headings -->
+         by the cursorAdapter using column -->
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
@@ -42,6 +42,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/outline_library_add_white_48"/>
+        android:src="@drawable/baseline_edit_white_48"/>
 
 </RelativeLayout>
