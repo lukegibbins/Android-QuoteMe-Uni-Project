@@ -47,9 +47,18 @@ public class ManageQuoteActivity extends AppCompatActivity implements LoaderMana
                                             RequestQuoteActivity.class);
                                     startActivity(launchAddQuoteIntent);
                                 } else if(which == 1){
-                                   deleteAllQuotes();
+
+                                    new AlertDialog.Builder(ManageQuoteActivity.this)
+                                            .setMessage(getString(R.string.app_deleteAllConfirmation))
+                                            .setCancelable(false)
+                                            .setPositiveButton(getString(R.string.app_yes), new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    deleteAllQuotes();
+                                                }
+                                            })
+                                            .setNegativeButton(getString(R.string.app_no), null).show();
                                 } else {
-                                    //Cancel
+                                    //'CANCEL* action, do nothing
                                 }
                             }
                         });
