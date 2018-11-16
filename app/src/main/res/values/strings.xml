@@ -29,6 +29,7 @@
     <string name="app_imageHint">Add image of required work...</string>
 
     <string-array name="app_vendors">
+        <item>Select a Vendor</item>
         <item>Building</item>
         <item>Gardening</item>
         <item>Pluming</item>
