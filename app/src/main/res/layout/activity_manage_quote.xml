@@ -38,6 +38,4 @@
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/outline_library_add_white_48"/>
-
-
 </RelativeLayout>

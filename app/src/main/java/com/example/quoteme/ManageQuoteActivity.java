@@ -1,23 +1,37 @@
 package com.example.quoteme;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
-import es.dmoral.toasty.Toasty;
+import android.widget.ListView;
 
 public class ManageQuoteActivity extends AppCompatActivity {
+
+    private static final int QUOTE_LOADER = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_quote);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ManageQuoteActivity.this, RequestQuoteActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        ListView quoteListView = findViewById(R.id.list);
+
+
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
