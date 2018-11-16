@@ -32,11 +32,58 @@ public class QuoteProvider extends ContentProvider {
         return true;
     }
 
+    //Used to actually fill in the data in the quoteViewList
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection,
                         @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        return null;
+
+        // Get readable database
+        SQLiteDatabase database = quoteDbHelper.getReadableDatabase();
+
+        // This cursor will hold the result of the query
+        Cursor cursor;
+
+        // Figure out if the URI matcher can match the URI to a specific code
+        int match = sUriMatcher.match(uri);
+        switch (match) {
+
+            //Cursor could contain multiple rows of data
+            case ALL_QUOTES:
+                cursor = database.query(QuoteContract.QuoteEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null, sortOrder
+                );
+                break;
+
+            //Cursor contain 1 specific row using an ID. E.g "content://com.example.android.quotes/quotes/3",
+            case SINGLE_QUOTE_ID:
+                selection = QuoteContract.QuoteEntry._ID + "=?";
+                selectionArgs = new String[] {
+                        String.valueOf(ContentUris.parseId(uri))
+                };
+
+                cursor = database.query(QuoteContract.QuoteEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null, sortOrder);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Cannot query unknown URI " + uri);
+        }
+
+        // Set notification URI on the Cursor, so we know what content URI the Cursor was created for.
+        // If the data at this URI changes, then we know we need to update the Cursor.
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
+        // Return the cursor
+        return cursor;
     }
 
     @Nullable

@@ -41,6 +41,6 @@ public class QuoteCursorAdapter extends CursorAdapter {
 
         //Update TextViews in list_item.xml with values from associated columns
         titleTextView.setText(quoteTitle);
-        titleTextView.setText(quoteVendor);
+        vendorTextView.setText(quoteVendor);
     }
 }

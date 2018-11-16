@@ -7,12 +7,15 @@
     android:layout_height="match_parent"
     tools:context=".ManageQuoteActivity">
 
+    <!-- Used to populate items for list_view, which is populated
+         by the cursorAdapter using column headings -->
     <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <!-- Empty view for the list -->
+
+    <!-- Only for displaying data if no list_item is present -->
     <RelativeLayout
         android:id="@+id/empty_view"
         android:layout_width="wrap_content"
@@ -28,8 +31,10 @@
             android:paddingTop="16dp"
             android:text="Add a quote to begin"
             android:textAppearance="?android:textAppearanceMedium"/>
-
     </RelativeLayout>
+    <!-- Only for displaying data if no list_item is present -->
+
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -38,4 +43,5 @@
         android:layout_alignParentRight="true"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/outline_library_add_white_48"/>
+
 </RelativeLayout>
