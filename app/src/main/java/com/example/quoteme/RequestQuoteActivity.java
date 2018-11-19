@@ -39,7 +39,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
 
     //0 for a status pending, 1 for a status accepted
     private static final int PENDING_QUOTE_STATUS = 0;
-    private static final int EXISING_QUOTE_LOADER = 0;
+    private static final int EXISTING_QUOTE_LOADER = 0;
 
     private Uri currentQuoteUri;
     private EditText quoteTitle, quoteLocation, quoteTel, quoteDescription;
@@ -60,7 +60,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         Intent receivingIntent = getIntent();
         currentQuoteUri = receivingIntent.getData();
 
-
         quoteTitle = findViewById(R.id.editTitle);
         quoteLocation = findViewById(R.id.editLocation);
         quoteTel = findViewById(R.id.editTel);
@@ -76,7 +75,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         if(currentQuoteUri != null){
             setTitle(getString(R.string.app_editQuote));
             buttonSubmit.setText(getString(R.string.app_update));
-            getSupportLoaderManager().initLoader(EXISING_QUOTE_LOADER, null, this);
+            getSupportLoaderManager().initLoader(EXISTING_QUOTE_LOADER, null, this);
         }
     }
 
@@ -89,6 +88,11 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         String quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
         String quoteImageString = "quote.png"; //<-- changed when figure out
 
+        //Throw error
+        if(quoteVendorSpinner == vendorList.get(0)){
+            quoteVendorSpinner = null;
+        }
+
         //Fill DB table with values
         ContentValues values = new ContentValues();
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE, quoteTitleString);
@@ -99,6 +103,17 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE, quoteImageString);
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS, PENDING_QUOTE_STATUS);
 
+        //Determine if new or existing quote
+        if(currentQuoteUri == null){
+            Uri newUri = getContentResolver().insert(QuoteContract.QuoteEntry.CONTENT_URI, values);
+            //Error saving quote
+            if(newUri == null){
+                Toasty.error(this,"Error adding quote", Toast.LENGTH_LONG).show();
+                //Quote added successfully
+            } else {
+                Toasty.success(this,"Quote added. Quote status set to 'pending'", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void populateHashMapWithVendors(){
@@ -112,7 +127,11 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         if (v == buttonSubmit) {
-            Toasty.success(this, getString(R.string.app_success), Toast.LENGTH_SHORT).show();
+            try {
+                saveQuote();
+            } catch (Exception e){
+                Toasty.error(this, "Please select a valid vendor", Toast.LENGTH_LONG).show();
+            }
         }
         else if (v == buttonImageUp){
             Toasty.success(this, getString(R.string.app_success), Toast.LENGTH_SHORT).show();
