@@ -1,5 +1,6 @@
 package com.example.quoteme;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -18,6 +19,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.quoteme.QuoteData.QuoteContract;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Dictionary;
@@ -34,7 +37,10 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     private ArrayList<String> vendorList = new ArrayList<String>();
     private HashMap <String, Integer> vendorMappings = new HashMap<String, Integer>();
 
+    //0 for a status pending, 1 for a status accepted
+    private static final int PENDING_QUOTE_STATUS = 0;
     private static final int EXISING_QUOTE_LOADER = 0;
+
     private Uri currentQuoteUri;
     private EditText quoteTitle, quoteLocation, quoteTel, quoteDescription;
     private Spinner vendorSpinner;
@@ -54,12 +60,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         Intent receivingIntent = getIntent();
         currentQuoteUri = receivingIntent.getData();
 
-        if(currentQuoteUri == null){
-            setTitle(getString(R.string.app_requestQuote));
-        } else {
-            setTitle("Edit Quote");
-            getSupportLoaderManager().initLoader(EXISING_QUOTE_LOADER, null, this);
-        }
 
         quoteTitle = findViewById(R.id.editTitle);
         quoteLocation = findViewById(R.id.editLocation);
@@ -72,6 +72,33 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
 
         buttonSubmit.setOnClickListener(this);
         buttonImageUp.setOnClickListener(this);
+
+        if(currentQuoteUri != null){
+            setTitle(getString(R.string.app_editQuote));
+            buttonSubmit.setText(getString(R.string.app_update));
+            getSupportLoaderManager().initLoader(EXISING_QUOTE_LOADER, null, this);
+        }
+    }
+
+    private void saveQuote(){
+        //Read data from field entries
+        String quoteTitleString = quoteTitle.getText().toString().trim();
+        String quoteLocationString = quoteLocation.getText().toString().trim();
+        String quoteTelString = quoteTel.getText().toString().trim();
+        String quoteDescString = quoteDescription.getText().toString().trim();
+        String quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
+        String quoteImageString = "quote.png"; //<-- changed when figure out
+
+        //Fill DB table with values
+        ContentValues values = new ContentValues();
+        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE, quoteTitleString);
+        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION, quoteLocationString);
+        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE, quoteTelString);
+        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION, quoteDescString);
+        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR, quoteVendorSpinner);
+        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE, quoteImageString);
+        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS, PENDING_QUOTE_STATUS);
+
     }
 
     private void populateHashMapWithVendors(){
