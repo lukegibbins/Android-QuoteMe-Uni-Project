@@ -53,7 +53,7 @@
         android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editTel"
-        app:srcCompat="@drawable/baseline_title_black_18dp" />
+        app:srcCompat="@drawable/baseline_phone_black_18dp" />
 
     <ImageView
         android:id="@+id/imageView"
