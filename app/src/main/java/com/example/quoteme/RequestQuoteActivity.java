@@ -119,6 +119,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+    //Sets up a key-value pair list with list items and values but disregards first element
     private void populateHashMapWithVendors(){
         for(int i = 1; i < vendorList.size(); i++){
             vendorMappings.put(vendorList.get(i), i);
