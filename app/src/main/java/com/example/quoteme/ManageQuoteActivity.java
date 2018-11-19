@@ -1,8 +1,10 @@
 package com.example.quoteme;
 
+import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +17,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -47,7 +50,6 @@ public class ManageQuoteActivity extends AppCompatActivity implements LoaderMana
                                             RequestQuoteActivity.class);
                                     startActivity(launchAddQuoteIntent);
                                 } else if(which == 1){
-
                                     new AlertDialog.Builder(ManageQuoteActivity.this)
                                             .setMessage(getString(R.string.app_deleteAllConfirmation))
                                             .setCancelable(false)
@@ -78,7 +80,24 @@ public class ManageQuoteActivity extends AppCompatActivity implements LoaderMana
         quoteCursorAdapter = new QuoteCursorAdapter(this,null);
         quoteListView.setAdapter(quoteCursorAdapter);
 
+
+        quoteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(ManageQuoteActivity.this, RequestQuoteActivity.class);
+                //When an item is clicked, it appends the ID of the item to the URI routing a specific quote
+                Uri currentQuoteUri = ContentUris.withAppendedId(QuoteContract.QuoteEntry.CONTENT_URI, id);
+                intent.setData(currentQuoteUri);
+                startActivity(intent);
+            }
+        });
+
         getSupportLoaderManager().initLoader(QUOTE_LOADER, null, this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

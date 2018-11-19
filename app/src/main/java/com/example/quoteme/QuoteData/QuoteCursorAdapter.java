@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.example.quoteme.R;
 
+import org.w3c.dom.Text;
+
 public class QuoteCursorAdapter extends CursorAdapter {
 
     //Constructor
@@ -30,10 +32,11 @@ public class QuoteCursorAdapter extends CursorAdapter {
         //Find views
         TextView titleTextView = view.findViewById(R.id.name);
         TextView vendorTextView = view.findViewById(R.id.summary);
+        TextView statusTextView = view.findViewById(R.id.status);
 
         //Define column headings to receive data from
         int titleColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE);
-        int vendorColumnIndex = cursor.getColumnIndex((QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR));
+        int vendorColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR);
 
         //Read values from cursor to current variables
         String quoteTitle = cursor.getString(titleColumnIndex);

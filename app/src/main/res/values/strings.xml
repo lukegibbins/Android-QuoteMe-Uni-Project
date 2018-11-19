@@ -30,7 +30,7 @@
     <string name="app_update">Update</string>
 
     <string-array name="app_vendors">
-        <item>Select a Vendor</item>
+        <item>Select a vendor</item>
         <item>Building</item>
         <item>Gardening</item>
         <item>Pluming</item>
@@ -59,5 +59,7 @@
     <string name="app_deleteQuotesInfo">quotes have been deleted</string>
     <string name="app_yes">Yes</string>
     <string name="app_no">No</string>
+    <string name="app_pending">PENDING</string>
+    <string name="app_accepted">ACCEPTED</string>
 
 </resources>

@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -54,10 +55,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_quote);
 
-        //add array list of vendors to list
+        //add array list of vendors to list and populate hashMap
         vendorList.addAll(Arrays.asList(getResources().getStringArray(R.array.app_vendors)));
-
-        //gets stringArray vendor values and pops them into a HashMap
         populateHashMapWithVendors();
 
         //Gets incoming intent and possible Uri
@@ -160,16 +159,67 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return null;
+        // Since the editor shows all pet attributes, define a projection that contains
+        // all columns from the pet table
+        String[] projection = {
+                QuoteContract.QuoteEntry._ID,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR
+        };
+
+        // This loader will execute the ContentProvider's query method on a background thread
+        return new CursorLoader(this,   // Parent activity context
+                currentQuoteUri,         // Query the content URI for the current pet
+                projection,             // Columns to include in the resulting Cursor
+                null,                   // No selection clause
+                null,                   // No selection arguments
+                null);                  // Default sort order
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        //If the cursor is null or there is no items in the list, back out
+        if (cursor == null || cursor.getCount() < 1) {
+            return;
+        }
 
+        // Proceed with moving to the first row of the cursor and reading data from it
+        // (This should be the only row in the cursor)
+        if (cursor.moveToFirst()) {
+            // Find the columns of pet attributes that we're interested in
+            int titleColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE);
+            int locationColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION);
+            int telColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE);
+            int descColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION);
+            int vendorColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR);
+
+            // Extract out the value from the Cursor for the given column index
+            String title = cursor.getString(titleColumnIndex);
+            String location = cursor.getString(locationColumnIndex);
+            String telephone = cursor.getString(telColumnIndex);
+            String description = cursor.getString(descColumnIndex);
+            String vendor = cursor.getString(vendorColumnIndex);
+
+            // Update the views on the screen with the values from the database
+            quoteTitle.setText(title);
+            quoteLocation.setText(location);
+            quoteTel.setText(telephone);
+            quoteDescription.setText(description);
+            vendorSpinner.setSelection(vendorMappings.get(vendor));
+        }
     }
 
+
+    //Reset the fields to empty values after an edit in preparation for an insert
     @Override
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-
+        quoteTitle.setText("");
+        quoteDescription.setText("");
+        quoteLocation.setText("");
+        quoteTel.setText("");
+        vendorSpinner.setSelection(0);
     }
 }

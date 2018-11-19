@@ -47,7 +47,6 @@ public class QuoteProvider extends ContentProvider {
         // Figure out if the URI matcher can match the URI to a specific code
         int match = sUriMatcher.match(uri);
         switch (match) {
-
             //Cursor could contain multiple rows of data
             case ALL_QUOTES:
                 cursor = database.query(QuoteContract.QuoteEntry.TABLE_NAME,
@@ -55,23 +54,23 @@ public class QuoteProvider extends ContentProvider {
                         selection,
                         selectionArgs,
                         null,
-                        null, sortOrder
+                        null,
+                        sortOrder
                 );
                 break;
 
             //Cursor contain 1 specific row using an ID. E.g "content://com.example.android.quotes/quotes/3",
             case SINGLE_QUOTE_ID:
                 selection = QuoteContract.QuoteEntry._ID + "=?";
-                selectionArgs = new String[] {
-                        String.valueOf(ContentUris.parseId(uri))
-                };
-
+                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
                 cursor = database.query(QuoteContract.QuoteEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
                         null,
-                        null, sortOrder);
+                        null,
+                        sortOrder
+                );
                 break;
 
             default:
@@ -88,8 +87,16 @@ public class QuoteProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public String getType(@NonNull Uri uri) {
-        return null;
+    public String getType(Uri uri) {
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case ALL_QUOTES:
+                return QuoteContract.QuoteEntry.CONTENT_LIST_TYPE;
+            case SINGLE_QUOTE_ID:
+                return QuoteContract.QuoteEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
 
     @Nullable
