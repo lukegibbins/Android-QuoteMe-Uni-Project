@@ -82,7 +82,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private void saveQuote(){
+    private void saveQuote() {
         //Read data from field entries
         String quoteTitleString = quoteTitle.getText().toString().trim();
         String quoteLocationString = quoteLocation.getText().toString().trim();
@@ -91,6 +91,15 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
         String quoteImageString = "quote.png"; //<-- changed when figured out
 
+        boolean valueChecker;
+        if(quoteTitleString.isEmpty() ||
+                quoteDescString.isEmpty() ||
+                quoteLocationString.isEmpty() ||
+                quoteTelString.isEmpty()){
+            valueChecker = false;
+        } else {
+            valueChecker = true;
+        }
 
         //Fill DB table with values
         ContentValues values = new ContentValues();
@@ -102,19 +111,68 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE, quoteImageString);
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS, PENDING_QUOTE_STATUS);
 
-
         //Determine if new or existing quote
-        if(currentQuoteUri == null && !quoteVendorSpinner.equals(vendorList.get(0))){
-            Uri newUri = getContentResolver().insert(QuoteContract.QuoteEntry.CONTENT_URI, values);
-            //Error saving quote
-            if(newUri == null){
-                Toasty.error(this,"Error adding quote", Toast.LENGTH_LONG).show();
-                //Quote added successfully
-            } else {
-                Toasty.success(this,"Quote added. Quote status set to 'pending'", Toast.LENGTH_LONG).show();
+        //If this is a new quote --> Do insert
+        if (currentQuoteUri == null) {
+            if (valueChecker == true) {
+                if (!quoteVendorSpinner.equals(vendorList.get(0))) {
+                    Uri newUri = getContentResolver().insert(QuoteContract.QuoteEntry.CONTENT_URI, values);
+                    //Error saving quote
+                    if (newUri == null) {
+                        Toasty.error(this, "Error adding quote", Toast.LENGTH_LONG).show();
+                        //Quote added successfully
+                    } else {
+                        Toasty.success(this, "Quote added. Quote status set to 'pending'", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toasty.error(this, "Please select a vendor from the list", Toast.LENGTH_LONG).show();
+                }
+            } else{
+                if(quoteDescString.isEmpty()){
+                    quoteDescription.setError("This field can not be empty");
+                }
+                if(quoteTitleString.isEmpty()){
+                    quoteTitle.setError("This field can not be empty");
+                }
+                if(quoteLocationString.isEmpty()){
+                    quoteLocation.setError("This field can not be empty");
+                }
+                if(quoteTelString.isEmpty()){
+                    quoteTel.setError("This field can not be empty");
+                }
             }
-        } else{
-            Toasty.error(this,"Please select a vendor from the list", Toast.LENGTH_LONG).show();
+        }
+        //Else, do update
+        else {
+            if (valueChecker == true) {
+                if (!quoteVendorSpinner.equals(vendorList.get(0))){
+                //We want to update the current row as the data being passed through has a Uri
+                int rowsAffected = getContentResolver().update(currentQuoteUri, values, null, null);
+                // Show a toast message depending on whether or not the update was successful.
+                if (rowsAffected == 0) {
+                    // If no rows were affected, then there was an error with the update.
+                    Toasty.error(this, "Error updating quote", Toast.LENGTH_LONG).show();
+                } else {
+                    // Otherwise, the update was successful and we can display a toast.
+                    Toasty.success(this, "Quote updated.", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                    Toasty.error(this, "Please select a vendor from the list", Toast.LENGTH_LONG).show();
+                }
+         } else {
+                if(quoteDescString.isEmpty()){
+                    quoteDescription.setError("This field can not be empty");
+                }
+                if(quoteTitleString.isEmpty()){
+                    quoteTitle.setError("This field can not be empty");
+                }
+                if(quoteLocationString.isEmpty()){
+                    quoteLocation.setError("This field can not be empty");
+                }
+                if(quoteTelString.isEmpty()){
+                    quoteTel.setError("This field can not be empty");
+                }
+            }
         }
     }
 

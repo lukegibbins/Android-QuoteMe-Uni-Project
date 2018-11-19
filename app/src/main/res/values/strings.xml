@@ -43,7 +43,7 @@
     <string name="app_actionAdd">Action</string>
     <string name="app_actionClick">Click \'Action\' to request new quote</string>
     <string name="app_editQuotes">Edit</string>
-    <string name="app_editQuote">Edit Quote</string>
+    <string name="app_editQuote">View/Edit Quote</string>
     <string name="app_deleteQuotes">Delete</string>
     <string name="app_selectQuote">Select Quote</string>
 
