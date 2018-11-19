@@ -36,6 +36,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
 
     private ArrayList<String> vendorList = new ArrayList<String>();
     private HashMap <String, Integer> vendorMappings = new HashMap<String, Integer>();
+    private String quoteVendorSpinner;
 
     //0 for a status pending, 1 for a status accepted
     private static final int PENDING_QUOTE_STATUS = 0;
@@ -52,6 +53,9 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_quote);
+
+        //add array list of vendors to list
+        vendorList.addAll(Arrays.asList(getResources().getStringArray(R.array.app_vendors)));
 
         //gets stringArray vendor values and pops them into a HashMap
         populateHashMapWithVendors();
@@ -85,13 +89,9 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         String quoteLocationString = quoteLocation.getText().toString().trim();
         String quoteTelString = quoteTel.getText().toString().trim();
         String quoteDescString = quoteDescription.getText().toString().trim();
-        String quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
-        String quoteImageString = "quote.png"; //<-- changed when figure out
+        quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
+        String quoteImageString = "quote.png"; //<-- changed when figured out
 
-        //Throw error
-        if(quoteVendorSpinner == vendorList.get(0)){
-            quoteVendorSpinner = null;
-        }
 
         //Fill DB table with values
         ContentValues values = new ContentValues();
@@ -103,8 +103,9 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE, quoteImageString);
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS, PENDING_QUOTE_STATUS);
 
+
         //Determine if new or existing quote
-        if(currentQuoteUri == null){
+        if(currentQuoteUri == null && !quoteVendorSpinner.equals(vendorList.get(0))){
             Uri newUri = getContentResolver().insert(QuoteContract.QuoteEntry.CONTENT_URI, values);
             //Error saving quote
             if(newUri == null){
@@ -113,12 +114,12 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             } else {
                 Toasty.success(this,"Quote added. Quote status set to 'pending'", Toast.LENGTH_LONG).show();
             }
+        } else{
+            Toasty.error(this,"Please select a vendor from the list", Toast.LENGTH_LONG).show();
         }
     }
 
     private void populateHashMapWithVendors(){
-        vendorList.addAll(Arrays.asList(getResources().getStringArray(R.array.app_vendors)));
-
         for(int i = 1; i < vendorList.size(); i++){
             vendorMappings.put(vendorList.get(i), i);
         }
@@ -127,11 +128,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         if (v == buttonSubmit) {
-            try {
-                saveQuote();
-            } catch (Exception e){
-                Toasty.error(this, "Please select a valid vendor", Toast.LENGTH_LONG).show();
-            }
+            saveQuote();
         }
         else if (v == buttonImageUp){
             Toasty.success(this, getString(R.string.app_success), Toast.LENGTH_SHORT).show();
