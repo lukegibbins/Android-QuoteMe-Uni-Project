@@ -47,8 +47,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     private EditText quoteTitle, quoteLocation, quoteTel, quoteDescription;
     private Spinner vendorSpinner;
 
-    Button buttonSubmit;
-    Button buttonImageUp;
+    Button buttonSubmit, buttonImageUp, buttonDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +70,11 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
 
         buttonImageUp = findViewById(R.id.buttonImageUp);
         buttonSubmit = findViewById(R.id.buttonSubmit);
+        buttonDelete = findViewById(R.id.buttonDeleteSpecific);
 
         buttonSubmit.setOnClickListener(this);
         buttonImageUp.setOnClickListener(this);
+        buttonDelete.setOnClickListener(this);
 
         if(currentQuoteUri != null){
             setTitle(getString(R.string.app_editQuote));
@@ -112,7 +113,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS, PENDING_QUOTE_STATUS);
 
         //Determine if new or existing quote
-        //If this is a new quote --> Do insert
+        //If this is a new quote --> Do insert and validate
         if (currentQuoteUri == null) {
             if (valueChecker == true) {
                 if (!quoteVendorSpinner.equals(vendorList.get(0))) {
@@ -142,7 +143,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 }
             }
         }
-        //Else, do update
+        //Else, do update and validate
         else {
             if (valueChecker == true) {
                 if (!quoteVendorSpinner.equals(vendorList.get(0))){
@@ -176,6 +177,11 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+    private void deleteSpecificQuote(){
+        int deletedCount = getContentResolver().delete(currentQuoteUri, null, null);
+        Toasty.info(this, deletedCount + " "+getString(R.string.app_deleteQuotesInfo), Toast.LENGTH_LONG).show();
+    }
+
     //Sets up a key-value pair list with list items and values but disregards first element
     private void populateHashMapWithVendors(){
         for(int i = 1; i < vendorList.size(); i++){
@@ -187,9 +193,10 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         if (v == buttonSubmit) {
             saveQuote();
-        }
-        else if (v == buttonImageUp){
+        } else if (v == buttonImageUp){
             Toasty.success(this, getString(R.string.app_success), Toast.LENGTH_SHORT).show();
+        } else if (v == buttonDelete){
+            deleteSpecificQuote();
         }
     }
 
