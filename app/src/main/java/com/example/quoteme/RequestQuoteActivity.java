@@ -80,6 +80,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             setTitle(getString(R.string.app_editQuote));
             buttonSubmit.setText(getString(R.string.app_update));
             getSupportLoaderManager().initLoader(EXISTING_QUOTE_LOADER, null, this);
+        } else if (currentQuoteUri == null){
+            buttonDelete.setVisibility(View.GONE);
         }
     }
 
@@ -124,6 +126,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                         //Quote added successfully
                     } else {
                         Toasty.success(this, "Quote added. Quote status set to 'pending'", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(this, ManageQuoteActivity.class);
+                        startActivity(intent);
                     }
                 } else {
                     Toasty.error(this, "Please select a vendor from the list", Toast.LENGTH_LONG).show();
@@ -156,6 +160,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 } else {
                     // Otherwise, the update was successful and we can display a toast.
                     Toasty.success(this, "Quote updated.", Toast.LENGTH_LONG).show();
+                    finish();
+
                 }
             } else {
                     Toasty.error(this, "Please select a vendor from the list", Toast.LENGTH_LONG).show();
@@ -180,6 +186,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     private void deleteSpecificQuote(){
         int deletedCount = getContentResolver().delete(currentQuoteUri, null, null);
         Toasty.info(this, deletedCount + " "+getString(R.string.app_deleteQuotesInfo), Toast.LENGTH_LONG).show();
+        finish();
     }
 
     //Sets up a key-value pair list with list items and values but disregards first element
