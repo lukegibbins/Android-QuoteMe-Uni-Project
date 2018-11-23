@@ -2,33 +2,42 @@ package com.example.quoteme;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.quoteme.QuoteData.QuoteContract;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Dictionary;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
 
 import es.dmoral.toasty.Toasty;
 
@@ -42,11 +51,15 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     //0 for a status pending, 1 for a status accepted
     private static final int PENDING_QUOTE_STATUS = 0;
     private static final int EXISTING_QUOTE_LOADER = 0;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    public static final String SHARED_PREFERENCES = "SHARED_PREFERENCES";
+    private String pictureName;
 
     private Uri currentQuoteUri;
     private EditText quoteTitle, quoteLocation, quoteTel, quoteDescription;
     private Spinner vendorSpinner;
 
+    ImageView imageCaptureCam;
     Button buttonSubmit, buttonImageUp, buttonDelete;
 
     @Override
@@ -72,6 +85,13 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         buttonSubmit = findViewById(R.id.buttonSubmit);
         buttonDelete = findViewById(R.id.buttonDeleteSpecific);
 
+        imageCaptureCam = (ImageView) findViewById(R.id.imageCaptureCam);
+
+        //Disable button if no camera
+        if(!hasCamera()){
+            buttonImageUp.setEnabled(false);
+        }
+
         buttonSubmit.setOnClickListener(this);
         buttonImageUp.setOnClickListener(this);
         buttonDelete.setOnClickListener(this);
@@ -84,6 +104,60 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             buttonDelete.setVisibility(View.GONE);
         }
     }
+
+    //Checks if app has camera
+    private boolean hasCamera() {
+        return getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
+    }
+
+    private void launchCamera(){
+
+        //Launch camera and save image to external storage >> storage/emulator/0/
+        Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        //Save to SD CARD. Get directory to save to, generate a pic name and add to SD
+        //Gets location (File explorer >> SD card >> pictures
+        File pictureDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        //generate unique pic name using method
+        pictureName = generatePictureName();
+        addSharedPreferences(pictureName);
+        //Coverts to image file and concatenates dir and image name
+        File imageFile = new File(pictureDir, pictureName);
+        //coverts to URi
+        Uri pictureUri = Uri.fromFile(imageFile);
+        //Adds image to location
+        captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
+        startActivityForResult(captureIntent, REQUEST_IMAGE_CAPTURE);
+    }
+
+    private void addSharedPreferences(String pictureName){
+        SharedPreferences sp = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        //Key and Value
+        editor.putString(pictureName, pictureName);
+    }
+
+
+    private String generatePictureName() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        String timeStamp = sdf.format(new Date());
+        return "QUOTE_IMG_" + timeStamp + ".jpg";
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+                SharedPreferences sp = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
+                String s = sp.getString(pictureName, "No Image");
+                System.out.println("*****************hey**" + pictureName);
+            }
+        } catch (Exception e){
+            Toast.makeText(this, "Sorry", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     private void saveQuote() {
         //Read data from field entries
@@ -196,14 +270,17 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+
     @Override
     public void onClick(View v) {
         if (v == buttonSubmit) {
             saveQuote();
         } else if (v == buttonImageUp){
-            Toasty.success(this, getString(R.string.app_success), Toast.LENGTH_SHORT).show();
+            launchCamera();
         } else if (v == buttonDelete){
             deleteSpecificQuote();
+        } else if (v == buttonImageUp){
+
         }
     }
 
