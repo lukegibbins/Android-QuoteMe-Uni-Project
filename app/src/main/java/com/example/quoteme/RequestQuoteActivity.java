@@ -58,7 +58,9 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     private Uri currentQuoteUri;
     private EditText quoteTitle, quoteLocation, quoteTel, quoteDescription;
     private Spinner vendorSpinner;
+
     private String pictureName;
+    private String loadedPictureName;
 
     ImageView imageCaptureCam;
     Button buttonSubmit, buttonImageUp, buttonDelete;
@@ -151,7 +153,12 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         String quoteDescString = quoteDescription.getText().toString().trim();
         quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
 
-        String quoteImageString = pictureName; //<-- changed when figured out
+        String quoteImageString;
+        if(pictureName != null){
+            quoteImageString = pictureName;
+        } else {
+            quoteImageString = null;
+        }
 
         boolean valueChecker;
         if(quoteTitleString.isEmpty() ||
@@ -289,7 +296,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
                 try {
                     setImageFromExternalStorage();
-                    pictureName = null;
                 } catch (Exception e){
                     Toast.makeText(this, "Unable to access storage", Toast.LENGTH_SHORT).show();
                 }
@@ -390,11 +396,10 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             //If not null, then wipe the default image and replace with the image found in the db
             try {
                 String imageTitle = cursor.getString(imageColumnIndex);
-                pictureName = imageTitle;
                 String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                        + "/" + pictureName;
+                        + "/" + imageTitle;
                 Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
-                imageCaptureCam.setImageResource(0);
+                imageCaptureCam.setBackgroundResource(0); //This works
                 imageCaptureCam.setImageBitmap(bitmap);
             } catch (Exception e){
                 imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
@@ -411,7 +416,5 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         quoteLocation.setText("");
         quoteTel.setText("");
         vendorSpinner.setSelection(0);
-        imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
-        pictureName = null;
     }
 }
