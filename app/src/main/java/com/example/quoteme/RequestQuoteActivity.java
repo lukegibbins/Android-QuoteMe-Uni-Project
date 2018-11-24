@@ -59,11 +59,9 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     private EditText quoteTitle, quoteLocation, quoteTel, quoteDescription;
     private Spinner vendorSpinner;
 
-    private String pictureName;
-    private String loadedPictureName;
-
     ImageView imageCaptureCam;
     Button buttonSubmit, buttonImageUp, buttonDelete;
+    String capturedImageFileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,36 +112,26 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
     }
 
-    //Checks if app has camera
     private boolean hasCamera() {
         return getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY);
     }
 
-    private void launchCamera(){
-        //Launch camera and save image to external storage >> storage/emulator/0/
-        pictureName = null;
+    private void launchCameraAndSave(){
         Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //Save to SD CARD. Get directory to save to, generate a pic name and add to SD
-        //Gets location (File explorer >> SD card >> pictures
         File pictureDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        //generate unique pic name using method
-        pictureName = generatePictureName();
-        //Coverts to image file and concatenates dir and image name
-        File imageFile = new File(pictureDir, pictureName);
-        //coverts to URi
-        Uri pictureUri = Uri.fromFile(imageFile);
-        //Adds image to location
-        captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
+        String imageName = generatePictureName();
+        capturedImageFileName = imageName;
+        File imageFile = new File(pictureDir, imageName);
+        Uri imageUri = Uri.fromFile(imageFile);
+        captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(captureIntent, REQUEST_IMAGE_CAPTURE);
     }
-
 
     private String generatePictureName(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         String timeStamp = sdf.format(new Date());
         return "QUOTE_IMG_" + timeStamp + ".jpg";
     }
-
 
     private void saveQuote() {
         //Read data from field entries
@@ -152,15 +140,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         String quoteTelString = quoteTel.getText().toString().trim();
         String quoteDescString = quoteDescription.getText().toString().trim();
         quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
-
-        String quoteImageString;
-        if(pictureName != null){
-            quoteImageString = pictureName;
-        } else if (pictureName == null && quoteTitleString != null){
-            quoteImageString = loadedPictureName;
-        } else {
-            quoteImageString = null;
-        }
 
         boolean valueChecker;
         if(quoteTitleString.isEmpty() ||
@@ -179,7 +158,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE, quoteTelString);
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION, quoteDescString);
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR, quoteVendorSpinner);
-        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE, quoteImageString);
+        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE, "image.png");
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS, PENDING_QUOTE_STATUS);
 
         //Determine if new or existing quote
@@ -270,20 +249,13 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         return true;
     }
 
-    private void setImageFromExternalStorage() {
-        String fileName = pictureName;
-        String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + fileName;
-        Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
-        imageCaptureCam.setImageBitmap(bitmap);
-    }
-    
 
     @Override
     public void onClick(View v) {
         if (v == buttonSubmit) {
             saveQuote();
         } else if (v == buttonImageUp){
-            launchCamera();
+            launchCameraAndSave();
         } else if (v == buttonDelete){
             deleteSpecificQuote();
         } else if (v == buttonImageUp){
@@ -296,8 +268,12 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         try {
             if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
                 try {
+                    String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                            + "/" + capturedImageFileName;
+                    Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
                     imageCaptureCam.setBackgroundResource(0);
-                    setImageFromExternalStorage();
+                    imageCaptureCam.setImageBitmap(bitmap);
+                    capturedImageFileName = null;
                 } catch (Exception e){
                     Toast.makeText(this, "Unable to access storage", Toast.LENGTH_SHORT).show();
                 }
@@ -402,7 +378,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 }else{
                     String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                             + "/" + imageTitle;
-                    loadedPictureName = imageTitle;
                     Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
                     imageCaptureCam.setBackgroundResource(0); //This works
                     imageCaptureCam.setImageBitmap(bitmap);
@@ -419,6 +394,5 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         quoteLocation.setText("");
         quoteTel.setText("");
         vendorSpinner.setSelection(0);
-        imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
     }
 }
