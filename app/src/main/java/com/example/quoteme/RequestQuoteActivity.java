@@ -121,8 +121,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
 
     private void launchCamera(){
         //Launch camera and save image to external storage >> storage/emulator/0/
+        pictureName = null;
         Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
         //Save to SD CARD. Get directory to save to, generate a pic name and add to SD
         //Gets location (File explorer >> SD card >> pictures
         File pictureDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
@@ -156,6 +156,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         String quoteImageString;
         if(pictureName != null){
             quoteImageString = pictureName;
+        } else if (pictureName == null && quoteTitleString != null){
+            quoteImageString = loadedPictureName;
         } else {
             quoteImageString = null;
         }
@@ -272,7 +274,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         String fileName = pictureName;
         String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + fileName;
         Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
-        imageCaptureCam.setBackgroundResource(0); //This works
         imageCaptureCam.setImageBitmap(bitmap);
     }
     
@@ -295,6 +296,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         try {
             if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
                 try {
+                    imageCaptureCam.setBackgroundResource(0);
                     setImageFromExternalStorage();
                 } catch (Exception e){
                     Toast.makeText(this, "Unable to access storage", Toast.LENGTH_SHORT).show();
@@ -394,17 +396,17 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
 
             //Try extract the imageName out of the row. If it is null, display default noImageSelected
             //If not null, then wipe the default image and replace with the image found in the db
-
             String imageTitle = cursor.getString(imageColumnIndex);
             if(imageTitle == null){
                 imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
-            }else{
-                String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                        + "/" + imageTitle;
-                Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
-                imageCaptureCam.setBackgroundResource(0); //This works
-                imageCaptureCam.setImageBitmap(bitmap);
-            }
+                }else{
+                    String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                            + "/" + imageTitle;
+                    loadedPictureName = imageTitle;
+                    Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
+                    imageCaptureCam.setBackgroundResource(0); //This works
+                    imageCaptureCam.setImageBitmap(bitmap);
+                }
         }
     }
 
@@ -418,6 +420,5 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         quoteTel.setText("");
         vendorSpinner.setSelection(0);
         imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
-
     }
 }
