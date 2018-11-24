@@ -1,5 +1,6 @@
 package com.example.quoteme;
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +14,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -44,6 +46,8 @@ import es.dmoral.toasty.Toasty;
 public class RequestQuoteActivity extends AppCompatActivity implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor> {
 
+    private String pictureName;
+
     private ArrayList<String> vendorList = new ArrayList<String>();
     private HashMap <String, Integer> vendorMappings = new HashMap<String, Integer>();
     private String quoteVendorSpinner;
@@ -52,8 +56,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     private static final int PENDING_QUOTE_STATUS = 0;
     private static final int EXISTING_QUOTE_LOADER = 0;
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    public static final String SHARED_PREFERENCES = "SHARED_PREFERENCES";
-    private String pictureName;
 
     private Uri currentQuoteUri;
     private EditText quoteTitle, quoteLocation, quoteTel, quoteDescription;
@@ -85,7 +87,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         buttonSubmit = findViewById(R.id.buttonSubmit);
         buttonDelete = findViewById(R.id.buttonDeleteSpecific);
 
-        imageCaptureCam = (ImageView) findViewById(R.id.imageCaptureCam);
+        imageCaptureCam = findViewById(R.id.imageCaptureCam);
 
         //Disable button if no camera
         if(!hasCamera()){
@@ -103,6 +105,11 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         } else if (currentQuoteUri == null){
             buttonDelete.setVisibility(View.GONE);
         }
+
+        //Every time this page is visited, ask for permission. We have to because of the API being 23
+        //to access external storage
+        ActivityCompat.requestPermissions(RequestQuoteActivity.this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
     }
 
     //Checks if app has camera
@@ -111,7 +118,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void launchCamera(){
-
         //Launch camera and save image to external storage >> storage/emulator/0/
         Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -120,7 +126,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         File pictureDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         //generate unique pic name using method
         pictureName = generatePictureName();
-        addSharedPreferences(pictureName);
         //Coverts to image file and concatenates dir and image name
         File imageFile = new File(pictureDir, pictureName);
         //coverts to URi
@@ -130,32 +135,11 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         startActivityForResult(captureIntent, REQUEST_IMAGE_CAPTURE);
     }
 
-    private void addSharedPreferences(String pictureName){
-        SharedPreferences sp = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        //Key and Value
-        editor.putString(pictureName, pictureName);
-    }
-
 
     private String generatePictureName() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         String timeStamp = sdf.format(new Date());
         return "QUOTE_IMG_" + timeStamp + ".jpg";
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
-            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-                SharedPreferences sp = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
-                String s = sp.getString(pictureName, "No Image");
-                System.out.println("*****************hey**" + pictureName);
-            }
-        } catch (Exception e){
-            Toast.makeText(this, "Sorry", Toast.LENGTH_SHORT).show();
-        }
     }
 
 
@@ -270,6 +254,19 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    private void setImageFromExternalStorage() {
+        String fileName = pictureName;
+        String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + fileName;
+        Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
+        imageCaptureCam.setImageBitmap(bitmap);
+    }
+    
 
     @Override
     public void onClick(View v) {
@@ -284,10 +281,35 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+                try {
+                    setImageFromExternalStorage();
+                } catch (Exception e){
+                    Toast.makeText(this, "Unable to access storage", Toast.LENGTH_SHORT).show();
+                }
+            }
+        } catch (Exception e){
+            Toast.makeText(this, "Sorry", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
+        switch (requestCode) {
+            case 1: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    } else {
+                    Toast.makeText(this, "Permission denied to read your External storage",
+                            Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
     }
 
     @Override
