@@ -63,7 +63,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     Button buttonSubmit, buttonImageUp, buttonDelete;
 
     String capturedImageFileName;
-    String captureImageSaveInstance;
+    Boolean photoCapture = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,13 +142,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         String quoteTelString = quoteTel.getText().toString().trim();
         String quoteDescString = quoteDescription.getText().toString().trim();
         quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
-
-        String quoteImageString;
-        if(captureImageSaveInstance != null){
-            quoteImageString = captureImageSaveInstance;
-        } else{
-            quoteImageString = null;
-        }
+        String quoteImageString = capturedImageFileName;
 
         boolean valueChecker;
         if(quoteTitleString.isEmpty() ||
@@ -183,6 +177,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                     } else {
                         Toasty.success(this, "Quote added. Quote status set to 'pending'", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(this, ManageQuoteActivity.class);
+                        capturedImageFileName = null;
                         startActivity(intent);
                     }
                 } else {
@@ -205,6 +200,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         }
         //Else, do update and validate
         else {
+            capturedImageFileName = null;
             if (valueChecker == true) {
                 if (!quoteVendorSpinner.equals(vendorList.get(0))){
                 //We want to update the current row as the data being passed through has a Uri
@@ -216,6 +212,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 } else {
                     // Otherwise, the update was successful and we can display a toast.
                     Toasty.success(this, "Quote updated.", Toast.LENGTH_LONG).show();
+                    capturedImageFileName = null;
                     finish();
 
                 }
@@ -276,14 +273,14 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
             if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+                //Display saved image each time
                 try {
+                    photoCapture = true;
                     String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                             + "/" + capturedImageFileName;
                     Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
                     imageCaptureCam.setBackgroundResource(0);
                     imageCaptureCam.setImageBitmap(bitmap);
-                    captureImageSaveInstance = capturedImageFileName;
-                    capturedImageFileName = null;
                 } catch (Exception e){
                     Toast.makeText(this, "Unable to access storage", Toast.LENGTH_SHORT).show();
                 }
@@ -385,13 +382,28 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             String imageTitle = cursor.getString(imageColumnIndex);
             if(imageTitle == null){
                 imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
-                }else{
+                }
+            else if (imageTitle != null && photoCapture == false){
                     String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                             + "/" + imageTitle;
                     Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
                     imageCaptureCam.setBackgroundResource(0); //This works
                     imageCaptureCam.setImageBitmap(bitmap);
                 }
+            else if(imageTitle != null && photoCapture == true){
+                String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                        + "/" + capturedImageFileName;
+                Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
+                imageCaptureCam.setBackgroundResource(0); //This works
+                imageCaptureCam.setImageBitmap(bitmap);
+            }
+            else if (imageTitle == null && photoCapture == true){
+                String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                        + "/" + capturedImageFileName;
+                Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
+                imageCaptureCam.setBackgroundResource(0); //This works
+                imageCaptureCam.setImageBitmap(bitmap);
+            }
         }
     }
 
