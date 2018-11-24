@@ -394,15 +394,16 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
 
             //Try extract the imageName out of the row. If it is null, display default noImageSelected
             //If not null, then wipe the default image and replace with the image found in the db
-            try {
-                String imageTitle = cursor.getString(imageColumnIndex);
+
+            String imageTitle = cursor.getString(imageColumnIndex);
+            if(imageTitle == null){
+                imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
+            }else{
                 String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                         + "/" + imageTitle;
                 Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
                 imageCaptureCam.setBackgroundResource(0); //This works
                 imageCaptureCam.setImageBitmap(bitmap);
-            } catch (Exception e){
-                imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
             }
         }
     }
@@ -416,5 +417,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         quoteLocation.setText("");
         quoteTel.setText("");
         vendorSpinner.setSelection(0);
+        imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
+
     }
 }
