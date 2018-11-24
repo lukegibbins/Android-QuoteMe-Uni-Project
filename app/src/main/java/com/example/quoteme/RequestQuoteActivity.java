@@ -61,7 +61,9 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
 
     ImageView imageCaptureCam;
     Button buttonSubmit, buttonImageUp, buttonDelete;
+
     String capturedImageFileName;
+    String captureImageSaveInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +143,13 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         String quoteDescString = quoteDescription.getText().toString().trim();
         quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
 
+        String quoteImageString;
+        if(captureImageSaveInstance != null){
+            quoteImageString = captureImageSaveInstance;
+        } else{
+            quoteImageString = null;
+        }
+
         boolean valueChecker;
         if(quoteTitleString.isEmpty() ||
                 quoteDescString.isEmpty() ||
@@ -158,7 +167,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE, quoteTelString);
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION, quoteDescString);
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR, quoteVendorSpinner);
-        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE, "image.png");
+        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE, quoteImageString);
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS, PENDING_QUOTE_STATUS);
 
         //Determine if new or existing quote
@@ -273,6 +282,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                     Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
                     imageCaptureCam.setBackgroundResource(0);
                     imageCaptureCam.setImageBitmap(bitmap);
+                    captureImageSaveInstance = capturedImageFileName;
                     capturedImageFileName = null;
                 } catch (Exception e){
                     Toast.makeText(this, "Unable to access storage", Toast.LENGTH_SHORT).show();
