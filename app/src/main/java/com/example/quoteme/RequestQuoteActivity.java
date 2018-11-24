@@ -46,8 +46,6 @@ import es.dmoral.toasty.Toasty;
 public class RequestQuoteActivity extends AppCompatActivity implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    private String pictureName;
-
     private ArrayList<String> vendorList = new ArrayList<String>();
     private HashMap <String, Integer> vendorMappings = new HashMap<String, Integer>();
     private String quoteVendorSpinner;
@@ -60,6 +58,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     private Uri currentQuoteUri;
     private EditText quoteTitle, quoteLocation, quoteTel, quoteDescription;
     private Spinner vendorSpinner;
+    private String pictureName;
 
     ImageView imageCaptureCam;
     Button buttonSubmit, buttonImageUp, buttonDelete;
@@ -88,6 +87,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         buttonDelete = findViewById(R.id.buttonDeleteSpecific);
 
         imageCaptureCam = findViewById(R.id.imageCaptureCam);
+        imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
 
         //Disable button if no camera
         if(!hasCamera()){
@@ -136,7 +136,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     }
 
 
-    private String generatePictureName() {
+    private String generatePictureName(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
         String timeStamp = sdf.format(new Date());
         return "QUOTE_IMG_" + timeStamp + ".jpg";
@@ -150,7 +150,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         String quoteTelString = quoteTel.getText().toString().trim();
         String quoteDescString = quoteDescription.getText().toString().trim();
         quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
-        String quoteImageString = "quote.png"; //<-- changed when figured out
+
+        String quoteImageString = pictureName; //<-- changed when figured out
 
         boolean valueChecker;
         if(quoteTitleString.isEmpty() ||
@@ -264,6 +265,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         String fileName = pictureName;
         String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + fileName;
         Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
+        imageCaptureCam.setBackgroundResource(0); //This works
         imageCaptureCam.setImageBitmap(bitmap);
     }
     
@@ -287,6 +289,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
                 try {
                     setImageFromExternalStorage();
+                    pictureName = null;
                 } catch (Exception e){
                     Toast.makeText(this, "Unable to access storage", Toast.LENGTH_SHORT).show();
                 }
@@ -338,7 +341,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION,
-                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE
         };
 
         // This loader will execute the ContentProvider's query method on a background thread
@@ -366,6 +370,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             int telColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE);
             int descColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION);
             int vendorColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR);
+            int imageColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE);
 
             // Extract out the value from the Cursor for the given column index
             String title = cursor.getString(titleColumnIndex);
@@ -380,6 +385,20 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             quoteTel.setText(telephone);
             quoteDescription.setText(description);
             vendorSpinner.setSelection(vendorMappings.get(vendor));
+
+            //Try extract the imageName out of the row. If it is null, display default noImageSelected
+            //If not null, then wipe the default image and replace with the image found in the db
+            try {
+                String imageTitle = cursor.getString(imageColumnIndex);
+                pictureName = imageTitle;
+                String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                        + "/" + pictureName;
+                Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
+                imageCaptureCam.setImageResource(0);
+                imageCaptureCam.setImageBitmap(bitmap);
+            } catch (Exception e){
+                imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
+            }
         }
     }
 
@@ -392,5 +411,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         quoteLocation.setText("");
         quoteTel.setText("");
         vendorSpinner.setSelection(0);
+        imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
+        pictureName = null;
     }
 }
