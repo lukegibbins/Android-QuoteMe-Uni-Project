@@ -2,6 +2,8 @@ package com.example.quoteme;
 
 import android.Manifest;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,6 +20,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -54,6 +57,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     private static final int PENDING_QUOTE_STATUS = 0;
     private static final int EXISTING_QUOTE_LOADER = 0;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_IMAGE_GALLERY = 2;
 
     private Uri currentQuoteUri;
     private EditText quoteTitle, quoteLocation, quoteTel, quoteDescription;
@@ -64,7 +68,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
 
     String capturedImageFileName;
     String loadedImageFileName;
-
     Boolean hasPhotoBeenTaken = false;
 
     @Override
@@ -144,7 +147,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         String quoteTelString = quoteTel.getText().toString().trim();
         String quoteDescString = quoteDescription.getText().toString().trim();
         quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
-
         String quoteImageString = capturedImageFileName;
 
         boolean valueChecker;
@@ -261,13 +263,54 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         return true;
     }
 
+    private void galleryAddPic(String path) {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(path);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
+
+    public static String getPath(Context context, Uri uri) {
+        String result = null;
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = context.getContentResolver( ).query( uri, proj, null, null, null );
+        if(cursor != null){
+            if ( cursor.moveToFirst( ) ) {
+                int column_index = cursor.getColumnIndexOrThrow( proj[0] );
+                result = cursor.getString( column_index );
+            }
+            cursor.close( );
+        }
+        if(result == null) {
+            result = "Not found";
+        }
+        return result;
+    }
 
     @Override
     public void onClick(View v) {
         if (v == buttonSubmit) {
             saveQuote();
         } else if (v == buttonImageUp){
-            launchCameraAndSave();
+            AlertDialog.Builder builder = new AlertDialog.Builder(RequestQuoteActivity.this);
+            builder.setTitle("Choose option")
+                    .setItems(R.array.app_image_capture, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(which == 0){
+                                launchCameraAndSave();
+                            } else if(which == 1){
+                                //MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                                    Intent intent = new Intent(Intent.ACTION_PICK);
+                                    intent.setType("image/*");
+                                    startActivityForResult(intent, REQUEST_IMAGE_GALLERY);
+                            } else {
+                                //'CANCEL* action, do nothing
+                            }
+                        }
+                    });
+            AlertDialog ad = builder.create();
+            ad.show();
         } else if (v == buttonDelete){
             deleteSpecificQuote();
         } else if (v == buttonImageUp){
@@ -285,12 +328,24 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                     //photoCapture = true;
                     String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                             + "/" + capturedImageFileName;
-                    System.out.println("*******"+capturedImageFileName);
+                    galleryAddPic(photoPath);
                     Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
                     imageCaptureCam.setBackgroundResource(0);
                     imageCaptureCam.setImageBitmap(bitmap);
                 } catch (Exception e){
                     Toast.makeText(this, "Unable to access storage", Toast.LENGTH_SHORT).show();
+                }
+            } else if(requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK){
+                try {
+                    hasPhotoBeenTaken = true;
+                    Uri uri = data.getData();
+                    String picturePath = getPath(this, uri);
+                    String spl[]=picturePath.split("/");
+                    capturedImageFileName = spl[5].trim();
+                    imageCaptureCam.setBackgroundResource(0);
+                    imageCaptureCam.setImageURI(uri);
+                } catch (Exception e) {
+                    Toast.makeText(this, "Cant access image", Toast.LENGTH_SHORT).show();
                 }
             }
         } catch (Exception e){

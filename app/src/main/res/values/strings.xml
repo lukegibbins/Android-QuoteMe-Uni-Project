@@ -55,11 +55,17 @@
         <item>Cancel</item>
     </string-array>
 
+    <string-array
+        name="app_image_capture">
+        <item>Take picture</item>
+        <item>Access gallery</item>
+        <item>Cancel</item>
+    </string-array>
+
     <string name="app_deleteAllConfirmation">Are you sure you want to delete all quotes?</string>
     <string name="app_deleteQuotesInfo">quote(s) have been deleted</string>
     <string name="app_yes">Yes</string>
     <string name="app_no">No</string>
     <string name="app_pending">PENDING</string>
     <string name="app_accepted">ACCEPTED</string>
-
 </resources>
