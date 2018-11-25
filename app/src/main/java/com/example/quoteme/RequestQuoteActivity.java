@@ -63,7 +63,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     Button buttonSubmit, buttonImageUp, buttonDelete;
 
     String capturedImageFileName;
-    Boolean photoCapture = false;
+    Boolean hasPhotoBeenTaken = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +77,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         //Gets incoming intent and possible Uri
         Intent receivingIntent = getIntent();
         currentQuoteUri = receivingIntent.getData();
+        System.out.println("***HEY" + capturedImageFileName);
 
         quoteTitle = findViewById(R.id.editTitle);
         quoteLocation = findViewById(R.id.editLocation);
@@ -142,6 +143,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         String quoteTelString = quoteTel.getText().toString().trim();
         String quoteDescString = quoteDescription.getText().toString().trim();
         quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
+
         String quoteImageString = capturedImageFileName;
 
         boolean valueChecker;
@@ -170,6 +172,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             if (valueChecker == true) {
                 if (!quoteVendorSpinner.equals(vendorList.get(0))) {
                     Uri newUri = getContentResolver().insert(QuoteContract.QuoteEntry.CONTENT_URI, values);
+                    capturedImageFileName = null;
                     //Error saving quote
                     if (newUri == null) {
                         Toasty.error(this, "Error adding quote", Toast.LENGTH_LONG).show();
@@ -177,7 +180,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                     } else {
                         Toasty.success(this, "Quote added. Quote status set to 'pending'", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(this, ManageQuoteActivity.class);
-                        capturedImageFileName = null;
                         startActivity(intent);
                     }
                 } else {
@@ -200,7 +202,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         }
         //Else, do update and validate
         else {
-            capturedImageFileName = null;
             if (valueChecker == true) {
                 if (!quoteVendorSpinner.equals(vendorList.get(0))){
                 //We want to update the current row as the data being passed through has a Uri
@@ -274,10 +275,12 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         try {
             if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
                 //Display saved image each time
+                hasPhotoBeenTaken = true;
                 try {
-                    photoCapture = true;
+                    //photoCapture = true;
                     String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                             + "/" + capturedImageFileName;
+                    System.out.println("*******"+capturedImageFileName);
                     Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
                     imageCaptureCam.setBackgroundResource(0);
                     imageCaptureCam.setImageBitmap(bitmap);
@@ -380,24 +383,17 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             //Try extract the imageName out of the row. If it is null, display default noImageSelected
             //If not null, then wipe the default image and replace with the image found in the db
             String imageTitle = cursor.getString(imageColumnIndex);
-            if(imageTitle == null){
+            if(imageTitle == null && hasPhotoBeenTaken == false){
                 imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
-                }
-            else if (imageTitle != null && photoCapture == false){
-                    String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                            + "/" + imageTitle;
-                    Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
-                    imageCaptureCam.setBackgroundResource(0); //This works
-                    imageCaptureCam.setImageBitmap(bitmap);
-                }
-            else if(imageTitle != null && photoCapture == true){
+            } else if (imageTitle != null && hasPhotoBeenTaken == false){
                 String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                        + "/" + capturedImageFileName;
+                        + "/" + imageTitle;
                 Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
                 imageCaptureCam.setBackgroundResource(0); //This works
                 imageCaptureCam.setImageBitmap(bitmap);
-            }
-            else if (imageTitle == null && photoCapture == true){
+            } else if(imageTitle == null && hasPhotoBeenTaken == true){ //if the user wants to replace a new image for a blank one
+                imageCaptureCam.setBackgroundResource(0);
+            } else if (imageTitle != null && hasPhotoBeenTaken == true){
                 String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                         + "/" + capturedImageFileName;
                 Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
