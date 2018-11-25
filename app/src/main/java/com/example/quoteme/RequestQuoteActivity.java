@@ -288,6 +288,12 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         return result;
     }
 
+    private void lanuchGallery(){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_IMAGE_GALLERY);
+    }
+
     @Override
     public void onClick(View v) {
         if (v == buttonSubmit) {
@@ -301,9 +307,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                                 launchCameraAndSave();
                             } else if(which == 1){
                                 //MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                                    Intent intent = new Intent(Intent.ACTION_PICK);
-                                    intent.setType("image/*");
-                                    startActivityForResult(intent, REQUEST_IMAGE_GALLERY);
+                                lanuchGallery();
                             } else {
                                 //'CANCEL* action, do nothing
                             }
@@ -323,9 +327,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         try {
             if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
                 //Display saved image each time
-                hasPhotoBeenTaken = true;
                 try {
-                    //photoCapture = true;
+                    hasPhotoBeenTaken = true;
                     String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                             + "/" + capturedImageFileName;
                     galleryAddPic(photoPath);
