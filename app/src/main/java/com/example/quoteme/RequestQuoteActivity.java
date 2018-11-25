@@ -63,6 +63,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     Button buttonSubmit, buttonImageUp, buttonDelete;
 
     String capturedImageFileName;
+    String loadedImageFileName;
+
     Boolean hasPhotoBeenTaken = false;
 
     @Override
@@ -77,7 +79,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         //Gets incoming intent and possible Uri
         Intent receivingIntent = getIntent();
         currentQuoteUri = receivingIntent.getData();
-        System.out.println("***HEY" + capturedImageFileName);
 
         quoteTitle = findViewById(R.id.editTitle);
         quoteLocation = findViewById(R.id.editLocation);
@@ -172,7 +173,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             if (valueChecker == true) {
                 if (!quoteVendorSpinner.equals(vendorList.get(0))) {
                     Uri newUri = getContentResolver().insert(QuoteContract.QuoteEntry.CONTENT_URI, values);
-                    capturedImageFileName = null;
                     //Error saving quote
                     if (newUri == null) {
                         Toasty.error(this, "Error adding quote", Toast.LENGTH_LONG).show();
@@ -180,6 +180,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                     } else {
                         Toasty.success(this, "Quote added. Quote status set to 'pending'", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(this, ManageQuoteActivity.class);
+                        capturedImageFileName = null;
                         startActivity(intent);
                     }
                 } else {
@@ -205,6 +206,10 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             if (valueChecker == true) {
                 if (!quoteVendorSpinner.equals(vendorList.get(0))){
                 //We want to update the current row as the data being passed through has a Uri
+                if(hasPhotoBeenTaken == false)
+                {
+                    values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE, loadedImageFileName);
+                }
                 int rowsAffected = getContentResolver().update(currentQuoteUri, values, null, null);
                 // Show a toast message depending on whether or not the update was successful.
                 if (rowsAffected == 0) {
@@ -383,17 +388,29 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             //Try extract the imageName out of the row. If it is null, display default noImageSelected
             //If not null, then wipe the default image and replace with the image found in the db
             String imageTitle = cursor.getString(imageColumnIndex);
+
+            //if there's no image and NO photo has been taken
             if(imageTitle == null && hasPhotoBeenTaken == false){
                 imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
-            } else if (imageTitle != null && hasPhotoBeenTaken == false){
+            }
+
+            //db image is there, photo not taken and user has not pressed upload, they just back out
+            else if (imageTitle != null && hasPhotoBeenTaken == false){
                 String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                         + "/" + imageTitle;
+                loadedImageFileName = imageTitle;
                 Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
                 imageCaptureCam.setBackgroundResource(0); //This works
                 imageCaptureCam.setImageBitmap(bitmap);
-            } else if(imageTitle == null && hasPhotoBeenTaken == true){ //if the user wants to replace a new image for a blank one
+            }
+
+            //if the user wants to replace a new image for a blank one
+            else if(imageTitle == null && hasPhotoBeenTaken == true){
                 imageCaptureCam.setBackgroundResource(0);
-            } else if (imageTitle != null && hasPhotoBeenTaken == true){
+            }
+
+            //if the user wants to replace an image for an new image
+            else if (imageTitle != null && hasPhotoBeenTaken == true){
                 String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                         + "/" + capturedImageFileName;
                 Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
