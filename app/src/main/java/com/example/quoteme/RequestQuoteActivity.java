@@ -73,6 +73,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     String loadedImageFileName;
     Boolean hasPhotoBeenTaken = false;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,11 +116,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         } else if (currentQuoteUri == null){
             buttonDelete.setVisibility(View.GONE);
         }
-
-        //Every time this page is visited, ask for permission. We have to because of the API being 23
-        //to access external storage
-        ActivityCompat.requestPermissions(RequestQuoteActivity.this,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
     }
 
     private boolean hasCamera() {
@@ -302,6 +298,11 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         if (v == buttonSubmit) {
             saveQuote();
         } else if (v == buttonImageUp){
+            //Every time this page is visited, ask for permission. We have to because of the API being 23
+            //to access external storage
+            ActivityCompat.requestPermissions(RequestQuoteActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+
             AlertDialog.Builder builder = new AlertDialog.Builder(RequestQuoteActivity.this);
             builder.setTitle("Choose option")
                     .setItems(R.array.app_image_capture, new DialogInterface.OnClickListener() {
