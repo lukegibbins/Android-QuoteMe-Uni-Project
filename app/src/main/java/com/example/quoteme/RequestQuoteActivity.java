@@ -525,14 +525,12 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 return;
             }
             lastUpdate = actualTime;
-            Toast.makeText(this, "Values cleared from fields", Toast.LENGTH_SHORT).show();
+             Toasty.info(this, "Values cleared from fields", Toast.LENGTH_SHORT).show();
             quoteTitle.setText("");
             quoteDescription.setText("");
             quoteLocation.setText("");
             quoteTel.setText("");
             vendorSpinner.setSelection(0);
-            imageCaptureCam.setBackgroundResource(0);
-            imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
         }
     }
 
