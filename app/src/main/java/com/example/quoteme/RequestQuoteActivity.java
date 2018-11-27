@@ -346,12 +346,15 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 try {
                     hasPhotoBeenTaken = true;
                     Uri uri = data.getData();
-                    System.out.println("****THIS**"+uri);
                     String picturePath = getPath(this, uri);
                     String splitPathUsingSlashes[] = picturePath.split("/");
                     capturedImageFileName = splitPathUsingSlashes[5].trim();
+                    String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                            + "/" + capturedImageFileName;
+                    Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
+                    Bitmap rotateBitmap = rotateBitmap(bitmap, 90);
                     imageCaptureCam.setBackgroundResource(0);
-                    imageCaptureCam.setImageURI(uri);
+                    imageCaptureCam.setImageBitmap(rotateBitmap);
 
                 } catch (Exception e) {
                     Toast.makeText(this, "Cant access image", Toast.LENGTH_SHORT).show();
