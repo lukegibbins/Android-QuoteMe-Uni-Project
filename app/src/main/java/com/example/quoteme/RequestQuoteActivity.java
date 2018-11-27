@@ -10,7 +10,12 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
@@ -50,7 +55,11 @@ import java.util.HashMap;
 import es.dmoral.toasty.Toasty;
 
 public class RequestQuoteActivity extends AppCompatActivity implements View.OnClickListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>, SensorEventListener {
+
+    //Sensors
+    private SensorManager sensorManager;
+    private long lastUpdate;
 
     private ArrayList<String> vendorList = new ArrayList<String>();
     private HashMap <String, Integer> vendorMappings = new HashMap<String, Integer>();
@@ -78,6 +87,10 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_quote);
+
+        //sensor features
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        lastUpdate = System.currentTimeMillis();
 
         //add array list of vendors to list and populate hashMap
         vendorList.addAll(Arrays.asList(getResources().getStringArray(R.array.app_vendors)));
@@ -496,6 +509,33 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
+    private void getAccelerometer(SensorEvent event) {
+        float[] values = event.values;
+        // Movement
+        float x = values[0];
+        float y = values[1];
+        float z = values[2];
+
+        float accelerationSquareRoot = (x * x + y * y + z * z)
+                / (SensorManager.GRAVITY_EARTH * SensorManager.GRAVITY_EARTH);
+        long actualTime = event.timestamp;
+        if (accelerationSquareRoot >= 2) //
+        {
+            if (actualTime - lastUpdate < 200) {
+                return;
+            }
+            lastUpdate = actualTime;
+            Toast.makeText(this, "Values cleared from fields", Toast.LENGTH_SHORT).show();
+            quoteTitle.setText("");
+            quoteDescription.setText("");
+            quoteLocation.setText("");
+            quoteTel.setText("");
+            vendorSpinner.setSelection(0);
+            imageCaptureCam.setBackgroundResource(0);
+            imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
+        }
+    }
+
 
     //Reset the fields to empty values after an edit in preparation for an insert
     @Override
@@ -505,5 +545,34 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         quoteLocation.setText("");
         quoteTel.setText("");
         vendorSpinner.setSelection(0);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            getAccelerometer(event);
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // register this class as a listener for the orientation and
+        // accelerometer sensors
+        sensorManager.registerListener(this,
+                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onPause() {
+        // unregister listener
+        super.onPause();
+        sensorManager.unregisterListener(this);
     }
 }
