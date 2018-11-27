@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
@@ -34,9 +35,11 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.quoteme.QuoteData.QuoteContract;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -288,7 +291,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         return result;
     }
 
-    private void lanuchGallery(){
+    private void launchGallery(){
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*");
         startActivityForResult(intent, REQUEST_IMAGE_GALLERY);
@@ -307,7 +310,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                                 launchCameraAndSave();
                             } else if(which == 1){
                                 //MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                                lanuchGallery();
+                                launchGallery();
                             } else {
                                 //'CANCEL* action, do nothing
                             }
@@ -334,7 +337,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                     galleryAddPic(photoPath);
                     Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
                     imageCaptureCam.setBackgroundResource(0);
-                    imageCaptureCam.setImageBitmap(bitmap);
+                    Bitmap rotateBitmap = rotateBitmap(bitmap, 90);
+                    imageCaptureCam.setImageBitmap(rotateBitmap);
                 } catch (Exception e){
                     Toast.makeText(this, "Unable to access storage", Toast.LENGTH_SHORT).show();
                 }
@@ -342,11 +346,13 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 try {
                     hasPhotoBeenTaken = true;
                     Uri uri = data.getData();
+                    System.out.println("****THIS**"+uri);
                     String picturePath = getPath(this, uri);
-                    String spl[]=picturePath.split("/");
-                    capturedImageFileName = spl[5].trim();
+                    String splitPathUsingSlashes[] = picturePath.split("/");
+                    capturedImageFileName = splitPathUsingSlashes[5].trim();
                     imageCaptureCam.setBackgroundResource(0);
                     imageCaptureCam.setImageURI(uri);
+
                 } catch (Exception e) {
                     Toast.makeText(this, "Cant access image", Toast.LENGTH_SHORT).show();
                 }
@@ -458,8 +464,9 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                         + "/" + imageTitle;
                 loadedImageFileName = imageTitle;
                 Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
+                Bitmap rotateBitmap = rotateBitmap(bitmap, 90);
                 imageCaptureCam.setBackgroundResource(0); //This works
-                imageCaptureCam.setImageBitmap(bitmap);
+                imageCaptureCam.setImageBitmap(rotateBitmap);
             }
 
             //if the user wants to replace a new image for a blank one
@@ -472,10 +479,17 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                         + "/" + capturedImageFileName;
                 Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
+                Bitmap rotateBitmap = rotateBitmap(bitmap, 90);
                 imageCaptureCam.setBackgroundResource(0); //This works
-                imageCaptureCam.setImageBitmap(bitmap);
+                imageCaptureCam.setImageBitmap(rotateBitmap);
             }
         }
+    }
+
+    private Bitmap rotateBitmap(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 
 
