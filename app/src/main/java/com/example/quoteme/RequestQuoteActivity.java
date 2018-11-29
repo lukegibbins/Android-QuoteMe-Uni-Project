@@ -52,9 +52,6 @@ import es.dmoral.toasty.Toasty;
 public class RequestQuoteActivity extends AppCompatActivity implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor>, SensorEventListener{
 
-    //Gesture Detector
-    private GestureDetectorCompat gestureDetector;
-
     //Sensors
     private SensorManager sensorManager;
     private long lastUpdate;
@@ -128,9 +125,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         } else if (currentQuoteUri == null){
             buttonDelete.setVisibility(View.GONE);
         }
-
-        //Gesture Detector
-        gestureDetector = new GestureDetectorCompat(this,this);
     }
 
     private boolean hasCamera() {
