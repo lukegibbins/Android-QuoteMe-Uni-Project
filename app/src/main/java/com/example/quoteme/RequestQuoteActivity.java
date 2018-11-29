@@ -5,18 +5,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -26,12 +23,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,12 +39,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.quoteme.QuoteData.QuoteContract;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +50,10 @@ import java.util.HashMap;
 import es.dmoral.toasty.Toasty;
 
 public class RequestQuoteActivity extends AppCompatActivity implements View.OnClickListener,
-        LoaderManager.LoaderCallbacks<Cursor>, SensorEventListener {
+        LoaderManager.LoaderCallbacks<Cursor>, SensorEventListener{
+
+    //Gesture Detector
+    private GestureDetectorCompat gestureDetector;
 
     //Sensors
     private SensorManager sensorManager;
@@ -87,6 +85,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_quote);
+
 
         //sensor features
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -129,6 +128,9 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         } else if (currentQuoteUri == null){
             buttonDelete.setVisibility(View.GONE);
         }
+
+        //Gesture Detector
+        gestureDetector = new GestureDetectorCompat(this,this);
     }
 
     private boolean hasCamera() {
