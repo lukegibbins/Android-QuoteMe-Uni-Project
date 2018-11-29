@@ -105,13 +105,13 @@ public class QuoteProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case ALL_QUOTES:
-                return insertPet(uri, values);
+                return insertQuote(uri, values);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
         }
     }
 
-    private Uri insertPet(Uri uri, ContentValues values){
+    private Uri insertQuote(Uri uri, ContentValues values){
         SQLiteDatabase database = quoteDbHelper.getWritableDatabase();
         long id = database.insert(TABLE_NAME, null, values);
         if (id == -1) {

@@ -113,14 +113,14 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         imageCaptureCam = findViewById(R.id.imageCaptureCam);
         imageCaptureCam.setBackgroundResource(R.drawable.noimageselected);
 
+        buttonSubmit.setOnClickListener(this);
+        buttonImageUp.setOnClickListener(this);
+        buttonDelete.setOnClickListener(this);
+
         //Disable button if no camera
         if(!hasCamera()){
             buttonImageUp.setEnabled(false);
         }
-
-        buttonSubmit.setOnClickListener(this);
-        buttonImageUp.setOnClickListener(this);
-        buttonDelete.setOnClickListener(this);
 
         if(currentQuoteUri != null){
             setTitle(getString(R.string.app_editQuote));
@@ -220,8 +220,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             if (valueChecker == true) {
                 if (!quoteVendorSpinner.equals(vendorList.get(0))){
                 //We want to update the current row as the data being passed through has a Uri
-                if(hasPhotoBeenTaken == false)
-                {
+                if(hasPhotoBeenTaken == false) {
                     values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE, loadedImageFileName);
                 }
                 int rowsAffected = getContentResolver().update(currentQuoteUri, values, null, null);
@@ -256,6 +255,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+    //Delete a specific quote
     private void deleteSpecificQuote(){
         int deletedCount = getContentResolver().delete(currentQuoteUri, null, null);
         Toasty.info(this, deletedCount + " "+getString(R.string.app_deleteQuotesInfo), Toast.LENGTH_LONG).show();
@@ -285,11 +285,11 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
 
     public static String getPath(Context context, Uri uri) {
         String result = null;
-        String[] proj = { MediaStore.Images.Media.DATA };
-        Cursor cursor = context.getContentResolver( ).query( uri, proj, null, null, null );
+        String[] project = { MediaStore.Images.Media.DATA };
+        Cursor cursor = context.getContentResolver( ).query( uri, project, null, null, null );
         if(cursor != null){
             if ( cursor.moveToFirst( ) ) {
-                int column_index = cursor.getColumnIndexOrThrow( proj[0] );
+                int column_index = cursor.getColumnIndexOrThrow( project[0] );
                 result = cursor.getString( column_index );
             }
             cursor.close( );
@@ -525,7 +525,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 return;
             }
             lastUpdate = actualTime;
-             Toasty.info(this, "Values cleared from fields", Toast.LENGTH_SHORT).show();
+            Toasty.info(this, "Values cleared from fields", Toast.LENGTH_SHORT).show();
             quoteTitle.setText("");
             quoteDescription.setText("");
             quoteLocation.setText("");

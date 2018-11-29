@@ -13,7 +13,7 @@ public class QuoteDbHelper extends SQLiteOpenHelper {
 
     public QuoteDbHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(); //Need this here
     }
 
     @Override
@@ -27,6 +27,7 @@ public class QuoteDbHelper extends SQLiteOpenHelper {
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS + " INTEGER NOT NULL DEFAULT 0, "
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE + " TEXT NOT NULL, "
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR + " TEXT NOT NULL, "
+                + QuoteContract.QuoteEntry.COLUMN_QUOTE_USER + " TEXT NOT NULL, "
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION + " TEXT NOT NULL);";
 
         // Execute the SQL statement

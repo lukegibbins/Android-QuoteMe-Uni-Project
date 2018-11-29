@@ -32,7 +32,7 @@ public class QuoteCursorAdapter extends CursorAdapter {
         //Find views
         TextView titleTextView = view.findViewById(R.id.name);
         TextView vendorTextView = view.findViewById(R.id.summary);
-        TextView statusTextView = view.findViewById(R.id.status);
+        //TextView statusTextView = view.findViewById(R.id.status);
 
         //Define column headings to receive data from
         int titleColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE);
