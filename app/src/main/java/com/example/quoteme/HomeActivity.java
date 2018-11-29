@@ -1,16 +1,19 @@
 package com.example.quoteme;
 
 import android.content.Intent;
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button requestWork;
+    ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +22,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         requestWork = findViewById(R.id.buttonRequestWork);
         requestWork.setOnClickListener(this);
+
+        imageView = findViewById(R.id.imageViewConstr);
+        imageView.setBackgroundResource(R.drawable.constr2);
+
+
 
     }
 
