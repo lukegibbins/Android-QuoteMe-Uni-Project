@@ -2,6 +2,7 @@ package com.example.quoteme;
 
 import android.content.Intent;
 import android.media.Image;
+import android.support.annotation.ColorInt;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,18 +16,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     Button requestWork;
     ImageView imageView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        View view = this.getWindow().getDecorView();
+        view.setBackgroundColor(getResources().getColor(R.color.primaryTextColor));
 
         requestWork = findViewById(R.id.buttonRequestWork);
         requestWork.setOnClickListener(this);
 
         imageView = findViewById(R.id.imageViewConstr);
         imageView.setBackgroundResource(R.drawable.constr2);
-
-
 
     }
 
