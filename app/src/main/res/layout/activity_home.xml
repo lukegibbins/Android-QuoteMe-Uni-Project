@@ -15,7 +15,7 @@
     <ImageView
         android:id="@+id/imageViewConstr"
         android:layout_width="359dp"
-        android:layout_height="275dp"
+        android:layout_height="277dp"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
@@ -72,13 +72,13 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="262dp"
-        android:layout_height="27dp"
+        android:layout_width="264dp"
+        android:layout_height="35dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="80dp"
         android:text="Welcome to QuoteMe,"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -86,8 +86,8 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         android:text="Luke Gibbins"
         android:textColor="@color/secondaryTextColor"
         app:layout_constraintStart_toStartOf="parent"
