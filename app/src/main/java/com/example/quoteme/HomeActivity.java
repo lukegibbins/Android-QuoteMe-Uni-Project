@@ -29,8 +29,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         requestWork.setOnClickListener(this);
 
         imageView = findViewById(R.id.imageViewConstr);
-        imageView.setBackgroundResource(R.drawable.constr2);
-
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
