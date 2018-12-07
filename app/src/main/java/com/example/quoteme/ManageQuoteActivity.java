@@ -31,7 +31,6 @@ public class ManageQuoteActivity extends AppCompatActivity implements LoaderMana
     private static final int QUOTE_LOADER = 0;
     private QuoteCursorAdapter quoteCursorAdapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
