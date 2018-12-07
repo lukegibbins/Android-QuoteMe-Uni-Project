@@ -103,6 +103,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         if(cursor.moveToFirst()){
             hasUserBeenFound = true;
+            cursor.close();
         }
         return hasUserBeenFound;
     }
