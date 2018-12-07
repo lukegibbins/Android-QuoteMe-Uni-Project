@@ -83,7 +83,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_quote);
 
-
         //sensor features
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         lastUpdate = System.currentTimeMillis();
@@ -282,9 +281,9 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     public static String getPath(Context context, Uri uri) {
         String result = null;
         String[] project = { MediaStore.Images.Media.DATA };
-        Cursor cursor = context.getContentResolver( ).query( uri, project, null, null, null );
+        Cursor cursor = context.getContentResolver().query(uri, project, null, null, null );
         if(cursor != null){
-            if ( cursor.moveToFirst( ) ) {
+            if ( cursor.moveToFirst()) {
                 int column_index = cursor.getColumnIndexOrThrow( project[0] );
                 result = cursor.getString( column_index );
             }
