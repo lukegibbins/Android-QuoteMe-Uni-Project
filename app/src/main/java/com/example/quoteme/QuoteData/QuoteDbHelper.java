@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 
 import static com.example.quoteme.CommonUtils.DBhelper.DATABASE_NAME;
 import static com.example.quoteme.CommonUtils.DBhelper.DATABASE_VERSION;
-import static com.example.quoteme.QuoteData.QuoteContract.QuoteEntry.TABLE_NAME;
+import static com.example.quoteme.QuoteData.QuoteContract.QuoteEntry.TABLE_NAME_QUOTE;
 
 public class QuoteDbHelper extends SQLiteOpenHelper {
 
@@ -19,7 +19,7 @@ public class QuoteDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create a String that contains the SQL statement to create the pets table
-        String SQL_CREATE_QUOTE_TABLE = "CREATE TABLE " + TABLE_NAME + "("
+        String SQL_CREATE_QUOTE_TABLE = "CREATE TABLE " + TABLE_NAME_QUOTE + "("
                 + QuoteContract.QuoteEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE + " TEXT NOT NULL, "
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION + " TEXT NOT NULL, "
@@ -36,7 +36,7 @@ public class QuoteDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("drop table if exists "+ TABLE_NAME);
+        db.execSQL("drop table if exists "+ TABLE_NAME_QUOTE);
         onCreate(db);
     }
 }

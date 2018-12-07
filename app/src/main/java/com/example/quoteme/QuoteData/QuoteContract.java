@@ -26,7 +26,7 @@ public class QuoteContract  {
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_QUOTES);
 
         //Table Name
-        public final static String TABLE_NAME = "quotes";
+        public final static String TABLE_NAME_QUOTE = "quotes";
 
         //Table Columns
         public final static String _ID = BaseColumns._ID;
