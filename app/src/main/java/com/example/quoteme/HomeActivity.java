@@ -1,8 +1,7 @@
 package com.example.quoteme;
 
 import android.content.Intent;
-import android.media.Image;
-import android.support.annotation.ColorInt;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,12 +9,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import static com.example.quoteme.LoginActivity.FIRST_NAME;
+import static com.example.quoteme.LoginActivity.SHARED_PREF_FILE;
+import static com.example.quoteme.LoginActivity.SURNAME;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button requestWork;
     ImageView imageView;
+    TextView textViewUsername;
 
+    private String firstName;
+    private String surname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +34,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         requestWork = findViewById(R.id.buttonRequestWork);
         requestWork.setOnClickListener(this);
+
+        SharedPreferences sharedPreferences  = getSharedPreferences(SHARED_PREF_FILE, MODE_PRIVATE);
+        firstName = sharedPreferences.getString(FIRST_NAME, "first name");
+        surname = sharedPreferences.getString(SURNAME, "surname");
+
+        textViewUsername = findViewById(R.id.textViewUserName);
+        textViewUsername.setText(firstName + " " + surname);
 
         imageView = findViewById(R.id.imageViewConstr);
     }

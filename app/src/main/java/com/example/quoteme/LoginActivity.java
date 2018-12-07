@@ -26,11 +26,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText loginUsername, loginPassword;
 
     SharedPreferences sharedPreferences;
-    private final String SHARED_PREF_FILE = "com.example.quoteme";
-
-    private final String USERNAME = "username";
-    private final String FIRST_NAME = "firstName";
-    private final String SURNAME = "surname";
+    public static final String SHARED_PREF_FILE = "com.example.quoteme";
+    public static final String USERNAME = "username";
+    public static final String FIRST_NAME = "firstName";
+    public static final String SURNAME = "surname";
 
     private String userFirstName;
     private String userSurname;
@@ -75,6 +74,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             editor.putString(FIRST_NAME, userFirstName);
             editor.putString(SURNAME, userSurname);
             editor.apply();
+            editor.commit();
 
             Intent i = new Intent(this, HomeActivity.class);
             startActivity(i);
@@ -102,7 +102,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             int passwordColumnIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_USERS_PASSWORD);
             int firstNameColumnIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_USERS_FIRSTNAME);
             int surnameColumnIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_USERS_SURNAME);
-
 
             String emailString = cursor.getString(emailColumnIndex);
             String passwordString = cursor.getString(passwordColumnIndex);
