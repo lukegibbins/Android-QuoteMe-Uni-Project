@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 
+import static com.example.quoteme.CommonUtils.DBhelper.CONTENT_AUTHORITY;
 import static com.example.quoteme.QuoteData.QuoteContract.QuoteEntry.TABLE_NAME;
 
 public class QuoteProvider extends ContentProvider {
@@ -22,8 +23,8 @@ public class QuoteProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        sUriMatcher.addURI(QuoteContract.CONTENT_AUTHORITY, QuoteContract.PATH_QUOTES, ALL_QUOTES);
-        sUriMatcher.addURI(QuoteContract.CONTENT_AUTHORITY,QuoteContract.PATH_QUOTES + "/#", SINGLE_QUOTE_ID);
+        sUriMatcher.addURI(CONTENT_AUTHORITY, QuoteContract.PATH_QUOTES, ALL_QUOTES);
+        sUriMatcher.addURI(CONTENT_AUTHORITY,QuoteContract.PATH_QUOTES + "/#", SINGLE_QUOTE_ID);
     }
 
     @Override
