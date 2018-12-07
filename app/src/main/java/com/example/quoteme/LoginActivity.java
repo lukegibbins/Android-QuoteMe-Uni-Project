@@ -1,6 +1,7 @@
 package com.example.quoteme;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +25,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     QuoteDbHelper db;
     EditText loginUsername, loginPassword;
 
+    SharedPreferences sharedPreferences;
+    private final String SHARED_PREF_FILE = "com.example.quoteme";
+
+    private final String USERNAME = "username";
+    private final String FIRST_NAME = "firstName";
+    private final String SURNAME = "surname";
+
+    private String userFirstName;
+    private String userSurname;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +50,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         buttonLogin = findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(this);
+
+        sharedPreferences = getSharedPreferences(SHARED_PREF_FILE, MODE_PRIVATE);
     }
 
     @Override
@@ -53,9 +66,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void logUserIn(){
+
         Boolean isAuthenticated = isAuthenticated(loginUsername.getText().toString().trim());
 
         if(isAuthenticated == true) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(USERNAME, loginUsername.getText().toString().trim());
+            editor.putString(FIRST_NAME, userFirstName);
+            editor.putString(SURNAME, userSurname);
+            editor.apply();
+
             Intent i = new Intent(this, HomeActivity.class);
             startActivity(i);
         } else {
@@ -66,7 +86,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Boolean isAuthenticated(String emailAddress){
         Boolean isAuthenticated = false;
 
-        String [] project = {"email, password"};
+        String [] project = {"email, password, firstName, surname"};
         String selection = "email=?";
         String [] selectionArgs = {emailAddress};
 
@@ -80,9 +100,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(cursor.moveToFirst()){
             int emailColumnIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_USERS_EMAIL);
             int passwordColumnIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_USERS_PASSWORD);
+            int firstNameColumnIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_USERS_FIRSTNAME);
+            int surnameColumnIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_USERS_SURNAME);
+
 
             String emailString = cursor.getString(emailColumnIndex);
             String passwordString = cursor.getString(passwordColumnIndex);
+            String userFirstNameString = cursor.getString(firstNameColumnIndex);
+            String userSurnameString = cursor.getString(surnameColumnIndex);
+
+            userFirstName = userFirstNameString;
+            userSurname = userSurnameString;
 
             if(emailString.equals(loginUsername.getText().toString().trim()) &&
                     passwordString.equals(loginPassword.getText().toString().trim())){
