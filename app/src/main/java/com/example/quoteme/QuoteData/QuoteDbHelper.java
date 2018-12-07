@@ -5,9 +5,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 
+import com.example.quoteme.UserData.UserContract;
+
 import static com.example.quoteme.CommonUtils.DBhelper.DATABASE_NAME;
 import static com.example.quoteme.CommonUtils.DBhelper.DATABASE_VERSION;
 import static com.example.quoteme.QuoteData.QuoteContract.QuoteEntry.TABLE_NAME_QUOTE;
+import static com.example.quoteme.UserData.UserContract.UserEntry.TABLE_NAME_USERS;
 
 public class QuoteDbHelper extends SQLiteOpenHelper {
 
@@ -30,13 +33,22 @@ public class QuoteDbHelper extends SQLiteOpenHelper {
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_USER + " TEXT NOT NULL, "
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION + " TEXT NOT NULL);";
 
+        String SQL_CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_NAME_USERS + "("
+                + UserContract.UserEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + UserContract.UserEntry.COLUMN_USERS_FIRSTNAME + " TEXT NOT NULL, "
+                + UserContract.UserEntry.COLUMN_USERS_SURNAME + " TEXT NOT NULL, "
+                + UserContract.UserEntry.COLUMN_USERS_EMAIL + " TEXT NOT NULL, "
+                + UserContract.UserEntry.COLUMN_USERS_PASSWORD + " TEXT NOT NULL);";
+
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_QUOTE_TABLE);
+        db.execSQL(SQL_CREATE_USERS_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists "+ TABLE_NAME_QUOTE);
+        db.execSQL("drop table if exists "+ TABLE_NAME_USERS);
         onCreate(db);
     }
 }

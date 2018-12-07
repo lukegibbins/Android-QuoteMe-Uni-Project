@@ -9,14 +9,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.quoteme.QuoteData.QuoteDbHelper;
-import com.example.quoteme.UserData.UserDbHelper;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView textSignUpNow;
     Button buttonLogin;
     QuoteDbHelper db;
-    UserDbHelper userDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +22,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         db = new QuoteDbHelper(this);
-        userDbHelper = new UserDbHelper(this);
 
         textSignUpNow = findViewById(R.id.textSignUpNow);
         textSignUpNow.setOnClickListener(this);
