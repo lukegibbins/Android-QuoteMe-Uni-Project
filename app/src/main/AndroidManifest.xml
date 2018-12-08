@@ -68,7 +68,7 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".SearchActivity"
+        <activity android:name=".SearchQuoteActivity"
             android:label="@string/app_searchQuote">
         </activity>
     </application>

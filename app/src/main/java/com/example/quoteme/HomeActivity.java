@@ -60,7 +60,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             Intent i  = new Intent(this, RequestQuoteActivity.class);
             startActivity(i);
         } else if (v == searchWork){
-            Intent i  = new Intent(this, SearchActivity.class);
+            Intent i  = new Intent(this, SearchQuoteActivity.class);
             startActivity(i);
         }
     }
