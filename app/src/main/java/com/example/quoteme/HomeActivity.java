@@ -17,7 +17,7 @@ import static com.example.quoteme.LoginActivity.SURNAME;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button requestWork;
+    Button requestWork, searchWork;
     ImageView imageView;
     TextView textViewUsername;
 
@@ -34,6 +34,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         requestWork = findViewById(R.id.buttonRequestWork);
         requestWork.setOnClickListener(this);
+
+        searchWork = findViewById(R.id.buttonSearchWork);
+        searchWork.setOnClickListener(this);
 
         SharedPreferences sharedPreferences  = getSharedPreferences(SHARED_PREF_FILE, MODE_PRIVATE);
         firstName = sharedPreferences.getString(FIRST_NAME, "first name");
@@ -55,6 +58,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if(v == requestWork){
             Intent i  = new Intent(this, RequestQuoteActivity.class);
+            startActivity(i);
+        } else if (v == searchWork){
+            Intent i  = new Intent(this, SearchActivity.class);
             startActivity(i);
         }
     }

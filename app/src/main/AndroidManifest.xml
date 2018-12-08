@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--*** This is he manifest file which contains data regarding each activity ***-->
+<?xml version="1.0" encoding="utf-8"?><!-- *** This is he manifest file which contains data regarding each activity *** -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.quoteme"
     android:version="1"
@@ -9,7 +8,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-feature android:name="android.hardware.camera" android:required="true" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -31,9 +33,9 @@
             android:name=".SignUpActivity"
             android:label="@string/app_signup">
 
-            <!--***DEFINES PARENT ACTIVITY TO ALL YOU GO GO BACK TO WHERE YOU LAST CAME***-->
-            <!--***ANDROID:LABEL DEFINES THE NAME AT THE TOP OF THE APP BAR***-->
-            <!--***SAME APPLIES TO ALL**-->
+            <!-- ***DEFINES PARENT ACTIVITY TO ALL YOU GO GO BACK TO WHERE YOU LAST CAME*** -->
+            <!-- ***ANDROID:LABEL DEFINES THE NAME AT THE TOP OF THE APP BAR*** -->
+            <!-- ***SAME APPLIES TO ALL** -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".LoginActivity" />
@@ -48,21 +50,27 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomeActivity" />
         </activity>
-        <activity android:name=".ManageQuoteActivity"
+        <activity
+            android:name=".ManageQuoteActivity"
             android:label="@string/app_manageQuotes">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HomeActivity" />
         </activity>
 
-        <!--Register Provider-->
+        <!-- Register Provider -->
         <provider
             android:name=".QuoteData.QuoteProvider"
             android:authorities="com.example.quoteme"
             android:exported="false" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity android:name=".SearchActivity"
+            android:label="@string/app_searchQuote">
+        </activity>
     </application>
 
 </manifest>

@@ -20,9 +20,12 @@
     <string name="app_signout">Sign Out</string>
     <string name="app_manageQuotes">Manage Quotes</string>
     <string name="app_requestQuote">Request Quote</string>
+    <string name="app_searchQuote">Search Quote</string>
+    <string name="app_searchViewForList">Search</string>
     <string name="app_quoteTitle">Quote Title</string>
     <string name="app_trade">Trade</string>
     <string name="app_Location">Location</string>
+    <string name="app_searchLocation">Filter by location</string>
     <string name="app_tel">Contact Number</string>
     <string name="app_description">Description of Work</string>
     <string name="app_imageUpload">Image Upload</string>
@@ -31,6 +34,15 @@
 
     <string-array name="app_vendors">
         <item>Select a vendor</item>
+        <item>Building</item>
+        <item>Gardening</item>
+        <item>Pluming</item>
+        <item>Electrician</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="app_searchVendors">
+        <item>Filter by vendor</item>
         <item>Building</item>
         <item>Gardening</item>
         <item>Pluming</item>
@@ -48,15 +60,13 @@
     <string name="app_selectQuote">Select Quote</string>
 
     <string name="app_float_options_title">Choose an Action</string>
-    <string-array
-        name="app_float_options">
+    <string-array name="app_float_options">
         <item>Add a Quote</item>
         <item>Delete all Quotes</item>
         <item>Cancel</item>
     </string-array>
 
-    <string-array
-        name="app_image_capture">
+    <string-array name="app_image_capture">
         <item>Take picture</item>
         <item>Access gallery</item>
         <item>Cancel</item>
