@@ -3,6 +3,7 @@ package com.example.quoteme;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -26,10 +27,14 @@ import com.example.quoteme.QuoteData.QuoteCursorAdapter;
 
 import es.dmoral.toasty.Toasty;
 
+import static com.example.quoteme.LoginActivity.EMAIL;
+import static com.example.quoteme.LoginActivity.SHARED_PREF_FILE;
+
 public class ManageQuoteActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int QUOTE_LOADER = 0;
     private QuoteCursorAdapter quoteCursorAdapter;
+    private String usersEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +96,10 @@ public class ManageQuoteActivity extends AppCompatActivity implements LoaderMana
             }
         });
 
+        //Gets users email address to filter quotes by usersEmail
+        SharedPreferences sharedPreferences  = getSharedPreferences(SHARED_PREF_FILE, MODE_PRIVATE);
+        usersEmail = sharedPreferences.getString(EMAIL, "users email address");
+
         getSupportLoaderManager().initLoader(QUOTE_LOADER, null, this);
     }
 
@@ -129,6 +138,10 @@ public class ManageQuoteActivity extends AppCompatActivity implements LoaderMana
     @Override
     public Loader<Cursor> onCreateLoader(int i, @Nullable Bundle bundle) {
 
+        //Where clause for cursor query
+        String selection = "user=?";
+        String [] selectionArgs = {usersEmail};
+
         //Defines the items which should be displayed in quoteListView
         String [] projection = {
                 QuoteContract.QuoteEntry._ID,
@@ -139,8 +152,8 @@ public class ManageQuoteActivity extends AppCompatActivity implements LoaderMana
         return new CursorLoader(this,
                 QuoteContract.QuoteEntry.CONTENT_URI,
                 projection,
-                null,
-                null,
+                selection,
+                selectionArgs,
                 null
         );
     }
