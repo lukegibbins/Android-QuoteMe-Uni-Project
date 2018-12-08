@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -49,6 +50,9 @@ import java.util.HashMap;
 
 import es.dmoral.toasty.Toasty;
 
+import static com.example.quoteme.LoginActivity.EMAIL;
+import static com.example.quoteme.LoginActivity.SHARED_PREF_FILE;
+
 public class RequestQuoteActivity extends AppCompatActivity implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor>, SensorEventListener{
 
@@ -77,6 +81,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     String loadedImageFileName;
     Boolean hasPhotoBeenTaken = false;
 
+    private String usersEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +116,9 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         buttonSubmit.setOnClickListener(this);
         buttonImageUp.setOnClickListener(this);
         buttonDelete.setOnClickListener(this);
+
+        SharedPreferences sharedPreferences  = getSharedPreferences(SHARED_PREF_FILE, MODE_PRIVATE);
+        usersEmail = sharedPreferences.getString(EMAIL, "users email address");
 
         //Disable button if no camera
         if(!hasCamera()){
@@ -175,6 +183,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR, quoteVendorSpinner);
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE, quoteImageString);
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS, PENDING_QUOTE_STATUS);
+        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_USER, usersEmail);
 
         //Determine if new or existing quote
         //If this is a new quote --> Do insert and validate

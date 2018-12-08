@@ -30,9 +30,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public static final String USERNAME = "username";
     public static final String FIRST_NAME = "firstName";
     public static final String SURNAME = "surname";
+    public static final String EMAIL = "email";
 
     private String userFirstName;
     private String userSurname;
+    private String usersEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +75,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             editor.putString(USERNAME, loginUsername.getText().toString().trim());
             editor.putString(FIRST_NAME, userFirstName);
             editor.putString(SURNAME, userSurname);
+            editor.putString(EMAIL, usersEmail);
             editor.apply();
             editor.commit();
 
@@ -110,6 +113,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             userFirstName = userFirstNameString;
             userSurname = userSurnameString;
+            usersEmail = emailString;
 
             if(emailString.equals(loginUsername.getText().toString().trim()) &&
                     passwordString.equals(loginPassword.getText().toString().trim())){
