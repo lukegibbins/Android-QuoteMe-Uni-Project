@@ -23,14 +23,11 @@ public class SearchQuoteActivity extends AppCompatActivity implements LoaderMana
 
     private QuoteCursorAdapter quoteCursorAdapter;
     private static final int QUOTE_LOADER = 0;
-    private TextView noQuotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_quote);
-
-        noQuotes = findViewById(R.id.search_empty_title_text);
 
         //Defines view which holds data queried by cursorAdapter
         ListView quoteListView = findViewById(R.id.search_list);
