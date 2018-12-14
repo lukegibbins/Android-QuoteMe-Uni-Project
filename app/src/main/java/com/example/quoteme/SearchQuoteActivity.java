@@ -26,6 +26,7 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
     private QuoteCursorAdapter quoteCursorAdapter;
     EditText filteredLocation;
     Button buttonFilterSearch;
+    ListView quoteListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,7 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
         filteredLocation = findViewById(R.id.editLocationSearch);
 
         //Defines view which holds data queried by cursorAdapter
-        ListView quoteListView = findViewById(R.id.search_list);
+        quoteListView = findViewById(R.id.search_list);
 
         //Used to display an empty view for a quoteListView that has 0 items
         View emptyView = findViewById(R.id.search_empty_title_text);
