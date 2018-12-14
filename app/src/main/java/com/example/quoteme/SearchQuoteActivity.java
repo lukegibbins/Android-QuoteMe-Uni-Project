@@ -1,7 +1,9 @@
 package com.example.quoteme;
 
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -62,6 +65,17 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
         //Create instance of cursorAdapter and bind cursorAdapter data to quoteList
         quoteCursorAdapter = new QuoteCursorAdapter(this, cursor);
         quoteListView.setAdapter(quoteCursorAdapter);
+
+        quoteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(SearchQuoteActivity.this, RequestQuoteActivity.class);
+                //When an item is clicked, it appends the ID of the item to the URI routing a specific quote
+                Uri currentQuoteUri = ContentUris.withAppendedId(QuoteContract.QuoteEntry.CONTENT_URI, id);
+                intent.setData(currentQuoteUri);
+                startActivity(intent);
+            }
+        });
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -110,7 +124,9 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         if(v == buttonFilterSearch){
-            filterSearch();
+            //filterSearch();
+            Intent i = new Intent(this, RespondQuoteActivity.class);
+            startActivity(i);
         }
     }
 }

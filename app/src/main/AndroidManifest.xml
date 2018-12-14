@@ -68,8 +68,16 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".SearchQuoteActivity"
+        <activity
+            android:name=".SearchQuoteActivity"
             android:label="@string/app_searchQuote">
+        </activity>
+
+        <activity android:name=".RespondQuoteActivity"
+            android:label="@string/app_respond">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SearchQuoteActivity" />
         </activity>
     </application>
 

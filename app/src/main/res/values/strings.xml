@@ -21,6 +21,7 @@
     <string name="app_manageQuotes">Manage Quotes</string>
     <string name="app_requestQuote">Request Quote</string>
     <string name="app_searchQuote">Search Quote</string>
+    <string name="app_respond">Respond</string>
     <string name="app_searchViewForList">Search</string>
     <string name="app_quoteTitle">Quote Title</string>
     <string name="app_trade">Trade</string>
