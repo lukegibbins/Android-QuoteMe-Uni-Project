@@ -33,6 +33,9 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_quote);
 
+        buttonFilterSearch = findViewById(R.id.buttonSearchQuote);
+        buttonFilterSearch.setOnClickListener(this);
+
         filteredLocation = findViewById(R.id.editLocationSearch);
 
         //Defines view which holds data queried by cursorAdapter
@@ -68,8 +71,25 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void filterSearch(){
+        String location = filteredLocation.getText().toString().trim();
+        String selection = "location=?";
+        String [] selectionArgs = {location};
 
+        String [] project = {
+                QuoteContract.QuoteEntry._ID,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR
+        };
 
+        Cursor cursor = getContentResolver().query(QuoteContract.QuoteEntry.CONTENT_URI,
+                project,
+                selection,
+                selectionArgs,
+                null
+        );
+
+        quoteCursorAdapter = new QuoteCursorAdapter(this, cursor);
+        quoteListView.setAdapter(quoteCursorAdapter);
     }
 
     @Override
@@ -90,7 +110,7 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         if(v == buttonFilterSearch){
-
+            filterSearch();
         }
     }
 }
