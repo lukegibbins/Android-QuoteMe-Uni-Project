@@ -16,7 +16,7 @@
         android:background="@drawable/custom_edit_text_bg_blue"
         android:text="@string/app_searchViewForList"
         android:textColor="@color/primaryTextColor"
-        app:layout_constraintStart_toStartOf="@+id/spinnerVendors"
+        app:layout_constraintStart_toStartOf="@+id/spinnerVendorsSearch"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
@@ -34,7 +34,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/spinnerVendors"
+        android:id="@+id/spinnerVendorsSearch"
         android:layout_width="276dp"
         android:layout_height="40dp"
         android:layout_marginTop="8dp"
@@ -75,10 +75,10 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/spinnerVendors"
+        app:layout_constraintEnd_toEndOf="@+id/spinnerVendorsSearch"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/buttonSearchQuote"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerVendors"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerVendorsSearch"
         app:srcCompat="@drawable/baseline_refresh_black_48" />
 
 </android.support.constraint.ConstraintLayout>

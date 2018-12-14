@@ -4,11 +4,6 @@ import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,11 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Spinner;
 
 import com.example.quoteme.QuoteData.QuoteContract;
 import com.example.quoteme.QuoteData.QuoteCursorAdapter;
-import com.example.quoteme.UserData.UserContract;
 
 public class SearchQuoteActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -32,6 +26,9 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
     Button buttonFilterSearch;
     ListView quoteListView;
     ImageView imageRefresh;
+
+    private Spinner vendorSpinner;
+    private String quoteVendorSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +48,9 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
         //Used to display an empty view for a quoteListView that has 0 items
         View emptyView = findViewById(R.id.search_empty_title_text);
         quoteListView.setEmptyView(emptyView);
+
+        //Vendor spinner
+        vendorSpinner = findViewById(R.id.spinnerVendorsSearch);
 
         //Defines the items which should be displayed in quoteListView
         String [] project = {
@@ -88,10 +88,55 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
         return true;
     }
 
-    private void filterSearch(){
+    private void filterSearchLocationVendor(){
+        quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
+        String location = filteredLocation.getText().toString().trim();
+        String selection = "location=? AND vendor=?";
+        String [] selectionArgs = {location, quoteVendorSpinner};
+
+        String [] project = {
+                QuoteContract.QuoteEntry._ID,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR
+        };
+
+        Cursor cursor = getContentResolver().query(QuoteContract.QuoteEntry.CONTENT_URI,
+                project,
+                selection,
+                selectionArgs,
+                null
+        );
+
+        quoteCursorAdapter = new QuoteCursorAdapter(this, cursor);
+        quoteListView.setAdapter(quoteCursorAdapter);
+    }
+
+    private void filterSearchLocation(){
         String location = filteredLocation.getText().toString().trim();
         String selection = "location=?";
         String [] selectionArgs = {location};
+
+        String [] project = {
+                QuoteContract.QuoteEntry._ID,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR
+        };
+
+        Cursor cursor = getContentResolver().query(QuoteContract.QuoteEntry.CONTENT_URI,
+                project,
+                selection,
+                selectionArgs,
+                null
+        );
+
+        quoteCursorAdapter = new QuoteCursorAdapter(this, cursor);
+        quoteListView.setAdapter(quoteCursorAdapter);
+    }
+
+    private void filterSearchVendor(){
+        quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
+        String selection = "vendor=?";
+        String [] selectionArgs = {quoteVendorSpinner};
 
         String [] project = {
                 QuoteContract.QuoteEntry._ID,
@@ -128,9 +173,21 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         if(v == buttonFilterSearch){
-            filterSearch();
-//            Intent i = new Intent(this, RespondQuoteActivity.class);
-//            startActivity(i);
+            String location = filteredLocation.getText().toString().trim();
+            int vendorSpinnerPosition = vendorSpinner.getSelectedItemPosition();
+
+                //if there are values for the location but the vendor is at element 0
+                if(!location.isEmpty() && vendorSpinnerPosition == 0){
+                filterSearchLocation();
+            }
+                //if there are values for the vendor but not location
+                else if (location.isEmpty() && vendorSpinnerPosition > 0){
+                filterSearchVendor();
+            }
+                //if there are values for both the vendor and location
+                else if (!location.isEmpty() && vendorSpinnerPosition > 0){
+                filterSearchLocationVendor();
+            }
         } else if (v == imageRefresh){
             refreshList();
         }
