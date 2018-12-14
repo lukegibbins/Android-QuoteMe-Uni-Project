@@ -118,7 +118,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         buttonDelete.setOnClickListener(this);
 
         SharedPreferences sharedPreferences  = getSharedPreferences(SHARED_PREF_FILE, MODE_PRIVATE);
-        usersEmail = sharedPreferences.getString(EMAIL, "users email address");
+        usersEmail = sharedPreferences.getString(EMAIL, "user email address");
 
         //Disable button if no camera
         if(!hasCamera()){
