@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.quoteme.QuoteData.QuoteContract;
 import com.example.quoteme.QuoteData.QuoteCursorAdapter;
@@ -26,6 +27,7 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
     Button buttonFilterSearch;
     ListView quoteListView;
     ImageView imageRefresh;
+    TextView textInfo;
 
     private Spinner vendorSpinner;
     private String quoteVendorSpinner;
@@ -44,6 +46,11 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
 
         //Defines view which holds data queried by cursorAdapter
         quoteListView = findViewById(R.id.search_list);
+        textInfo = findViewById(R.id.textInfoHelp);
+
+        if(quoteListView.getCount() < 1){
+            textInfo.setVisibility(View.GONE);
+        }
 
         //Used to display an empty view for a quoteListView that has 0 items
         View emptyView = findViewById(R.id.search_empty_title_text);
