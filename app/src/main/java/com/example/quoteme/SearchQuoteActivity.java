@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
     EditText filteredLocation;
     Button buttonFilterSearch;
     ListView quoteListView;
+    ImageView imageRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +40,10 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
 
         buttonFilterSearch = findViewById(R.id.buttonSearchQuote);
         buttonFilterSearch.setOnClickListener(this);
-
         filteredLocation = findViewById(R.id.editLocationSearch);
+
+        imageRefresh = findViewById(R.id.imageRefresh);
+        imageRefresh.setOnClickListener(this);
 
         //Defines view which holds data queried by cursorAdapter
         quoteListView = findViewById(R.id.search_list);
@@ -124,9 +128,31 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         if(v == buttonFilterSearch){
-            //filterSearch();
-            Intent i = new Intent(this, RespondQuoteActivity.class);
-            startActivity(i);
+            filterSearch();
+//            Intent i = new Intent(this, RespondQuoteActivity.class);
+//            startActivity(i);
+        } else if (v == imageRefresh){
+            refreshList();
         }
+    }
+
+    private void refreshList(){
+        //Defines the items which should be displayed in quoteListView
+        String [] project = {
+                QuoteContract.QuoteEntry._ID,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR
+        };
+
+        Cursor cursor = getContentResolver().query(QuoteContract.QuoteEntry.CONTENT_URI,
+                project,
+                null,
+                null,
+                null
+        );
+
+        //Create instance of cursorAdapter and bind cursorAdapter data to quoteList
+        quoteCursorAdapter = new QuoteCursorAdapter(this, cursor);
+        quoteListView.setAdapter(quoteCursorAdapter);
     }
 }
