@@ -44,6 +44,7 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
         quoteTitle = findViewById(R.id.textTitle);
         quoteLocation = findViewById(R.id.textLocation);
         quoteContact = findViewById(R.id.textContact);
+        quoteContact.setOnClickListener(this);
         quoteVendor = findViewById(R.id.textVendor);
         quoteDescription = findViewById(R.id.textDescription);
         quoteImg = findViewById(R.id.imageQuoteRespond);
@@ -154,7 +155,12 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
-
+        if(v == quoteContact){
+            //Prompts to call or text
+            Uri number = Uri.parse("tel:" + quoteContact.getText().toString());
+            Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
+            startActivity(callIntent);
+        }
     }
 
     private Bitmap rotateBitmap(Bitmap source, float angle) {
