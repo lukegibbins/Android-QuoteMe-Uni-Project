@@ -170,13 +170,13 @@
 
         <LinearLayout
             android:id="@+id/linearLayout7"
-            android:layout_width="fill_parent"
-            android:layout_height="316dp"
+            android:layout_width="366dp"
+            android:layout_height="303dp"
             android:orientation="horizontal"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.111"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
 
@@ -195,7 +195,6 @@
                 android:layout_height="295dp"
                 android:layout_gravity="right"
                 android:layout_weight="1"
-                android:paddingRight="20dp"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/noimageselected" />
 
