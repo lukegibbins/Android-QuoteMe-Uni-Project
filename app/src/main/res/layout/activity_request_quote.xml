@@ -135,7 +135,7 @@
 
         <Spinner
             android:id="@+id/spinnerVendorsSearch"
-            android:layout_width="276dp"
+            android:layout_width="278dp"
             android:layout_height="61dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
@@ -150,7 +150,7 @@
 
         <EditText
             android:id="@+id/editDesc"
-            android:layout_width="273dp"
+            android:layout_width="278dp"
             android:layout_height="130dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"

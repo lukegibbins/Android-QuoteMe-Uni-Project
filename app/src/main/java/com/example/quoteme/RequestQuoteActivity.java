@@ -193,7 +193,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                         Toasty.error(this, "Error adding quote", Toast.LENGTH_LONG).show();
                         //Quote added successfully
                     } else {
-                        Toasty.success(this, "Quote added. Quote status set to 'pending'", Toast.LENGTH_LONG).show();
+                        Toasty.success(this, "Quote added. Quote status set to 'PENDING'", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(this, ManageQuoteActivity.class);
                         capturedImageFileName = null;
                         startActivity(intent);

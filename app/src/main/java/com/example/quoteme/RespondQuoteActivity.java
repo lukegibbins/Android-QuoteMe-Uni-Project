@@ -1,5 +1,6 @@
 package com.example.quoteme;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -18,8 +19,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.quoteme.QuoteData.QuoteContract;
+
+import es.dmoral.toasty.Toasty;
 
 import static android.widget.ImageView.ScaleType.FIT_CENTER;
 
@@ -169,6 +173,21 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Enter email subject");
             emailIntent.putExtra(Intent.EXTRA_TEXT, "Enter email message");
             startActivity(emailIntent);
+        } else if (v == buttonAcceptQuote){
+            acceptQuote();
+            finish();
+        }
+    }
+
+    private void acceptQuote(){
+        ContentValues values = new ContentValues();
+        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS, 1);
+        int rowsAffected = getContentResolver().update(currentQuoteUri, values, null, null);
+
+        if (rowsAffected == 0) {
+            Toasty.error(this, "Error updating quote.", Toast.LENGTH_LONG).show();
+        } else {
+            Toasty.success(this, "Quote successfully accepted.", Toast.LENGTH_LONG).show();
         }
     }
 

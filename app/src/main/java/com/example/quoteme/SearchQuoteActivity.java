@@ -63,13 +63,17 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
         String [] project = {
                 QuoteContract.QuoteEntry._ID,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE,
-                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS
         };
+
+        String selection = "status=?";
+        String [] selectionArgs = {"0"};
 
         Cursor cursor = getContentResolver().query(QuoteContract.QuoteEntry.CONTENT_URI,
                 project,
-                null,
-                null,
+                selection,
+                selectionArgs,
                 null
         );
 
@@ -98,13 +102,14 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
     private void filterSearchLocationVendor(){
         quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
         String location = filteredLocation.getText().toString().trim();
-        String selection = "location=? AND vendor=?";
-        String [] selectionArgs = {location, quoteVendorSpinner};
+        String selection = "location=? AND vendor=? AND status=?";
+        String [] selectionArgs = {location, quoteVendorSpinner, "0"};
 
         String [] project = {
                 QuoteContract.QuoteEntry._ID,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE,
-                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS
         };
 
         Cursor cursor = getContentResolver().query(QuoteContract.QuoteEntry.CONTENT_URI,
@@ -120,13 +125,15 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
 
     private void filterSearchLocation(){
         String location = filteredLocation.getText().toString().trim();
-        String selection = "location=?";
-        String [] selectionArgs = {location};
+        String selection = "location=? AND status=?";
+        String [] selectionArgs = {location, "0"};
 
         String [] project = {
                 QuoteContract.QuoteEntry._ID,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE,
-                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS
+
         };
 
         Cursor cursor = getContentResolver().query(QuoteContract.QuoteEntry.CONTENT_URI,
@@ -142,13 +149,14 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
 
     private void filterSearchVendor(){
         quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
-        String selection = "vendor=?";
-        String [] selectionArgs = {quoteVendorSpinner};
+        String selection = "vendor=? AND status=?";
+        String [] selectionArgs = {quoteVendorSpinner, "0"};
 
         String [] project = {
                 QuoteContract.QuoteEntry._ID,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE,
-                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS
         };
 
         Cursor cursor = getContentResolver().query(QuoteContract.QuoteEntry.CONTENT_URI,
@@ -205,13 +213,17 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
         String [] project = {
                 QuoteContract.QuoteEntry._ID,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE,
-                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS
         };
+
+        String selection = "status=?";
+        String [] selectionArgs = {"0"};
 
         Cursor cursor = getContentResolver().query(QuoteContract.QuoteEntry.CONTENT_URI,
                 project,
-                null,
-                null,
+                selection,
+                selectionArgs,
                 null
         );
 

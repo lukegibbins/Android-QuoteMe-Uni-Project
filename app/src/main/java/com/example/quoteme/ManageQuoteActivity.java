@@ -146,7 +146,8 @@ public class ManageQuoteActivity extends AppCompatActivity implements LoaderMana
         String [] projection = {
                 QuoteContract.QuoteEntry._ID,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE,
-                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS
         };
 
         return new CursorLoader(this,

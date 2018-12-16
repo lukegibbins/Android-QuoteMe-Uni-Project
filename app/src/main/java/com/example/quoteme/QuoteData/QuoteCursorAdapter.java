@@ -2,6 +2,7 @@ package com.example.quoteme.QuoteData;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,18 +33,27 @@ public class QuoteCursorAdapter extends CursorAdapter {
         //Find views
         TextView titleTextView = view.findViewById(R.id.name);
         TextView vendorTextView = view.findViewById(R.id.summary);
-        //TextView statusTextView = view.findViewById(R.id.status);
+        TextView statusTextView = view.findViewById(R.id.status);
 
         //Define column headings to receive data from
         int titleColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE);
         int vendorColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR);
+        int statusColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS);
 
         //Read values from cursor to current variables
         String quoteTitle = cursor.getString(titleColumnIndex);
         String quoteVendor = cursor.getString(vendorColumnIndex);
+        String quoteStatus = cursor.getString(statusColumnIndex);
 
         //Update TextViews in list_item.xml with values from associated columns
         titleTextView.setText(quoteTitle);
         vendorTextView.setText(quoteVendor);
+
+        if(quoteStatus.equals("1")){
+            statusTextView.setText("accepted");
+            statusTextView.setTextColor(Color.parseColor("#388E3C"));
+        } else if (quoteStatus.equals("0")){
+            statusTextView.setText("Pending");
+        }
     }
 }
