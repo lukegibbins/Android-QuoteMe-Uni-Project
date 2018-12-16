@@ -80,7 +80,7 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
         quoteListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(SearchQuoteActivity.this, RequestQuoteActivity.class);
+                Intent intent = new Intent(SearchQuoteActivity.this, RespondQuoteActivity.class);
                 //When an item is clicked, it appends the ID of the item to the URI routing a specific quote
                 Uri currentQuoteUri = ContentUris.withAppendedId(QuoteContract.QuoteEntry.CONTENT_URI, id);
                 intent.setData(currentQuoteUri);
