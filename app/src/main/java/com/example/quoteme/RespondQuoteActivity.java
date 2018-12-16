@@ -175,7 +175,6 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
             startActivity(emailIntent);
         } else if (v == buttonAcceptQuote){
             acceptQuote();
-            finish();
         }
     }
 
@@ -189,6 +188,7 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
         } else {
             Toasty.success(this, "Quote successfully accepted.", Toast.LENGTH_LONG).show();
         }
+        finish();
     }
 
     private Bitmap rotateBitmap(Bitmap source, float angle) {
