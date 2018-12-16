@@ -40,14 +40,15 @@
                 android:layout_gravity="right"
                 android:layout_weight="1"
                 android:paddingRight="20dp"
-                android:textSize="20dp" />
+                android:textColor="@color/primaryLightColor"
+                android:textSize="20dp"
+                tools:textColor="@color/primaryLightColor" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout9"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-
             android:orientation="horizontal"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
@@ -101,8 +102,7 @@
                 android:paddingRight="20dp"
                 android:textColor="@color/primaryLightColor"
                 android:textColorHint="@color/primaryLightColor"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:textSize="20dp" />
         </LinearLayout>
 
         <LinearLayout
