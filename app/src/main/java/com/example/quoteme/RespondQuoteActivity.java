@@ -2,7 +2,11 @@ package com.example.quoteme;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
@@ -12,9 +16,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.quoteme.QuoteData.QuoteContract;
+
+import static android.widget.ImageView.ScaleType.FIT_CENTER;
 
 public class RespondQuoteActivity extends AppCompatActivity implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor> {
@@ -22,7 +29,8 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
     private Uri currentQuoteUri;
     private static final int EXISTING_QUOTE_LOADER = 0;
     private Button buttonAcceptQuote;
-    private TextView quoteTitle, quoteLocation, quoteContact, quoteVendor, quoteDescription, quoteImage;
+    private TextView quoteTitle, quoteLocation, quoteContact, quoteVendor, quoteDescription;
+    private ImageView quoteImg;
 
 
     @Override
@@ -38,8 +46,7 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
         quoteContact = findViewById(R.id.textContact);
         quoteVendor = findViewById(R.id.textVendor);
         quoteDescription = findViewById(R.id.textDescription);
-        quoteImage = findViewById(R.id.textImage);
-
+        quoteImg = findViewById(R.id.imageQuoteRespond);
 
         //Gets incoming intent and possible Uri
         Intent receivingIntent = getIntent();
@@ -88,7 +95,7 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
             int telColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE);
             int descColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION);
             int vendorColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR);
-            //int imageColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE);
+            int imageColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE);
 
             // Extract out the value from the Cursor for the given column index
             String title = cursor.getString(titleColumnIndex);
@@ -96,6 +103,20 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
             String telephone = cursor.getString(telColumnIndex);
             String description = cursor.getString(descColumnIndex);
             String vendor = cursor.getString(vendorColumnIndex);
+            String image = cursor.getString(imageColumnIndex);
+
+            //Get the image
+            try {
+                String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                        + "/" + image;
+                Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
+                Bitmap rotateBitmap = rotateBitmap(bitmap, 90);
+                quoteImg.setBackgroundResource(0); //This works
+                quoteImg.setImageBitmap(rotateBitmap);
+            } catch (Exception e){
+                //This works
+                quoteImg.setBackgroundResource(R.drawable.noimageselected);
+            }
 
             // Update the views on the screen with the values from the database
             quoteTitle.setText(title);
@@ -118,5 +139,11 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
 
+    }
+
+    private Bitmap rotateBitmap(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 }

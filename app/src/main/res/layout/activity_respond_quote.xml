@@ -171,7 +171,7 @@
         <LinearLayout
             android:id="@+id/linearLayout7"
             android:layout_width="fill_parent"
-            android:layout_height="66dp"
+            android:layout_height="316dp"
             android:orientation="horizontal"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
@@ -189,13 +189,17 @@
                 android:text="Image:"
                 android:textSize="20dp" />
 
-            <TextView
-                android:id="@+id/textImage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/imageQuoteRespond"
+                android:layout_width="79dp"
+                android:layout_height="295dp"
                 android:layout_gravity="right"
                 android:layout_weight="1"
-                android:textSize="20dp" />
+                android:paddingRight="20dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/noimageselected" />
+
+
         </LinearLayout>
 
         <Button
