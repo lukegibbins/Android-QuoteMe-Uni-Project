@@ -50,6 +50,7 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
         quoteImg = findViewById(R.id.imageQuoteRespond);
         quoteStatus = findViewById(R.id.textStatus);
         quoteEmail = findViewById(R.id.textEmail);
+        quoteEmail.setOnClickListener(this);
 
         //Gets incoming intent and possible Uri
         Intent receivingIntent = getIntent();
@@ -160,6 +161,14 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
             Uri number = Uri.parse("tel:" + quoteContact.getText().toString());
             Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
             startActivity(callIntent);
+        } else if (v == quoteEmail){
+            //Emails user
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            emailIntent.setType("text/plain");
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {quoteEmail.getText().toString()}); // recipients
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Enter email subject");
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "Enter email message");
+            startActivity(emailIntent);
         }
     }
 
