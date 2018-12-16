@@ -30,8 +30,8 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
     private static final int EXISTING_QUOTE_LOADER = 0;
     private Button buttonAcceptQuote;
     private TextView quoteTitle, quoteLocation, quoteContact, quoteVendor, quoteDescription;
+    private TextView quoteStatus, quoteEmail;
     private ImageView quoteImg;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,8 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
         quoteVendor = findViewById(R.id.textVendor);
         quoteDescription = findViewById(R.id.textDescription);
         quoteImg = findViewById(R.id.imageQuoteRespond);
+        quoteStatus = findViewById(R.id.textStatus);
+        quoteEmail = findViewById(R.id.textEmail);
 
         //Gets incoming intent and possible Uri
         Intent receivingIntent = getIntent();
@@ -67,7 +69,9 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR,
-                QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_USER,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS
         };
 
         // This loader will execute the ContentProvider's query method on a background thread
@@ -96,6 +100,9 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
             int descColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION);
             int vendorColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR);
             int imageColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE);
+            int emailColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_USER);
+            int statusColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS);
+
 
             // Extract out the value from the Cursor for the given column index
             String title = cursor.getString(titleColumnIndex);
@@ -104,6 +111,8 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
             String description = cursor.getString(descColumnIndex);
             String vendor = cursor.getString(vendorColumnIndex);
             String image = cursor.getString(imageColumnIndex);
+            String userEmail = cursor.getString(emailColumnIndex);
+            String status = cursor.getString(statusColumnIndex);
 
             //Get the image
             try {
@@ -124,6 +133,11 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
             quoteContact.setText(telephone);
             quoteDescription.setText(description);
             quoteVendor.setText(vendor);
+            quoteEmail.setText(userEmail);
+
+            if(status.equals("0")){
+                quoteStatus.setText("Pending");
+            }
         }
     }
 
@@ -134,6 +148,8 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
         quoteLocation.setText("");
         quoteContact.setText("");
         quoteVendor.setText("");
+        quoteEmail.setText("");
+        quoteStatus.setText("");
     }
 
     @Override
