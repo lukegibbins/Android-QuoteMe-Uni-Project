@@ -69,12 +69,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.action_manageQuotes:
-                Intent i = new Intent(this, ManageQuoteActivity.class);
-                startActivity(i);
+                Intent manageQuotesIntent = new Intent(this, ManageQuoteActivity.class);
+                startActivity(manageQuotesIntent);
                 return true;
             case R.id.action_signout:
-                Intent ii = new Intent(this, LoginActivity.class);
-                startActivity(ii);
+                Intent signOutIntent = new Intent(this, LoginActivity.class);
+                startActivity(signOutIntent);
+            case R.id.action_premium:
+                Intent premiumAccessIntent = new Intent(this, PremiumAccessActivity.class);
+                startActivity(premiumAccessIntent);
             default:
                 return super.onOptionsItemSelected(item);
         }
