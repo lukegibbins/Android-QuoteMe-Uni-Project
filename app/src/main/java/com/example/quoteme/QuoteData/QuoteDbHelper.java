@@ -31,7 +31,8 @@ public class QuoteDbHelper extends SQLiteOpenHelper {
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE + " TEXT NOT NULL, "
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR + " TEXT NOT NULL, "
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_USER + " TEXT NOT NULL, "
-                + QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION + " TEXT NOT NULL);";
+                + QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_CITY + " TEXT NOT NULL, "
+                + QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_COUNTRY + " TEXT NOT NULL);";
 
         String SQL_CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_NAME_USERS + "("
                 + UserContract.UserEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "

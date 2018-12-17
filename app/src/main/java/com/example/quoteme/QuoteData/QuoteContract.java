@@ -31,7 +31,8 @@ public class QuoteContract  {
         //Table Columns
         public final static String _ID = BaseColumns._ID;
         public final static String COLUMN_QUOTE_TITLE = "title";
-        public final static String COLUMN_QUOTE_LOCATION = "location";
+        public final static String COLUMN_QUOTE_LOCATION_CITY = "location_city";
+        public final static String COLUMN_QUOTE_LOCATION_COUNTRY = "location_country";
         public static final String COLUMN_QUOTE_TELEPHONE = "telephone";
         public static final String COLUMN_QUOTE_VENDOR = "vendor";
         public static final String COLUMN_QUOTE_DESCRIPTION = "description";

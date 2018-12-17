@@ -68,7 +68,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     static final int REQUEST_IMAGE_GALLERY = 2;
 
     private Uri currentQuoteUri;
-    private EditText quoteTitle, quoteLocation, quoteTel, quoteDescription;
+    private EditText quoteTitle, quoteLocationCity, quoteLocationCountry, quoteTel, quoteDescription;
     private Spinner vendorSpinner;
 
     ImageView imageCaptureCam;
@@ -98,7 +98,9 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         currentQuoteUri = receivingIntent.getData();
 
         quoteTitle = findViewById(R.id.editTitle);
-        quoteLocation = findViewById(R.id.editLocation);
+        quoteLocationCity = findViewById(R.id.editLocationCity);
+        quoteLocationCountry = findViewById(R.id.editLocationCountry);
+
         quoteTel = findViewById(R.id.editTel);
         quoteDescription = findViewById(R.id.editDesc);
         vendorSpinner = findViewById(R.id.spinnerVendorsSearch);
@@ -155,7 +157,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     private void saveQuote() {
         //Read data from field entries
         String quoteTitleString = quoteTitle.getText().toString().trim();
-        String quoteLocationString = quoteLocation.getText().toString().trim();
+        String quoteLocationCityString = quoteLocationCity.getText().toString().trim();
+        String quoteLocationCountryString = quoteLocationCountry.getText().toString().trim();
         String quoteTelString = quoteTel.getText().toString().trim();
         String quoteDescString = quoteDescription.getText().toString().trim();
         quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
@@ -164,7 +167,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         boolean valueChecker;
         if(quoteTitleString.isEmpty() ||
                 quoteDescString.isEmpty() ||
-                quoteLocationString.isEmpty() ||
+                quoteLocationCityString.isEmpty() ||
+                quoteLocationCountryString.isEmpty() ||
                 quoteTelString.isEmpty()){
             valueChecker = false;
         } else {
@@ -174,7 +178,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         //Fill DB table with values
         ContentValues values = new ContentValues();
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE, quoteTitleString);
-        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION, quoteLocationString);
+        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_CITY, quoteLocationCityString);
+        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_COUNTRY, quoteLocationCountryString);
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE, quoteTelString);
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION, quoteDescString);
         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR, quoteVendorSpinner);
@@ -208,8 +213,11 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 if(quoteTitleString.isEmpty()){
                     quoteTitle.setError("This field can not be empty");
                 }
-                if(quoteLocationString.isEmpty()){
-                    quoteLocation.setError("This field can not be empty");
+                if(quoteLocationCityString.isEmpty()){
+                    quoteLocationCity.setError("This field can not be empty");
+                }
+                if(quoteLocationCountryString.isEmpty()){
+                    quoteLocationCountry.setError("This field can not be empty");
                 }
                 if(quoteTelString.isEmpty()){
                     quoteTel.setError("This field can not be empty");
@@ -246,8 +254,11 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 if(quoteTitleString.isEmpty()){
                     quoteTitle.setError("This field can not be empty");
                 }
-                if(quoteLocationString.isEmpty()){
-                    quoteLocation.setError("This field can not be empty");
+                if(quoteLocationCityString.isEmpty()){
+                    quoteLocationCity.setError("This field can not be empty");
+                }
+                if(quoteLocationCountryString.isEmpty()){
+                    quoteLocationCountry.setError("This field can not be empty");
                 }
                 if(quoteTelString.isEmpty()){
                     quoteTel.setError("This field can not be empty");
@@ -419,7 +430,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         String[] projection = {
                 QuoteContract.QuoteEntry._ID,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE,
-                QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_CITY,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_COUNTRY,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR,
@@ -447,7 +459,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         if (cursor.moveToFirst()) {
             // Find the columns of pet attributes that we're interested in
             int titleColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE);
-            int locationColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION);
+            int locationCityColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_CITY);
+            int locationCountryColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_COUNTRY);
             int telColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE);
             int descColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION);
             int vendorColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR);
@@ -455,14 +468,16 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
 
             // Extract out the value from the Cursor for the given column index
             String title = cursor.getString(titleColumnIndex);
-            String location = cursor.getString(locationColumnIndex);
+            String locationCity = cursor.getString(locationCityColumnIndex);
+            String locationCountry = cursor.getString(locationCountryColumnIndex);
             String telephone = cursor.getString(telColumnIndex);
             String description = cursor.getString(descColumnIndex);
             String vendor = cursor.getString(vendorColumnIndex);
 
             // Update the views on the screen with the values from the database
             quoteTitle.setText(title);
-            quoteLocation.setText(location);
+            quoteLocationCity.setText(locationCity);
+            quoteLocationCountry.setText(locationCountry);
             quoteTel.setText(telephone);
             quoteDescription.setText(description);
             vendorSpinner.setSelection(vendorMappings.get(vendor));
@@ -529,7 +544,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             Toasty.info(this, "Values cleared from fields", Toast.LENGTH_SHORT).show();
             quoteTitle.setText("");
             quoteDescription.setText("");
-            quoteLocation.setText("");
+            quoteLocationCity.setText("");
+            quoteLocationCountry.setText("");
             quoteTel.setText("");
             vendorSpinner.setSelection(0);
         }
@@ -541,7 +557,8 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         quoteTitle.setText("");
         quoteDescription.setText("");
-        quoteLocation.setText("");
+        quoteLocationCity.setText("");
+        quoteLocationCountry.setText("");
         quoteTel.setText("");
         vendorSpinner.setSelection(0);
     }

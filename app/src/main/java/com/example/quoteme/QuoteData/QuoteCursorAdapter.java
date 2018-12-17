@@ -53,7 +53,7 @@ public class QuoteCursorAdapter extends CursorAdapter {
             statusTextView.setText("accepted");
             statusTextView.setTextColor(Color.parseColor("#388E3C"));
         } else if (quoteStatus.equals("0")){
-            statusTextView.setText("Pending");
+            statusTextView.setText("pending");
         }
     }
 }

@@ -14,10 +14,37 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/linearLayout11"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:paddingLeft="20dp"
+                android:text="Country:"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/textLocation_country"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_weight="1"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/linearLayout8"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:background="#E8E8E8"
             android:orientation="horizontal"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
@@ -77,12 +104,13 @@
         <LinearLayout
             android:id="@+id/linearLayout3"
             android:layout_width="fill_parent"
-            android:layout_height="0dp"
+            android:layout_height="73dp"
+            android:background="#E8E8E8"
             android:orientation="horizontal"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout1">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout11">
 
             <TextView
                 android:layout_width="0dp"
@@ -122,11 +150,11 @@
                 android:layout_gravity="left"
                 android:layout_weight="1"
                 android:paddingLeft="20dp"
-                android:text="Location:"
+                android:text="City:"
                 android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/textLocation"
+                android:id="@+id/textLocation_city"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -175,6 +203,7 @@
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"
+            android:background="#E8E8E8"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout8">
@@ -202,7 +231,6 @@
             android:id="@+id/linearLayout6"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="#E8E8E8"
             android:orientation="horizontal"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
@@ -236,6 +264,8 @@
             android:layout_width="376dp"
             android:layout_height="286dp"
             android:orientation="horizontal"
+            android:background="#E8E8E8"
+
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
             app:layout_constraintEnd_toEndOf="parent"

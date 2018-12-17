@@ -33,7 +33,7 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
     private Uri currentQuoteUri;
     private static final int EXISTING_QUOTE_LOADER = 0;
     private Button buttonAcceptQuote;
-    private TextView quoteTitle, quoteLocation, quoteContact, quoteVendor, quoteDescription;
+    private TextView quoteTitle, quoteLocationCity, quoteLocationCountry, quoteContact, quoteVendor, quoteDescription;
     private TextView quoteStatus, quoteEmail;
     private ImageView quoteImg;
 
@@ -46,7 +46,8 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
         buttonAcceptQuote.setOnClickListener(this);
 
         quoteTitle = findViewById(R.id.textTitle);
-        quoteLocation = findViewById(R.id.textLocation);
+        quoteLocationCity = findViewById(R.id.textLocation_city);
+        quoteLocationCountry = findViewById(R.id.textLocation_country);
         quoteContact = findViewById(R.id.textContact);
         quoteContact.setOnClickListener(this);
         quoteVendor = findViewById(R.id.textVendor);
@@ -71,7 +72,8 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
         String[] projection = {
                 QuoteContract.QuoteEntry._ID,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE,
-                QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_CITY,
+                QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_COUNTRY,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION,
                 QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR,
@@ -101,7 +103,8 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
         if (cursor.moveToFirst()) {
             // Find the columns of pet attributes that we're interested in
             int titleColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE);
-            int locationColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION);
+            int locationCityColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_CITY);
+            int locationCountryColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_COUNTRY);
             int telColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE);
             int descColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION);
             int vendorColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR);
@@ -112,7 +115,8 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
 
             // Extract out the value from the Cursor for the given column index
             String title = cursor.getString(titleColumnIndex);
-            String location = cursor.getString(locationColumnIndex);
+            String locationCity = cursor.getString(locationCityColumnIndex);
+            String locationCountry = cursor.getString(locationCountryColumnIndex);
             String telephone = cursor.getString(telColumnIndex);
             String description = cursor.getString(descColumnIndex);
             String vendor = cursor.getString(vendorColumnIndex);
@@ -135,7 +139,8 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
 
             // Update the views on the screen with the values from the database
             quoteTitle.setText(title);
-            quoteLocation.setText(location);
+            quoteLocationCity.setText(locationCity);
+            quoteLocationCountry.setText(locationCountry);
             quoteContact.setText(telephone);
             quoteDescription.setText(description);
             quoteVendor.setText(vendor);
@@ -151,7 +156,8 @@ public class RespondQuoteActivity extends AppCompatActivity implements View.OnCl
     public void onLoaderReset(@NonNull Loader<Cursor> loader) {
         quoteTitle.setText("");
         quoteDescription.setText("");
-        quoteLocation.setText("");
+        quoteLocationCity.setText("");
+        quoteLocationCountry.setText("");
         quoteContact.setText("");
         quoteVendor.setText("");
         quoteEmail.setText("");
