@@ -80,7 +80,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
 
     double latitude;
     double longtitude;
-
     List<Address> geocodeMatches = null;
 
     String capturedImageFileName;
@@ -109,10 +108,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         quoteTitle = findViewById(R.id.editTitle);
         quoteLocationCity = findViewById(R.id.editLocationCity);
         quoteLocationCountry = findViewById(R.id.editLocationCountry);
-
-        //Permission
-        ActivityCompat.requestPermissions(RequestQuoteActivity.this,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 
         quoteTel = findViewById(R.id.editTel);
         quoteDescription = findViewById(R.id.editDesc);
@@ -366,27 +361,11 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         } else if (v == buttonImageUp){
             //Every time this page is visited, ask for permission. We have to because of the API being 23
             //to access external storage
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(RequestQuoteActivity.this);
-            builder.setTitle("Choose option")
-                    .setItems(R.array.app_image_capture, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            if(which == 0){
-                                launchCameraAndSave();
-                            } else if(which == 1){
-                                //MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-                                launchGallery();
-                            } else {
-                                //'CANCEL* action, do nothing
-                            }
-                        }
-                    });
-            AlertDialog ad = builder.create();
-            ad.show();
+            //Permission
+            ActivityCompat.requestPermissions(RequestQuoteActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         } else if (v == buttonDelete){
             deleteSpecificQuote();
-        } else if (v == buttonImageUp){
-
         }
     }
 
@@ -420,13 +399,12 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                     Bitmap rotateBitmap = rotateBitmap(bitmap, 90);
                     imageCaptureCam.setBackgroundResource(0);
                     imageCaptureCam.setImageBitmap(rotateBitmap);
-
                 } catch (Exception e) {
-                    Toast.makeText(this, "Cant access image", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Can't access image", Toast.LENGTH_SHORT).show();
                 }
             }
         } catch (Exception e){
-            Toast.makeText(this, "Sorry", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Can't access storage or camera", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -435,18 +413,33 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         switch (requestCode) {
             case 1: {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(RequestQuoteActivity.this);
+                    builder.setTitle("Choose option")
+                            .setItems(R.array.app_image_capture, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if(which == 0){
+                                        launchCameraAndSave();
+                                    } else if(which == 1){
+                                        //MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                                        launchGallery();
+                                    } else {
+                                        //'CANCEL* action, do nothing
+                                    }
+                                }
+                            });
+                    AlertDialog ad = builder.create();
+                    ad.show();
                     } else {
                     try {
-                        Toast.makeText(this, "Permission denied to read your External storage",
-                                Toast.LENGTH_SHORT).show();
+                        Toasty.info(this, "Permission denied to read your External storage",
+                                Toast.LENGTH_LONG).show();
                     } catch(Exception e){
                         finish();
                     }
                 }
-                return;
             }
+            return;
         }
     }
 
@@ -491,7 +484,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     }
 
     @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor){
         //If the cursor is null or there is no items in the list, back out
         if (cursor == null || cursor.getCount() < 1) {
             return;
@@ -555,9 +548,9 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                         + "/" + capturedImageFileName;
                 Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
-                Bitmap rotateBitmap = rotateBitmap(bitmap, 90);
+                //Bitmap rotateBitmap = rotateBitmap(bitmap, 90);
                 imageCaptureCam.setBackgroundResource(0); //This works
-                imageCaptureCam.setImageBitmap(rotateBitmap);
+                imageCaptureCam.setImageBitmap(bitmap);
             }
         }
     }
