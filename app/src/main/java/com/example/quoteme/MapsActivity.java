@@ -1,36 +1,25 @@
 package com.example.quoteme;
 
+
 import android.database.Cursor;
-import android.location.Address;
-import android.location.Geocoder;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.widget.Toast;
-
 import com.example.quoteme.QuoteData.QuoteContract;
-import com.example.quoteme.UserData.UserContract;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
-
-import es.dmoral.toasty.Toasty;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
     private ArrayList<Double> latitudes = new ArrayList<>();
     private ArrayList<Double> longitudes = new ArrayList<>();
     private ArrayList<String> cities = new ArrayList<>();
     private ArrayList<String> countries = new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,20 +30,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         //Stores all the cities and countries from the quotes table into parallel arrays
-        getAllData();
+        try {
+            getAllData();
+        } catch(Exception e){
+            //Continue with the locations that do have lat and longs
+            e.printStackTrace();
+        }
     }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        //Eventually put current location in here
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         plotLatAndLongMarkers();
     }
+
 
     //Plot markers for all lat and longs
     private void plotLatAndLongMarkers(){
@@ -86,7 +76,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String cityString = cursor.getString(cityColumnIndex);
             String countryString = cursor.getString(countryColumnIndex);
 
-            if(!latitudeString.isEmpty() && !longitudeString.isEmpty()) {
+            if(!latitudeString.equals(null) && !longitudeString.equals(null)) {
                 double latitude = Double.parseDouble(latitudeString);
                 double longitude = Double.parseDouble(longitudeString);
 
