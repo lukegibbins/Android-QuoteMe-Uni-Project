@@ -15,6 +15,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -39,11 +41,13 @@ import android.widget.Toast;
 import com.example.quoteme.QuoteData.QuoteContract;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 
@@ -74,6 +78,11 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     ImageView imageCaptureCam;
     Button buttonSubmit, buttonImageUp, buttonDelete;
 
+    double latitude;
+    double longtitude;
+
+    List<Address> geocodeMatches = null;
+
     String capturedImageFileName;
     String loadedImageFileName;
     Boolean hasPhotoBeenTaken = false;
@@ -100,6 +109,10 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         quoteTitle = findViewById(R.id.editTitle);
         quoteLocationCity = findViewById(R.id.editLocationCity);
         quoteLocationCountry = findViewById(R.id.editLocationCountry);
+
+        //Permission
+        ActivityCompat.requestPermissions(RequestQuoteActivity.this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 
         quoteTel = findViewById(R.id.editTel);
         quoteDescription = findViewById(R.id.editDesc);
@@ -192,6 +205,20 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         if (currentQuoteUri == null) {
             if (valueChecker == true) {
                 if (!quoteVendorSpinner.equals(vendorList.get(0))) {
+                    try {
+                        geocodeMatches = new Geocoder(this).getFromLocationName(
+                                quoteLocationCityString+", "+quoteLocationCountryString, 1);
+                    }catch(IOException e){
+                        e.printStackTrace();
+                    }
+                    if(!geocodeMatches.isEmpty()) {
+                        latitude = geocodeMatches.get(0).getLatitude();
+                        longtitude = geocodeMatches.get(0).getLongitude();
+                        String latString = Double.toString(latitude);
+                        String longString = Double.toString(longtitude);
+                        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_LATITUDE, latString);
+                        values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_LONGITUDE, longString);
+                    }
                     Uri newUri = getContentResolver().insert(QuoteContract.QuoteEntry.CONTENT_URI, values);
                     //Error saving quote
                     if (newUri == null) {
@@ -231,6 +258,20 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 //We want to update the current row as the data being passed through has a Uri
                 if(hasPhotoBeenTaken == false) {
                     values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE, loadedImageFileName);
+                }
+                try {
+                    geocodeMatches = new Geocoder(this).getFromLocationName(
+                            quoteLocationCityString+", "+quoteLocationCountryString, 1);
+                }catch(IOException e){
+                    e.printStackTrace();
+                }
+                if(!geocodeMatches.isEmpty()) {
+                    latitude = geocodeMatches.get(0).getLatitude();
+                    longtitude = geocodeMatches.get(0).getLongitude();
+                    String latString = Double.toString(latitude);
+                    String longString = Double.toString(longtitude);
+                    values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_LATITUDE, latString);
+                    values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_LONGITUDE, longString);
                 }
                 int rowsAffected = getContentResolver().update(currentQuoteUri, values, null, null);
                 // Show a toast message depending on whether or not the update was successful.
@@ -300,11 +341,11 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         String[] project = { MediaStore.Images.Media.DATA };
         Cursor cursor = context.getContentResolver().query(uri, project, null, null, null );
         if(cursor != null){
-            if ( cursor.moveToFirst()) {
+            if(cursor.moveToFirst()) {
                 int column_index = cursor.getColumnIndexOrThrow( project[0] );
-                result = cursor.getString( column_index );
+                result = cursor.getString(column_index);
             }
-            cursor.close( );
+            cursor.close();
         }
         if(result == null) {
             result = "Not found";
@@ -325,8 +366,6 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         } else if (v == buttonImageUp){
             //Every time this page is visited, ask for permission. We have to because of the API being 23
             //to access external storage
-            ActivityCompat.requestPermissions(RequestQuoteActivity.this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(RequestQuoteActivity.this);
             builder.setTitle("Choose option")

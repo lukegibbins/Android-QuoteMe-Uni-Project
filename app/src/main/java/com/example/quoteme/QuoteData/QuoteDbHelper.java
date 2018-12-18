@@ -28,6 +28,8 @@ public class QuoteDbHelper extends SQLiteOpenHelper {
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_DESCRIPTION + " TEXT NOT NULL, "
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_IMAGE + " TEXT, "
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_STATUS + " INTEGER NOT NULL DEFAULT 0, "
+                + QuoteContract.QuoteEntry.COLUMN_QUOTE_LATITUDE + " TEXT, "
+                + QuoteContract.QuoteEntry.COLUMN_QUOTE_LONGITUDE + " TEXT, "
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_TELEPHONE + " TEXT NOT NULL, "
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR + " TEXT NOT NULL, "
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_USER + " TEXT NOT NULL, "

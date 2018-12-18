@@ -39,5 +39,7 @@ public class QuoteContract  {
         public static final String COLUMN_QUOTE_IMAGE = "image";
         public static final String COLUMN_QUOTE_STATUS = "status";
         public static final String COLUMN_QUOTE_USER = "user";
+        public static final String COLUMN_QUOTE_LATITUDE = "latitude";
+        public static final String COLUMN_QUOTE_LONGITUDE = "longitude";
     }
 }
