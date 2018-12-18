@@ -563,14 +563,19 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             }
 
             //db image is there, photo not taken and user has not pressed upload, they just back out
-            else if (imageTitle != null && hasPhotoBeenTaken == false){
-                String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                        + "/" + imageTitle;
-                loadedImageFileName = imageTitle;
-                Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
-                Bitmap rotateBitmap = rotateBitmap(bitmap, 90);
-                imageCaptureCam.setBackgroundResource(0); //This works
-                imageCaptureCam.setImageBitmap(rotateBitmap);
+            else if (imageTitle != null && hasPhotoBeenTaken == false) {
+                try {
+                    String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                            + "/" + imageTitle;
+                    loadedImageFileName = imageTitle;
+                    Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
+                    Bitmap rotateBitmap = rotateBitmap(bitmap, 90);
+                    imageCaptureCam.setBackgroundResource(0); //This works
+                    imageCaptureCam.setImageBitmap(rotateBitmap);
+                } catch(Exception e){
+                    e.printStackTrace();
+                    finish();
+                }
             }
 
             //if the user wants to replace a new image for a blank one
@@ -579,13 +584,18 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
             }
 
             //if the user wants to replace an image for an new image
-            else if (imageTitle != null && hasPhotoBeenTaken == true){
-                String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                        + "/" + capturedImageFileName;
-                Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
-                //Bitmap rotateBitmap = rotateBitmap(bitmap, 90);
-                imageCaptureCam.setBackgroundResource(0); //This works
-                imageCaptureCam.setImageBitmap(bitmap);
+            else if (imageTitle != null && hasPhotoBeenTaken == true) {
+                try {
+                    String photoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                            + "/" + capturedImageFileName;
+                    Bitmap bitmap = BitmapFactory.decodeFile(photoPath);
+                    Bitmap rotateBitmap = rotateBitmap(bitmap, 90);
+                    imageCaptureCam.setBackgroundResource(0); //This works
+                    imageCaptureCam.setImageBitmap(rotateBitmap);
+                } catch (Exception e){
+                    e.printStackTrace();
+                    finish();
+                }
             }
         }
     }
