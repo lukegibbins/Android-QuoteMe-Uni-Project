@@ -18,10 +18,12 @@ import android.hardware.SensorManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -29,6 +31,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -79,7 +82,7 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
     Button buttonSubmit, buttonImageUp, buttonDelete;
 
     double latitude;
-    double longtitude;
+    double longitude;
     List<Address> geocodeMatches = null;
 
     String capturedImageFileName;
@@ -208,9 +211,9 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                     }
                     if(!geocodeMatches.isEmpty()) {
                         latitude = geocodeMatches.get(0).getLatitude();
-                        longtitude = geocodeMatches.get(0).getLongitude();
+                        longitude = geocodeMatches.get(0).getLongitude();
                         String latString = Double.toString(latitude);
-                        String longString = Double.toString(longtitude);
+                        String longString = Double.toString(longitude);
                         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_LATITUDE, latString);
                         values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_LONGITUDE, longString);
                     }
@@ -262,9 +265,9 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 }
                 if(!geocodeMatches.isEmpty()) {
                     latitude = geocodeMatches.get(0).getLatitude();
-                    longtitude = geocodeMatches.get(0).getLongitude();
+                    longitude = geocodeMatches.get(0).getLongitude();
                     String latString = Double.toString(latitude);
-                    String longString = Double.toString(longtitude);
+                    String longString = Double.toString(longitude);
                     values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_LATITUDE, latString);
                     values.put(QuoteContract.QuoteEntry.COLUMN_QUOTE_LONGITUDE, longString);
                 }
@@ -359,14 +362,46 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
         if (v == buttonSubmit) {
             saveQuote();
         } else if (v == buttonImageUp){
-            //Every time this page is visited, ask for permission. We have to because of the API being 23
-            //to access external storage
-            //Permission
-            ActivityCompat.requestPermissions(RequestQuoteActivity.this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            if(isExternalStoragePermissionGranted()){
+                AlertDialog.Builder builder = new AlertDialog.Builder(RequestQuoteActivity.this);
+                builder.setTitle("Choose option")
+                        .setItems(R.array.app_image_capture, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if(which == 0){
+                                    launchCameraAndSave();
+                                } else if(which == 1){
+                                    //MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                                    launchGallery();
+                                } else {
+                                    //'CANCEL* action, do nothing
+                                }
+                            }
+                        });
+                AlertDialog ad = builder.create();
+                ad.show();
+            }
+
         } else if (v == buttonDelete){
             deleteSpecificQuote();
         }
+    }
+
+    private Boolean isExternalStoragePermissionGranted(){
+        Boolean permissionGranted;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                //File write logic here
+                permissionGranted =  true;
+            } else{
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        1);
+                permissionGranted = false;
+                return permissionGranted;
+            }
+        } else{
+            permissionGranted = true;
+        }
+        return permissionGranted;
     }
 
     @Override
