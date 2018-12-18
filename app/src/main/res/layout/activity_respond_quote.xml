@@ -262,7 +262,7 @@
         <LinearLayout
             android:id="@+id/linearLayout7"
             android:layout_width="376dp"
-            android:layout_height="286dp"
+            android:layout_height="321dp"
             android:orientation="horizontal"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
@@ -283,7 +283,7 @@
             <ImageView
                 android:id="@+id/imageQuoteRespond"
                 android:layout_width="14dp"
-                android:layout_height="264dp"
+                android:layout_height="298dp"
                 android:layout_gravity="right"
                 android:layout_weight="1"
                 android:scaleType="fitCenter"

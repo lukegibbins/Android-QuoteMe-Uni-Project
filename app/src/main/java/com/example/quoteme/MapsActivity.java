@@ -26,12 +26,11 @@ import es.dmoral.toasty.Toasty;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    double latitude;
-    double longitude;
-
-    private List<Address> geocodeMatches = null;
-    private ArrayList<String> countries = new ArrayList<>();
+    private ArrayList<Double> latitudes = new ArrayList<>();
+    private ArrayList<Double> longitudes = new ArrayList<>();
     private ArrayList<String> cities = new ArrayList<>();
+    private ArrayList<String> countries = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         //Stores all the cities and countries from the quotes table into parallel arrays
-        getAllLatsAndLongs();
+        getAllData();
     }
 
     @Override
@@ -54,12 +53,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        plotLatAndLongMarkers();
+    }
+
+    //Plot markers for all lat and longs
+    private void plotLatAndLongMarkers(){
+        for(int i = 0; i < latitudes.size(); i++){
+            mMap.addMarker(new MarkerOptions().position(new LatLng(latitudes.get(i), longitudes.get(i)))
+            .title(cities.get(i)+", "+countries.get(i)));
+        }
     }
 
 
     //Gets all cities and countries from quotes table
-    private void getAllLatsAndLongs() {
-        String[] project = {"location_city, location_country"};
+    private void getAllData() {
+        String[] project = {"latitude, longitude, location_city, location_country"};
         Cursor cursor = getContentResolver().query(QuoteContract.QuoteEntry.CONTENT_URI,
                 project,
                 null,
@@ -67,15 +75,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 null
         );
 
-        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-            int locationCityColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_CITY);
-            int locationCountryColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_COUNTRY);
+        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            int latitudeColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LATITUDE);
+            int longitudeColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LONGITUDE);
+            int cityColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_CITY);
+            int countryColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_COUNTRY);
 
-            String locationCityString = cursor.getString(locationCityColumnIndex);
-            String locationCountryString = cursor.getString(locationCountryColumnIndex);
+            String latitudeString = cursor.getString(latitudeColumnIndex);
+            String longitudeString = cursor.getString(longitudeColumnIndex);
+            String cityString = cursor.getString(cityColumnIndex);
+            String countryString = cursor.getString(countryColumnIndex);
 
-            cities.add(locationCityString);
-            countries.add(locationCountryString);
+            if(!latitudeString.isEmpty() && !longitudeString.isEmpty()) {
+                double latitude = Double.parseDouble(latitudeString);
+                double longitude = Double.parseDouble(longitudeString);
+
+                latitudes.add(latitude);
+                longitudes.add(longitude);
+                cities.add(cityString);
+                countries.add(countryString);
+            }
         }
     }
 }

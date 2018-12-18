@@ -438,8 +438,12 @@ public class RequestQuoteActivity extends AppCompatActivity implements View.OnCl
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     } else {
-                    Toast.makeText(this, "Permission denied to read your External storage",
-                            Toast.LENGTH_SHORT).show();
+                    try {
+                        Toast.makeText(this, "Permission denied to read your External storage",
+                                Toast.LENGTH_SHORT).show();
+                    } catch(Exception e){
+                        finish();
+                    }
                 }
                 return;
             }
