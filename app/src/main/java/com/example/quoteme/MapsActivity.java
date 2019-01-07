@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import com.example.quoteme.QuoteData.QuoteContract;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -12,9 +13,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 
+import static com.example.quoteme.PremiumAccessActivity.LAT_KEY;
+import static com.example.quoteme.PremiumAccessActivity.LONG_KEY;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private String latFromPostcode;
+    private String longFromPostcode;
 
     private ArrayList<Double> latitudes = new ArrayList<>();
     private ArrayList<Double> longitudes = new ArrayList<>();
@@ -25,9 +31,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        //set current location using postcode from previous page
+        //this location can also be used check distance between quotes
+        latFromPostcode = getIntent().getStringExtra(LAT_KEY);
+        longFromPostcode = getIntent().getStringExtra(LONG_KEY);
 
         //Stores all the cities and countries from the quotes table into parallel arrays
         try {
@@ -42,6 +54,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         plotLatAndLongMarkers();
+
+        Double latDouble = Double.valueOf(latFromPostcode);
+        Double longDouble = Double.valueOf(longFromPostcode);
+
+        // Add a marker for users current location and move the camera
+        LatLng currentLocationFromPostcode = new LatLng(latDouble, longDouble);
+        mMap.addMarker(new MarkerOptions().position(currentLocationFromPostcode).title("Your Location: " +
+                "Latitude: "+ latFromPostcode + ", Longitude: " + longFromPostcode));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocationFromPostcode));
     }
 
     //Plot markers for all lat and longs

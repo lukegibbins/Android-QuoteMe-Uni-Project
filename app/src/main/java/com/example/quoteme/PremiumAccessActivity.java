@@ -27,6 +27,9 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
     Spinner spinnerVendor;
     String latitude, longitude;
 
+    public final static String LAT_KEY = "LAT";
+    public final static String LONG_KEY = "LONG";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +48,6 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
 
         chkArea = findViewById(R.id.checkAlertArea);
         chkArea.setOnCheckedChangeListener(this);
-
     }
 
     @Override
@@ -54,12 +56,11 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
             if (!editPostCode.getText().toString().equals("")) {
                 convertPostcodeToLatLng();
                 if (latitude == null || longitude == null) {
-                    Toasty.error(this, "Invalid postcode",
-                            Toast.LENGTH_SHORT).show();
+                    Toasty.error(this, "Invalid postcode", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent mapsIntent = new Intent(this, MapsActivity.class);
-                    //mapsIntent.putExtra("LAT", latitude);
-                    // mapsIntent.putExtra("LONG", longitude);
+                    mapsIntent.putExtra(LAT_KEY, latitude);
+                    mapsIntent.putExtra(LONG_KEY, longitude);
                     startActivity(mapsIntent);
                 }
             } else{
