@@ -87,7 +87,11 @@
         </activity>
         <activity
             android:name=".PremiumAccessActivity"
-            android:label="Premium Access"></activity>
+            android:label="Premium Access">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SearchQuoteActivity" />
+        </activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
