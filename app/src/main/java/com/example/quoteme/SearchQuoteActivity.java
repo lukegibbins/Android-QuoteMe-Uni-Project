@@ -70,7 +70,7 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
                    if(premiumCode.equals("1")){
                        Intent premiumIntent = new Intent(SearchQuoteActivity.this, PremiumAccessActivity.class);
                        startActivity(premiumIntent);
-                   } else{
+                   } else {
                        AlertDialog.Builder builder = new AlertDialog.Builder(SearchQuoteActivity.this);
                        builder.setTitle("No Premium Access")
                                .setMessage("Do you want to enable premium access?")
@@ -160,7 +160,7 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
     private void filterSearchLocationVendor(){
         quoteVendorSpinner = vendorSpinner.getSelectedItem().toString().trim();
         String location = filteredLocation.getText().toString().trim();
-        String selection = "location=? AND vendor=? AND status=?";
+        String selection = "location_city=? AND vendor=? AND status=?";
         String [] selectionArgs = {location, quoteVendorSpinner, "0"};
 
         String [] project = {
@@ -183,7 +183,7 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
 
     private void filterSearchLocation(){
         String location = filteredLocation.getText().toString().trim();
-        String selection = "location=? AND status=?";
+        String selection = "location_city=? AND status=?";
         String [] selectionArgs = {location, "0"};
 
         String [] project = {
@@ -305,7 +305,7 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
             Toasty.error(this, "Error updating premium access", Toast.LENGTH_LONG).show();
         } else {
             // Otherwise, the update was successful and we can display a toast.
-            Toasty.success(this, "Premium Access Updated.", Toast.LENGTH_LONG).show();
+            Toasty.success(this, "Premium access updated", Toast.LENGTH_LONG).show();
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(PREMIUM, "1");
             editor.apply();
