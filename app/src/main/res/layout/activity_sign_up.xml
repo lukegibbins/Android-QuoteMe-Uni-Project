@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpActivity">
+    tools:context=".SignUpActivity"
+    tools:layout_editor_absoluteY="81dp">
 
     <!--*** THIS IS THE SIGN UP XML WHICH ALLOWS USERS TO SIGN UP.
             IT USES A CONSTRAINT LAYOUT AND HAS A CUSTOM DESIGNED BUTTON
@@ -14,15 +15,13 @@
     <EditText
         android:id="@+id/editFirstName"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginTop="67dp"
-        android:layout_marginBottom="16dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="52dp"
         android:background="@drawable/custom_edit_text_bg"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/app_firstName"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/editSurname"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -30,76 +29,81 @@
     <EditText
         android:id="@+id/editSurname"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginBottom="13dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/custom_edit_text_bg"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/app_surname"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/editEmail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/editFirstName"
         app:layout_constraintTop_toBottomOf="@+id/editFirstName" />
 
     <EditText
         android:id="@+id/editEmail"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginBottom="13dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/custom_edit_text_bg"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/app_email"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/editPasswordSignup"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/editSurname"
         app:layout_constraintTop_toBottomOf="@+id/editSurname" />
 
     <EditText
         android:id="@+id/editPasswordSignup"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginBottom="18dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/custom_edit_text_bg"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/app_password"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/editConfirmPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/editEmail"
         app:layout_constraintTop_toBottomOf="@+id/editEmail" />
 
     <EditText
         android:id="@+id/editConfirmPassword"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginBottom="36dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/custom_edit_text_bg"
         android:ems="10"
         android:gravity="center"
         android:hint="@string/app_confirmPassword"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/buttonSignUp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/editPasswordSignup"
         app:layout_constraintTop_toBottomOf="@+id/editPasswordSignup" />
 
     <Button
         android:id="@+id/buttonSignUp"
         android:layout_width="214dp"
-        android:layout_height="72dp"
-        android:layout_marginBottom="50dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/custom_edit_text_bg_blue"
         android:text="@string/app_submit"
         android:textColor="@color/primaryTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchPremium" />
+
+    <Switch
+        android:id="@+id/switchPremium"
+        android:layout_width="214dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="Premium Access"
+        android:textColor="@color/secondaryLightColor"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editConfirmPassword" />
