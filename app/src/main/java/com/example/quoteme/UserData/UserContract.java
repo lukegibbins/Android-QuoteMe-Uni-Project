@@ -30,9 +30,10 @@ public class UserContract {
 
         //Table Columns
         public final static String _ID = BaseColumns._ID;
-        public final static String COLUMN_USERS_FIRSTNAME= "firstName";
+        public final static String COLUMN_USERS_FIRSTNAME = "firstName";
         public final static String COLUMN_USERS_SURNAME = "surname";
         public static final String COLUMN_USERS_EMAIL = "email";
-        public static final String COLUMN_USERS_PASSWORD= "password";
+        public static final String COLUMN_USERS_PASSWORD = "password";
+        public static final String COLUMN_USERS_PREMIUM = "premium";
     }
 }

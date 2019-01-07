@@ -11,7 +11,9 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.quoteme.QuoteData.QuoteContract;
@@ -20,11 +22,13 @@ import com.example.quoteme.UserData.UserContract;
 import es.dmoral.toasty.Toasty;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener,
-        GestureDetector.OnGestureListener {
+        GestureDetector.OnGestureListener, CompoundButton.OnCheckedChangeListener {
 
     Button buttonSubmit;
     private EditText userFirstName, userSurname, userEmail, userPassword, userConfirmPassword;
     private GestureDetectorCompat gestureDetector;
+    Switch premiumSwitch;
+    private int premiumValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +43,11 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         userEmail = findViewById(R.id.editEmail);
         userPassword = findViewById(R.id.editPasswordSignup);
         userConfirmPassword = findViewById(R.id.editConfirmPassword);
+        premiumSwitch = findViewById(R.id.switchPremium);
+        premiumSwitch.setChecked(false);
 
         gestureDetector = new GestureDetectorCompat(this,this);
+        premiumSwitch.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -63,6 +70,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         values.put(UserContract.UserEntry.COLUMN_USERS_SURNAME, userSurnameString);
         values.put(UserContract.UserEntry.COLUMN_USERS_EMAIL, userEmailString);
         values.put(UserContract.UserEntry.COLUMN_USERS_PASSWORD, userPasswordString);
+        values.put(UserContract.UserEntry.COLUMN_USERS_PREMIUM, premiumValue);
 
         //checks to see if the method returned true or false
         Boolean userExists = checkIfUserAlreadyExists(userEmailString);
@@ -149,5 +157,14 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             return true;
         } else
             return false;
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(isChecked){
+            premiumValue = 1;
+        } else {
+            premiumValue = 0;
+        }
     }
 }

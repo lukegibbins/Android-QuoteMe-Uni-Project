@@ -41,6 +41,7 @@ public class QuoteDbHelper extends SQLiteOpenHelper {
                 + UserContract.UserEntry.COLUMN_USERS_FIRSTNAME + " TEXT NOT NULL, "
                 + UserContract.UserEntry.COLUMN_USERS_SURNAME + " TEXT NOT NULL, "
                 + UserContract.UserEntry.COLUMN_USERS_EMAIL + " TEXT NOT NULL, "
+                + UserContract.UserEntry.COLUMN_USERS_PREMIUM + " INTEGER NOT NULL DEFAULT 0, "
                 + UserContract.UserEntry.COLUMN_USERS_PASSWORD + " TEXT NOT NULL);";
 
         // Execute the SQL statement
