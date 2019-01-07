@@ -16,6 +16,7 @@
         <color name="primaryTextColor">#ffffff</color>    <!--USED IN TEXT-->
         <color name="secondaryTextColor">#000000</color>
         <color name="successTextColor">#388E3C</color>
+        <color name="red">#d50000</color>
 </resources>
 
 

@@ -216,11 +216,13 @@
         <Button
             android:id="@+id/buttonDeleteSpecific"
             android:layout_width="100dp"
-            android:layout_height="36dp"
+            android:layout_height="31dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="19dp"
             android:layout_marginRight="19dp"
-            android:text="Remove"
-            android:textColor="#FF0000"
+            android:background="@color/red"
+            android:text="Delete"
+            android:textColor="@color/primaryTextColor"
             app:layout_constraintBottom_toTopOf="@+id/editTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
