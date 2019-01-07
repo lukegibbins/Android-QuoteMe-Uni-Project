@@ -2,8 +2,10 @@ package com.example.quoteme;
 
 import android.content.ContentUris;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,9 +18,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.quoteme.QuoteData.QuoteContract;
 import com.example.quoteme.QuoteData.QuoteCursorAdapter;
+
+import es.dmoral.toasty.Toasty;
+
+import static com.example.quoteme.LoginActivity.FIRST_NAME;
+import static com.example.quoteme.LoginActivity.PREMIUM;
+import static com.example.quoteme.LoginActivity.SHARED_PREF_FILE;
 
 public class SearchQuoteActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -31,11 +40,28 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
 
     private Spinner vendorSpinner;
     private String quoteVendorSpinner;
+    private String premiumCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_quote);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_FILE, MODE_PRIVATE);
+        premiumCode = sharedPreferences.getString(PREMIUM, "0");
+
+        FloatingActionButton fabSearch = findViewById(R.id.fabSearch);
+        fabSearch.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   if(premiumCode.equals("1")){
+                       Intent premiumIntent = new Intent(SearchQuoteActivity.this, PremiumAccessActivity.class);
+                       startActivity(premiumIntent);
+                   } else{
+                       Toasty.error(SearchQuoteActivity.this,"no premium", Toast.LENGTH_SHORT).show();
+                   }
+               }
+           });
 
         buttonFilterSearch = findViewById(R.id.buttonSearchQuote);
         buttonFilterSearch.setOnClickListener(this);

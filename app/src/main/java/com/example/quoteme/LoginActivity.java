@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.example.quoteme.QuoteData.QuoteDbHelper;
 import com.example.quoteme.UserData.UserContract;
-
 import es.dmoral.toasty.Toasty;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -29,10 +28,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public static final String FIRST_NAME = "firstName";
     public static final String SURNAME = "surname";
     public static final String EMAIL = "email";
+    public static final String PREMIUM = "premium";
 
     private String userFirstName;
     private String userSurname;
     private String usersEmail;
+    private String usersPremiumAccessCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             editor.putString(FIRST_NAME, userFirstName);
             editor.putString(SURNAME, userSurname);
             editor.putString(EMAIL, usersEmail);
+            editor.putString(PREMIUM, usersPremiumAccessCode);
             editor.apply();
             editor.commit();
 
@@ -87,7 +89,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Boolean isAuthenticated(String emailAddress){
         Boolean isAuthenticated = false;
 
-        String [] project = {"email, password, firstName, surname"};
+        String [] project = {"email, password, firstName, surname, premium"};
         String selection = "email=?";
         String [] selectionArgs = {emailAddress};
 
@@ -103,15 +105,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             int passwordColumnIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_USERS_PASSWORD);
             int firstNameColumnIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_USERS_FIRSTNAME);
             int surnameColumnIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_USERS_SURNAME);
+            int premiumColumnIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_USERS_PREMIUM);
 
             String emailString = cursor.getString(emailColumnIndex);
             String passwordString = cursor.getString(passwordColumnIndex);
             String userFirstNameString = cursor.getString(firstNameColumnIndex);
             String userSurnameString = cursor.getString(surnameColumnIndex);
+            int premiumCode = cursor.getInt(premiumColumnIndex);
+            String premiumCodeString = String.valueOf(premiumCode);
 
             userFirstName = userFirstNameString;
             userSurname = userSurnameString;
             usersEmail = emailString;
+            usersPremiumAccessCode = premiumCodeString;
 
             if(emailString.equals(loginUsername.getText().toString().trim()) &&
                     passwordString.equals(loginPassword.getText().toString().trim())){
