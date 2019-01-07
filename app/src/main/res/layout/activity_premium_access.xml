@@ -4,40 +4,83 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PremiumAccessActivity">
+    tools:context=".PremiumAccessActivity"
+    tools:layout_editor_absoluteY="81dp">
+
+    <Spinner
+        android:id="@+id/spinnerVendorsSearch2"
+        android:layout_width="267dp"
+        android:layout_height="54dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/custom_edit_text_border"
+        android:entries="@array/app_vendors"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="58dp" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/spinnerVendorsSearch2"
+        app:srcCompat="@drawable/baseline_build_black_18dp" />
 
     <Button
         android:id="@+id/buttonMaps"
         android:layout_width="235dp"
         android:layout_height="47dp"
-        android:layout_marginBottom="108dp"
-        android:text="View Maps"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:background="@drawable/custom_edit_text_bg_blue"
+        android:text="View Map"
+        tools:layout_editor_absoluteX="84dp"
+        tools:layout_editor_absoluteY="419dp" />
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="41dp"
         android:layout_height="38dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editMapParameter"
-        app:srcCompat="@drawable/baseline_location_on_black_18dp" />
+        app:srcCompat="@drawable/baseline_location_on_black_18dp"
+        tools:layout_editor_absoluteY="213dp" />
 
     <EditText
         android:id="@+id/editMapParameter"
-        android:layout_width="wrap_content"
-        android:layout_height="42dp"
-        android:layout_marginTop="64dp"
+        android:layout_width="266dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
         android:ems="10"
-        android:hint="Miles (Max)"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewPostCode" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="267dp"
+        android:layout_height="54dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:text="Select to receieve future notifications for the above trade"
+        android:textColor="@color/common_google_signin_btn_text_light_focused"
+        android:textSize="15p"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerVendorsSearch2" />
+
+    <TextView
+        android:id="@+id/textViewPostCode"
+        android:layout_width="267dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:text="Enter postode to confirm current location"
+        android:textColor="@color/common_google_signin_btn_text_light_default"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteY="215dp" />
+
 </android.support.constraint.ConstraintLayout>

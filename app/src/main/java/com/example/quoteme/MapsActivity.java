@@ -44,7 +44,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         plotLatAndLongMarkers();
     }
 
-
     //Plot markers for all lat and longs
     private void plotLatAndLongMarkers(){
         for(int i = 0; i < latitudes.size(); i++){
@@ -52,7 +51,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             .title(cities.get(i)+", "+countries.get(i)));
         }
     }
-
 
     //Gets all cities and countries from quotes table
     private void getAllData() {
