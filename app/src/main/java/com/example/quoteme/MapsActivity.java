@@ -6,6 +6,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.widget.Toast;
+
 import com.example.quoteme.QuoteData.QuoteContract;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import static com.example.quoteme.PremiumAccessActivity.LAT_KEY;
 import static com.example.quoteme.PremiumAccessActivity.LONG_KEY;
 
@@ -31,6 +34,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ArrayList<Double> longitudes = new ArrayList<>();
     private ArrayList<String> cities = new ArrayList<>();
     private ArrayList<String> countries = new ArrayList<>();
+    private ArrayList<String> vendors = new ArrayList<>();
+    private ArrayList<String> quoteTitles = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,32 +76,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }catch(IOException e){
             e.printStackTrace();
         }
+
         if(!geocodeMatches.isEmpty()){
              address1 = geocodeMatches.get(0).getAddressLine(0);
         }
 
-        // Add a marker for users current location and move the camera
-        LatLng currentLocationFromPostcode = new LatLng(latDouble, longDouble);
-        mMap.addMarker(new MarkerOptions().position(currentLocationFromPostcode).title("Your Location: " +
-                address1));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocationFromPostcode));
+        try {
+            // Add a marker for users current location and move the camera
+            LatLng currentLocationFromPostcode = new LatLng(latDouble, longDouble);
+            mMap.addMarker(new MarkerOptions().position(currentLocationFromPostcode).title("Your Location: " +
+                    address1));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocationFromPostcode));
+        } catch (Exception e){
+            Toasty.error(this,"Error setting current location", Toast.LENGTH_SHORT).show();
+        }
     }
 
     //Plot markers for all lat and longs
     private void plotLatAndLongMarkers(){
-        for(int i = 0; i < latitudes.size(); i++){
+        for(int i = 0; i < quoteTitles.size(); i++){
             mMap.addMarker(new MarkerOptions().position(new LatLng(latitudes.get(i), longitudes.get(i)))
-            .title(cities.get(i)+", "+countries.get(i)));
+            .title(cities.get(i)+", "+countries.get(i))).setSnippet("Vendor: " + vendors.get(i) + " | " +
+                    "Title: "+ quoteTitles.get(i) +  " | Status: "+ " Pending");
         }
     }
 
     //Gets all cities and countries from quotes table
     private void getAllData() {
-        String[] project = {"latitude, longitude, location_city, location_country"};
+
+        String selection = "status=?";
+        String [] selectionArgs = {"0"};
+        String[] project = {"latitude, longitude, location_city, location_country, vendor, title"};
         Cursor cursor = getContentResolver().query(QuoteContract.QuoteEntry.CONTENT_URI,
                 project,
-                null,
-                null,
+                selection,
+                selectionArgs,
                 null
         );
 
@@ -105,11 +119,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             int longitudeColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LONGITUDE);
             int cityColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_CITY);
             int countryColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_COUNTRY);
+            int vendorColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR);
+            int titleColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE);
 
             String latitudeString = cursor.getString(latitudeColumnIndex);
             String longitudeString = cursor.getString(longitudeColumnIndex);
             String cityString = cursor.getString(cityColumnIndex);
             String countryString = cursor.getString(countryColumnIndex);
+            String vendorString = cursor.getString(vendorColumnIndex);
+            String titleString = cursor.getString(titleColumnIndex);
 
             if(!latitudeString.equals(null) && !longitudeString.equals(null)) {
                 double latitude = Double.parseDouble(latitudeString);
@@ -119,6 +137,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 longitudes.add(longitude);
                 cities.add(cityString);
                 countries.add(countryString);
+                vendors.add(vendorString);
+                quoteTitles.add(titleString);
             }
         }
     }

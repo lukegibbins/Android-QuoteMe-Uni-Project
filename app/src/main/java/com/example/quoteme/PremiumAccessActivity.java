@@ -89,7 +89,7 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
                 // Use the address as needed
                 latitude = String.valueOf(address.getLatitude());
                 longitude = String.valueOf(address.getLongitude());
-                Toast.makeText(this, "Location received", Toast.LENGTH_LONG).show();
+                Toasty.info(this, "Location received", Toast.LENGTH_LONG).show();
             }
         } catch (IOException e) {
             Toast.makeText(this, "Enter a correct postcode", Toast.LENGTH_LONG).show();
