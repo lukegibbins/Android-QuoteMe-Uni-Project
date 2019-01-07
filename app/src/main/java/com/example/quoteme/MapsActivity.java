@@ -2,6 +2,8 @@ package com.example.quoteme;
 
 
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import com.example.quoteme.QuoteData.QuoteContract;
@@ -11,7 +13,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.quoteme.PremiumAccessActivity.LAT_KEY;
 import static com.example.quoteme.PremiumAccessActivity.LONG_KEY;
@@ -52,16 +57,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        String address1 = null;
         mMap = googleMap;
         plotLatAndLongMarkers();
 
         Double latDouble = Double.valueOf(latFromPostcode);
         Double longDouble = Double.valueOf(longFromPostcode);
 
+        List<Address> geocodeMatches = null;
+        try {
+            geocodeMatches = new Geocoder(this).getFromLocation(latDouble, longDouble, 1);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        if(!geocodeMatches.isEmpty()){
+             address1 = geocodeMatches.get(0).getAddressLine(0);
+        }
+
         // Add a marker for users current location and move the camera
         LatLng currentLocationFromPostcode = new LatLng(latDouble, longDouble);
         mMap.addMarker(new MarkerOptions().position(currentLocationFromPostcode).title("Your Location: " +
-                "Latitude: "+ latFromPostcode + ", Longitude: " + longFromPostcode));
+                address1));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocationFromPostcode));
     }
 
