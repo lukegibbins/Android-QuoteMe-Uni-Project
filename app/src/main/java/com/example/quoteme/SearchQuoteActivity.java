@@ -1,6 +1,7 @@
 package com.example.quoteme;
 
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,10 +25,13 @@ import android.widget.Toast;
 
 import com.example.quoteme.QuoteData.QuoteContract;
 import com.example.quoteme.QuoteData.QuoteCursorAdapter;
+import com.example.quoteme.UserData.UserContract;
 
 import es.dmoral.toasty.Toasty;
 
+import static com.example.quoteme.LoginActivity.EMAIL;
 import static com.example.quoteme.LoginActivity.FIRST_NAME;
+import static com.example.quoteme.LoginActivity.ID;
 import static com.example.quoteme.LoginActivity.PREMIUM;
 import static com.example.quoteme.LoginActivity.SHARED_PREF_FILE;
 
@@ -43,14 +47,21 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
     private Spinner vendorSpinner;
     private String quoteVendorSpinner;
     private String premiumCode;
+    private String usersEmail;
+    private String usersId;
+
+    SharedPreferences sharedPreferences;
+    private final int PREMIUM_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_quote);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREF_FILE, MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(SHARED_PREF_FILE, MODE_PRIVATE);
+        usersEmail = sharedPreferences.getString(EMAIL, "email");
         premiumCode = sharedPreferences.getString(PREMIUM, "0");
+        usersId = sharedPreferences.getString(ID, "0");
 
         FloatingActionButton fabSearch = findViewById(R.id.fabSearch);
         fabSearch.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +77,9 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
                                .setPositiveButton("Yes",
                                        new DialogInterface.OnClickListener() {
                                            public void onClick(DialogInterface dialog, int whichButton) {
-                                               // do something...
+                                               enableUserForPremium();
+                                               Intent premiumIntent = new Intent(SearchQuoteActivity.this, PremiumAccessActivity.class);
+                                               startActivity(premiumIntent);
                                            }
                                        })
                                .setNegativeButton("Cancel",
@@ -275,5 +288,29 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
         //Create instance of cursorAdapter and bind cursorAdapter data to quoteList
         quoteCursorAdapter = new QuoteCursorAdapter(this, cursor);
         quoteListView.setAdapter(quoteCursorAdapter);
+    }
+
+    private void enableUserForPremium(){
+        String selection = "email=?";
+        String [] selectionArgs = {usersEmail};
+        Uri uri = Uri.parse("content://com.example.quoteme/users/" + usersId);
+
+        ContentValues values = new ContentValues();
+        values.put(UserContract.UserEntry.COLUMN_USERS_PREMIUM, PREMIUM_CODE);
+        int rowsAffected = getContentResolver().update(uri, values, selection, selectionArgs);
+
+        //Update the current premium access for the logged in user
+        if (rowsAffected == 0) {
+            // If no rows were affected, then there was an error with the update.
+            Toasty.error(this, "Error updating premium access", Toast.LENGTH_LONG).show();
+        } else {
+            // Otherwise, the update was successful and we can display a toast.
+            Toasty.success(this, "Premium Access Updated.", Toast.LENGTH_LONG).show();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(PREMIUM, "1");
+            editor.apply();
+            editor.commit();
+            finish();
+        }
     }
 }
