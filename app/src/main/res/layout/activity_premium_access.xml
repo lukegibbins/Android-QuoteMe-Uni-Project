@@ -7,28 +7,40 @@
     tools:context=".PremiumAccessActivity"
     tools:layout_editor_absoluteY="81dp">
 
+    <CheckBox
+        android:id="@+id/checkAlertArea"
+        android:layout_width="275dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:gravity="top"
+        android:text="Select to receive future notifications for quotes in your area"
+        android:textColor="@color/common_google_signin_btn_text_light_focused"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonMaps" />
+
     <EditText
         android:id="@+id/editPostCode"
-        android:layout_width="269dp"
+        android:layout_width="275dp"
         android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="44dp"
-        android:layout_marginRight="44dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
         android:ems="10"
         android:hint="Enter Postcode"
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="41dp"
-        android:layout_height="38dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editPostCode"
         app:srcCompat="@drawable/baseline_location_on_black_18dp" />
@@ -36,10 +48,11 @@
     <CheckBox
         android:id="@+id/checkAlertTrade"
         android:layout_width="275dp"
-        android:layout_height="71dp"
-        android:layout_marginTop="68dp"
-        android:layout_marginEnd="44dp"
-        android:layout_marginRight="44dp"
+        android:layout_height="62dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:gravity="top"
         android:text="Select to receive future notifications on a given trade"
         android:textColor="@color/common_google_signin_btn_text_light_focused"
         android:textSize="18sp"
@@ -48,12 +61,14 @@
 
     <Spinner
         android:id="@+id/spinnerVendorsPrem"
-        android:layout_width="273dp"
+        android:layout_width="275dp"
         android:layout_height="43dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
         android:background="@drawable/custom_edit_text_border"
         android:entries="@array/app_vendors"
-        app:layout_constraintEnd_toEndOf="@+id/checkAlertTrade"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/checkAlertTrade" />
 
     <ImageView
@@ -62,54 +77,41 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintEnd_toStartOf="@+id/checkAlertTrade"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/checkAlertTrade"
         app:srcCompat="@drawable/baseline_build_black_18dp" />
 
     <Button
         android:id="@+id/buttonMaps"
-        android:layout_width="263dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="44dp"
-        android:layout_marginRight="44dp"
+        android:layout_width="273dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
         android:background="@drawable/custom_edit_text_bg_blue"
         android:text="View quotes on map"
         android:textColor="@color/primaryTextColor"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/editPostCode"
         app:layout_constraintTop_toBottomOf="@+id/editPostCode" />
 
     <Button
         android:id="@+id/buttonSaveSettings"
-        android:layout_width="255dp"
+        android:layout_width="273dp"
         android:layout_height="58dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginRight="60dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
         android:background="@drawable/custom_edit_text_bg_green"
         android:text="Save settings"
         android:textColor="@color/primaryTextColor"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerVendorsPrem"
-        app:layout_constraintVertical_bias="0.493" />
-
-    <CheckBox
-        android:id="@+id/checkAlertArea"
-        android:layout_width="260dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="44dp"
-        android:layout_marginRight="44dp"
-        android:text="Select to receive future notifications for this area"
-        android:textColor="@color/common_google_signin_btn_text_light_focused"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonMaps" />
+        app:layout_constraintHorizontal_bias="0.727"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerVendorsPrem" />
 
 </android.support.constraint.ConstraintLayout>
