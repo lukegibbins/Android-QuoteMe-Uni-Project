@@ -1,11 +1,13 @@
 package com.example.quoteme;
 
 import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -58,7 +60,24 @@ public class SearchQuoteActivity extends AppCompatActivity implements View.OnCli
                        Intent premiumIntent = new Intent(SearchQuoteActivity.this, PremiumAccessActivity.class);
                        startActivity(premiumIntent);
                    } else{
-                       Toasty.error(SearchQuoteActivity.this,"no premium", Toast.LENGTH_SHORT).show();
+                       AlertDialog.Builder builder = new AlertDialog.Builder(SearchQuoteActivity.this);
+                       builder.setTitle("No Premium Access")
+                               .setMessage("Do you want to enable premium access?")
+                               .setPositiveButton("Yes",
+                                       new DialogInterface.OnClickListener() {
+                                           public void onClick(DialogInterface dialog, int whichButton) {
+                                               // do something...
+                                           }
+                                       })
+                               .setNegativeButton("Cancel",
+                               new DialogInterface.OnClickListener() {
+                                   public void onClick(DialogInterface dialog, int whichButton) {
+                                       dialog.dismiss();
+                                   }
+                               }
+                       );
+                       AlertDialog ad = builder.create();
+                       ad.show();
                    }
                }
            });

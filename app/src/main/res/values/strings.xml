@@ -67,6 +67,12 @@
         <item>Cancel</item>
     </string-array>
 
+    <string-array name="app_float_yesNo">
+        <item>Yes</item>
+        <item>No</item>
+        <item>Cancel</item>
+    </string-array>
+
     <string-array name="app_image_capture">
         <item>Take picture</item>
         <item>Access gallery</item>
