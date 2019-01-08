@@ -62,7 +62,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         String address1 = null;
         mMap = googleMap;
-        plotLatAndLongMarkersForFilteredData();
 
         Double latDouble = Double.valueOf(latFromPostcode);
         Double longDouble = Double.valueOf(longFromPostcode);
@@ -87,15 +86,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (Exception e){
             Toasty.error(this,"Error setting current location", Toast.LENGTH_SHORT).show();
         }
+
+        plotLatAndLongMarkersForFilteredData();
     }
 
     //Plot markers for all lat and longs
     private void plotLatAndLongMarkersForFilteredData(){
         for(int i = 0; i < mapObjectsWithinLocation.size(); i++){
-            mMap.addMarker(new MarkerOptions().position(mapObjects.get(i).getLatLng())
-            .title(mapObjects.get(i).getCity()+", "+mapObjects.get(i).getCountry()))
-                    .setSnippet("Vendor: " + mapObjects.get(i).getVendor() + " | " +
-                    "Title: "+ mapObjects.get(i).getQuoteTitle() +  " | Status: "+ "Pending");
+            mMap.addMarker(new MarkerOptions().position(mapObjectsWithinLocation.get(i).getLatLng())
+            .title(mapObjectsWithinLocation.get(i).getCity()+", "+mapObjectsWithinLocation.get(i).getCountry()))
+                    .setSnippet("Vendor: " + mapObjectsWithinLocation.get(i).getVendor() + " | " +
+                    "Title: "+ mapObjectsWithinLocation.get(i).getQuoteTitle() +  " | Status: "+ "Pending");
         }
     }
 
