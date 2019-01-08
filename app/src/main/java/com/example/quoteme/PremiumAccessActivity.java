@@ -1,6 +1,7 @@
 package com.example.quoteme;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
@@ -13,15 +14,19 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 
+import static com.example.quoteme.LoginActivity.EMAIL;
+import static com.example.quoteme.LoginActivity.SHARED_PREF_FILE;
+
 public class PremiumAccessActivity extends AppCompatActivity implements View.OnClickListener,
         CompoundButton.OnCheckedChangeListener {
 
-    Button buttonViewMap;
+    Button buttonViewMap, buttonSaveSettings;
     CheckBox chkTrade, chkArea;
     EditText editPostCode;
     Spinner spinnerVendor;
@@ -30,6 +35,10 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
     public final static String LAT_KEY = "LAT";
     public final static String LONG_KEY = "LONG";
 
+    String usersEmail;
+    SharedPreferences sharedPreferences;
+    SharedPreferences premiumPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +46,8 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
 
         buttonViewMap = findViewById(R.id.buttonMaps);
         buttonViewMap.setOnClickListener(this);
+        buttonSaveSettings = findViewById(R.id.buttonSaveSettings);
+        buttonSaveSettings.setOnClickListener(this);
 
         spinnerVendor = findViewById(R.id.spinnerVendorsPrem);
         spinnerVendor.setEnabled(false);
@@ -48,6 +59,26 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
 
         chkArea = findViewById(R.id.checkAlertArea);
         chkArea.setOnCheckedChangeListener(this);
+
+        boolean doesUserHavePreferences = createSharedPrefIfUserDoesNotExist();
+        //if there is a file already here
+        if(doesUserHavePreferences == true){
+            premiumPreferences = getSharedPreferences(usersEmail, MODE_PRIVATE);
+            boolean notificationsEnabled = premiumPreferences.getBoolean("VENDOR_NOTIFICATIONS",false);
+             if(notificationsEnabled == true){
+                 System.out.println("***** I AM HERE");
+                 int vendor_selection = premiumPreferences.getInt("VENDOR_TYPE",0);
+                 chkTrade.setChecked(true);
+                 spinnerVendor.setSelection(vendor_selection);
+             }
+        } else{
+            premiumPreferences = getSharedPreferences(usersEmail, MODE_PRIVATE);
+            SharedPreferences.Editor editor = premiumPreferences.edit();
+            editor.putBoolean("VENDOR_NOTIFICATIONS", false);
+            editor.putInt("VENDOR_TYPE", 0);
+            editor.apply();
+            editor.commit();
+        }
     }
 
     @Override
@@ -66,6 +97,22 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
             } else{
                 Toasty.error(this, "Your postcode is required to set your location",
                         Toast.LENGTH_LONG).show();
+            }
+        }
+
+        if (v == buttonSaveSettings){
+            if(chkTrade.isChecked() == true && spinnerVendor.getSelectedItemPosition() == 0){
+                Toasty.info(this,"No selection has been made for vendor Notifications",
+                        Toast.LENGTH_LONG).show();
+            } else if (chkTrade.isChecked() && spinnerVendor.getSelectedItemPosition() > 0){
+                SharedPreferences.Editor editor = premiumPreferences.edit();
+                editor.putBoolean("VENDOR_NOTIFICATIONS", true);
+                editor.putInt("VENDOR_TYPE", spinnerVendor.getSelectedItemPosition());
+                editor.apply();
+                editor.commit();
+                Toasty.success(this,"Preferences saved successfully",
+                        Toast.LENGTH_LONG).show();
+                finish();
             }
         }
     }
@@ -94,5 +141,16 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
         } catch (IOException e) {
             Toast.makeText(this, "Enter a correct postcode", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private boolean createSharedPrefIfUserDoesNotExist(){
+        Boolean fileExists = false;
+        sharedPreferences = getSharedPreferences(SHARED_PREF_FILE, MODE_PRIVATE);
+        usersEmail = sharedPreferences.getString(EMAIL, "email");
+        File file = new File("/data/data/com.example.quoteme/shared_prefs/" + usersEmail+".xml");
+        if(file.exists()){
+            fileExists = true;
+        }
+        return fileExists;
     }
 }

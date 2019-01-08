@@ -5,6 +5,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!--THIS REPRESENTS THE NOTIFICATION ICON AS PART OF THE EXTENDED TASK-->
+    <item
+        android:id="@+id/action_notification"
+        android:icon="@drawable/baseline_notification_important_white_24"
+        android:title="@string/app_notif"
+        app:showAsAction="always">
+
+        <menu>
+            <item
+                android:id="@+id/action_vendor_notif"
+                android:icon="@drawable/baseline_notification_important_black_36"
+                android:title="Vendor Notifications"></item>
+            <item
+                android:id="@+id/action_area_notif"
+                android:icon="@drawable/baseline_notification_important_black_36"
+                android:title="Area Notifications"></item>
+        </menu>
+    </item>
 
     <!--THIS REPRESENTS THE PROFILE ICON. WHEN IT IS CLICKED A SUBMENU WILL APPEAR
        CONTAINED 2 ITEMS. SEE SUBMENU BELOW-->
