@@ -84,8 +84,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             // Add a marker for users current location and move the camera
             LatLng currentLocationFromPostcode = new LatLng(latDouble, longDouble);
-            mMap.addMarker(new MarkerOptions().position(currentLocationFromPostcode).title("Your Location: " +
-                    address1));
+            mMap.addMarker(new MarkerOptions().position(currentLocationFromPostcode).title("Your Location:"))
+                    .setSnippet(address1);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocationFromPostcode));
         } catch (Exception e){
             Toasty.error(this,"Error setting current location", Toast.LENGTH_SHORT).show();
