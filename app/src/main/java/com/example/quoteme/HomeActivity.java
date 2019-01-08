@@ -80,13 +80,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 Intent signOutIntent = new Intent(this, LoginActivity.class);
                 startActivity(signOutIntent);
             case R.id.action_vendor_notif:
-                displayAreaNotificationsIfEnabled();
+                displayVendorNotificationsIfEnabled();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-     public void displayAreaNotificationsIfEnabled(){
+     public void displayVendorNotificationsIfEnabled(){
         sharedPreferences = getSharedPreferences(SHARED_PREF_FILE, MODE_PRIVATE);
         String usersEmail = sharedPreferences.getString(EMAIL,"email");
         premiumPreferences = getSharedPreferences(usersEmail, MODE_PRIVATE);
@@ -107,7 +107,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             snackbar.show();
         } else {
             View layout = findViewById(android.R.id.content);
-            Snackbar snackbar = Snackbar.make(layout, "Notifications not currently enabled. " +
+            Snackbar snackbar = Snackbar.make(layout, "Notifications are not currently enabled. " +
                             "You can enable notifications in 'Search Work'",
                     + Snackbar.LENGTH_INDEFINITE)
                     .setAction("OK", new View.OnClickListener() {
