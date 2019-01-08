@@ -2,6 +2,7 @@ package com.example.quoteme;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +15,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.quoteme.QuoteData.QuoteContract;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
@@ -31,6 +36,7 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
     EditText editPostCode;
     Spinner spinnerVendor;
     String latitude, longitude;
+    private ArrayList<String> vendorList = new ArrayList<String>();
 
     public final static String LAT_KEY = "LAT";
     public final static String LONG_KEY = "LONG";
@@ -49,6 +55,8 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
         buttonSaveSettings = findViewById(R.id.buttonSaveSettings);
         buttonSaveSettings.setOnClickListener(this);
 
+        vendorList.addAll(Arrays.asList(getResources().getStringArray(R.array.app_vendors)));
+
         spinnerVendor = findViewById(R.id.spinnerVendorsPrem);
         spinnerVendor.setEnabled(false);
 
@@ -66,7 +74,6 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
             premiumPreferences = getSharedPreferences(usersEmail, MODE_PRIVATE);
             boolean notificationsEnabled = premiumPreferences.getBoolean("VENDOR_NOTIFICATIONS",false);
              if(notificationsEnabled == true){
-                 System.out.println("***** I AM HERE");
                  int vendor_selection = premiumPreferences.getInt("VENDOR_TYPE",0);
                  chkTrade.setChecked(true);
                  spinnerVendor.setSelection(vendor_selection);
@@ -76,6 +83,8 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
             SharedPreferences.Editor editor = premiumPreferences.edit();
             editor.putBoolean("VENDOR_NOTIFICATIONS", false);
             editor.putInt("VENDOR_TYPE", 0);
+            editor.putInt("VENDOR_COUNT", 0);
+            editor.putString("VENDOR_NAME", "null");
             editor.apply();
             editor.commit();
         }
@@ -108,13 +117,45 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
                 SharedPreferences.Editor editor = premiumPreferences.edit();
                 editor.putBoolean("VENDOR_NOTIFICATIONS", true);
                 editor.putInt("VENDOR_TYPE", spinnerVendor.getSelectedItemPosition());
+                String vendorString = vendorList.get(spinnerVendor.getSelectedItemPosition());
+                int totalVendorCountInArea = getQuoteCountByVendor(vendorString);
+                editor.putInt("VENDOR_COUNT", totalVendorCountInArea);
+                editor.putString("VENDOR_NAME", vendorString);
                 editor.apply();
                 editor.commit();
-                Toasty.success(this,"Preferences saved successfully",
+                Toasty.success(this,"Preferences saved", Toast.LENGTH_LONG).show();
+                finish();
+            } else if (!chkTrade.isChecked()){
+                SharedPreferences.Editor editor = premiumPreferences.edit();
+                editor.putBoolean("VENDOR_NOTIFICATIONS", false);
+                editor.putInt("VENDOR_TYPE", 0);
+                editor.putInt("VENDOR_COUNT", 0);
+                editor.putString("VENDOR_NAME", "null");
+                editor.apply();
+                editor.commit();
+                Toasty.success(this,"Preferences saved",
                         Toast.LENGTH_LONG).show();
                 finish();
             }
         }
+    }
+
+    private int getQuoteCountByVendor(String vendorString) {
+        String selection = "vendor=? AND status=?";
+        String [] selectionArgs = {vendorString, "0"};
+
+        String [] project = {
+                QuoteContract.QuoteEntry._ID,
+
+        };
+
+        Cursor cursor = getContentResolver().query(QuoteContract.QuoteEntry.CONTENT_URI,
+                project,
+                selection,
+                selectionArgs,
+                null
+        );
+        return cursor.getCount();
     }
 
     @Override

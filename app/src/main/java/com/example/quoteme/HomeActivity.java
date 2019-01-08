@@ -2,6 +2,7 @@ package com.example.quoteme;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import static com.example.quoteme.LoginActivity.EMAIL;
 import static com.example.quoteme.LoginActivity.FIRST_NAME;
 import static com.example.quoteme.LoginActivity.SHARED_PREF_FILE;
 import static com.example.quoteme.LoginActivity.SURNAME;
@@ -23,6 +25,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     private String firstName;
     private String surname;
+
+    SharedPreferences premiumPreferences, sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +79,44 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.action_signout:
                 Intent signOutIntent = new Intent(this, LoginActivity.class);
                 startActivity(signOutIntent);
+            case R.id.action_vendor_notif:
+                displayAreaNotificationsIfEnabled();
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+     public void displayAreaNotificationsIfEnabled(){
+        sharedPreferences = getSharedPreferences(SHARED_PREF_FILE, MODE_PRIVATE);
+        String usersEmail = sharedPreferences.getString(EMAIL,"email");
+        premiumPreferences = getSharedPreferences(usersEmail, MODE_PRIVATE);
+        boolean notificationsEnabled = premiumPreferences.getBoolean("VENDOR_NOTIFICATIONS",false);
+
+        if(notificationsEnabled == true){
+         View layout = findViewById(android.R.id.content);
+         int vendorCount = premiumPreferences.getInt("VENDOR_TYPE",0);
+         String vendorName = premiumPreferences.getString("VENDOR_NAME","null");
+         Snackbar snackbar = Snackbar.make(layout, "There are currently "+ vendorCount +
+                 " quotes for "+ vendorName+" available.", + Snackbar.LENGTH_INDEFINITE)
+                 .setAction("OK", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //dismiss
+                    }
+                });
+            snackbar.show();
+        } else {
+            View layout = findViewById(android.R.id.content);
+            Snackbar snackbar = Snackbar.make(layout, "Notifications not currently enabled. " +
+                            "You can enable notifications in 'Search Work'",
+                    + Snackbar.LENGTH_INDEFINITE)
+                    .setAction("OK", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //dismiss
+                        }
+                    });
+            snackbar.show();
         }
     }
 }
