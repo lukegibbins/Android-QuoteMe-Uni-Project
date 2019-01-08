@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
+
+import static com.example.quoteme.PremiumAccessActivity.DISTANCE_KEY;
 import static com.example.quoteme.PremiumAccessActivity.LAT_KEY;
 import static com.example.quoteme.PremiumAccessActivity.LONG_KEY;
 
@@ -30,6 +32,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private String latFromPostcode;
     private String longFromPostcode;
+    private int usersDistanceKm;
     private ArrayList<MapObject> mapObjects = new ArrayList<>();
     private ArrayList<MapObject> mapObjectsWithinLocation = new ArrayList<>();
 
@@ -46,6 +49,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //this location can also be used check distance between quotes
         latFromPostcode = getIntent().getStringExtra(LAT_KEY);
         longFromPostcode = getIntent().getStringExtra(LONG_KEY);
+        usersDistanceKm = getIntent().getIntExtra(DISTANCE_KEY, 0);
 
         //Stores all the cities and countries from the quotes table
         //then filters the data depending on the users distance parameter
@@ -114,8 +118,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //tempVar for catching distance
         Float totalDistance;
 
-        //Users set parameter distance and conversion to float
-        int userDistance = 855000;
+        //Users set parameter distance. Convert Km to M
+        int userDistance = usersDistanceKm * 1000;
 
         for(int i = 0; i < mapObjects.size(); i++){
             mapObjectInIteration.setLatitude(mapObjects.get(i).getLatLng().latitude);

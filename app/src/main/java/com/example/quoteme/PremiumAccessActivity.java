@@ -33,13 +33,14 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
 
     Button buttonViewMap, buttonSaveSettings;
     CheckBox chkTrade, chkArea;
-    EditText editPostCode;
+    EditText editPostCode, editDistance;
     Spinner spinnerVendor;
     String latitude, longitude;
     private ArrayList<String> vendorList = new ArrayList<String>();
 
     public final static String LAT_KEY = "LAT";
     public final static String LONG_KEY = "LONG";
+    public final static String DISTANCE_KEY = "DIST";
 
     String usersEmail;
     SharedPreferences sharedPreferences;
@@ -64,6 +65,7 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
         chkTrade.setOnCheckedChangeListener(this);
 
         editPostCode = findViewById(R.id.editPostCode);
+        editDistance = findViewById(R.id.editDistance);
 
         chkArea = findViewById(R.id.checkAlertArea);
         chkArea.setOnCheckedChangeListener(this);
@@ -93,7 +95,7 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         if (v == buttonViewMap) {
-            if (!editPostCode.getText().toString().equals("")) {
+            if (!editPostCode.getText().toString().equals("") || !editDistance.getText().toString().equals("")) {
                 convertPostcodeToLatLng();
                 if (latitude == null || longitude == null) {
                     Toasty.error(this, "Invalid postcode", Toast.LENGTH_SHORT).show();
@@ -101,11 +103,15 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
                     Intent mapsIntent = new Intent(this, MapsActivity.class);
                     mapsIntent.putExtra(LAT_KEY, latitude);
                     mapsIntent.putExtra(LONG_KEY, longitude);
+                    int distanceInt = Integer.valueOf(editDistance.getText().toString());
+                    mapsIntent.putExtra(DISTANCE_KEY, distanceInt);
                     startActivity(mapsIntent);
                 }
             } else{
-                Toasty.error(this, "Your postcode is required to set your location",
+                Toasty.error(this, "Input parameters are required",
                         Toast.LENGTH_LONG).show();
+                editDistance.setError("This field can not be empty");
+                editPostCode.setError("This field can not be empty");
             }
         }
 
@@ -177,7 +183,7 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
                 // Use the address as needed
                 latitude = String.valueOf(address.getLatitude());
                 longitude = String.valueOf(address.getLongitude());
-                Toasty.info(this, "Location received", Toast.LENGTH_LONG).show();
+                Toasty.info(this, "Location Received", Toast.LENGTH_LONG).show();
             }
         } catch (IOException e) {
             Toast.makeText(this, "Enter a correct postcode", Toast.LENGTH_LONG).show();
