@@ -19,7 +19,7 @@ public class MapObject {
         this.latLng = latLng;
     }
 
-    //getter to return latLng
+    //getters to get object data
     public LatLng getLatLng(){
         return this.latLng;
     }

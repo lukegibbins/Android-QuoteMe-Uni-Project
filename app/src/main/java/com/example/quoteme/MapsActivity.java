@@ -1,9 +1,9 @@
 package com.example.quoteme;
 
-
 import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -31,6 +31,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String latFromPostcode;
     private String longFromPostcode;
     private ArrayList<MapObject> mapObjects = new ArrayList<>();
+    private ArrayList<MapObject> mapObjectsWithinLocation = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +47,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         latFromPostcode = getIntent().getStringExtra(LAT_KEY);
         longFromPostcode = getIntent().getStringExtra(LONG_KEY);
 
-        //Stores all the cities and countries from the quotes table into parallel arrays
+        //Stores all the cities and countries from the quotes table
+        //then filters the data depending on the users distance parameter
         try {
             getAllData();
+            filterMapDataByUsersLocation();
         } catch(Exception e){
             //Continue with the locations that do have lat and longs
             e.printStackTrace();
@@ -57,10 +60,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         String address1 = null;
         mMap = googleMap;
-        plotLatAndLongMarkers();
+        plotLatAndLongMarkersForFilteredData();
 
         Double latDouble = Double.valueOf(latFromPostcode);
         Double longDouble = Double.valueOf(longFromPostcode);
@@ -88,8 +90,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     //Plot markers for all lat and longs
-    private void plotLatAndLongMarkers(){
-        for(int i = 0; i < mapObjects.size(); i++){
+    private void plotLatAndLongMarkersForFilteredData(){
+        for(int i = 0; i < mapObjectsWithinLocation.size(); i++){
             mMap.addMarker(new MarkerOptions().position(mapObjects.get(i).getLatLng())
             .title(mapObjects.get(i).getCity()+", "+mapObjects.get(i).getCountry()))
                     .setSnippet("Vendor: " + mapObjects.get(i).getVendor() + " | " +
@@ -97,7 +99,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    //Gets all cities and countries from quotes table
+    private void filterMapDataByUsersLocation(){
+        //Users current known location
+        Double latDouble = Double.valueOf(latFromPostcode);
+        Double longDouble = Double.valueOf(longFromPostcode);
+        Location usersCurrentLocation = new Location("Users Location");
+        usersCurrentLocation.setLatitude(latDouble);
+        usersCurrentLocation.setLongitude(longDouble);
+
+        //Current object in iteration
+        Location mapObjectInIteration = new Location("Quote Location");
+
+        //tempVar for catching distance
+        Float totalDistance;
+
+        //Users set parameter distance and conversion to float
+        int userDistance = 855000;
+
+        for(int i = 0; i < mapObjects.size(); i++){
+            mapObjectInIteration.setLatitude(mapObjects.get(i).getLatLng().latitude);
+            mapObjectInIteration.setLongitude(mapObjects.get(i).getLatLng().longitude);
+
+            //Calc distance and add values that are in range to new list
+            totalDistance = usersCurrentLocation.distanceTo(mapObjectInIteration);
+            int totalDistanceInt = Math.round(totalDistance);
+
+            if(totalDistanceInt <= userDistance){
+                mapObjectsWithinLocation.add(mapObjects.get(i));
+            }
+        }
+    }
+
+    //Gets all cities and countries from quotes table and adds them to a custom made class object list
     private void getAllData() {
         String selection = "status=?";
         String [] selectionArgs = {"0"};
