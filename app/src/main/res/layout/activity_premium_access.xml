@@ -15,7 +15,7 @@
         android:layout_marginEnd="40dp"
         android:layout_marginRight="40dp"
         android:gravity="top"
-        android:text="Select to receive future notifications for quotes in your area"
+        android:text="Select to receive future notifications on quotes for the above area or distance"
         android:textColor="@color/common_google_signin_btn_text_light_focused"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
