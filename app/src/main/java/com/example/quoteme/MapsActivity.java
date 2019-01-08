@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.example.quoteme.Models.MapObject;
 import com.example.quoteme.QuoteData.QuoteContract;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,13 +30,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private String latFromPostcode;
     private String longFromPostcode;
-
-    private ArrayList<Double> latitudes = new ArrayList<>();
-    private ArrayList<Double> longitudes = new ArrayList<>();
-    private ArrayList<String> cities = new ArrayList<>();
-    private ArrayList<String> countries = new ArrayList<>();
-    private ArrayList<String> vendors = new ArrayList<>();
-    private ArrayList<String> quoteTitles = new ArrayList<>();
+    private ArrayList<MapObject> mapObjects = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,16 +89,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //Plot markers for all lat and longs
     private void plotLatAndLongMarkers(){
-        for(int i = 0; i < quoteTitles.size(); i++){
-            mMap.addMarker(new MarkerOptions().position(new LatLng(latitudes.get(i), longitudes.get(i)))
-            .title(cities.get(i)+", "+countries.get(i))).setSnippet("Vendor: " + vendors.get(i) + " | " +
-                    "Title: "+ quoteTitles.get(i) +  " | Status: "+ " Pending");
+        for(int i = 0; i < mapObjects.size(); i++){
+            mMap.addMarker(new MarkerOptions().position(mapObjects.get(i).getLatLng())
+            .title(mapObjects.get(i).getCity()+", "+mapObjects.get(i).getCountry()))
+                    .setSnippet("Vendor: " + mapObjects.get(i).getVendor() + " | " +
+                    "Title: "+ mapObjects.get(i).getQuoteTitle() +  " | Status: "+ "Pending");
         }
     }
 
     //Gets all cities and countries from quotes table
     private void getAllData() {
-
         String selection = "status=?";
         String [] selectionArgs = {"0"};
         String[] project = {"latitude, longitude, location_city, location_country, vendor, title"};
@@ -129,17 +124,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String vendorString = cursor.getString(vendorColumnIndex);
             String titleString = cursor.getString(titleColumnIndex);
 
-            if(!latitudeString.equals(null) && !longitudeString.equals(null)) {
-                double latitude = Double.parseDouble(latitudeString);
-                double longitude = Double.parseDouble(longitudeString);
-
-                latitudes.add(latitude);
-                longitudes.add(longitude);
-                cities.add(cityString);
-                countries.add(countryString);
-                vendors.add(vendorString);
-                quoteTitles.add(titleString);
-            }
+           try {
+               double latitude = Double.parseDouble(latitudeString);
+               double longitude = Double.parseDouble(longitudeString);
+               MapObject mapObject = new MapObject(new LatLng(latitude, longitude), cityString, countryString,
+               titleString, vendorString);
+               mapObjects.add(mapObject);
+           } catch (Exception e){
+               e.printStackTrace();
+           }
         }
     }
 }
