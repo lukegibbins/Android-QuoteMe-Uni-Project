@@ -90,7 +90,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         sharedPreferences = getSharedPreferences(SHARED_PREF_FILE, MODE_PRIVATE);
         String usersEmail = sharedPreferences.getString(EMAIL,"email");
         premiumPreferences = getSharedPreferences(usersEmail, MODE_PRIVATE);
-        boolean notificationsEnabled = premiumPreferences.getBoolean("VENDOR_NOTIFICATIONS",false);
+        boolean notificationsEnabled = premiumPreferences.getBoolean("NOTIFICATIONS",false);
 
         if(notificationsEnabled == true){
          View layout = findViewById(android.R.id.content);
