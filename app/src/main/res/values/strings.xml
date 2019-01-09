@@ -35,18 +35,18 @@
 
     <string-array name="app_vendors">
         <item>Select a vendor</item>
-        <item>Building</item>
-        <item>Gardening</item>
-        <item>Pluming</item>
+        <item>Builder</item>
+        <item>Gardener</item>
+        <item>Plumber</item>
         <item>Electrician</item>
         <item>Other</item>
     </string-array>
 
     <string-array name="app_searchVendors">
         <item>Filter by vendor</item>
-        <item>Building</item>
-        <item>Gardening</item>
-        <item>Pluming</item>
+        <item>Builder</item>
+        <item>Gardener</item>
+        <item>Plumber</item>
         <item>Electrician</item>
         <item>Other</item>
     </string-array>

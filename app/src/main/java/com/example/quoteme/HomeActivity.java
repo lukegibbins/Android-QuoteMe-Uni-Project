@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import static com.example.quoteme.LoginActivity.EMAIL;
 import static com.example.quoteme.LoginActivity.FIRST_NAME;
@@ -27,6 +28,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private String surname;
 
     SharedPreferences premiumPreferences, sharedPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
             case R.id.action_manageQuotes:
                 Intent manageQuotesIntent = new Intent(this, ManageQuoteActivity.class);
@@ -79,7 +81,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.action_signout:
                 Intent signOutIntent = new Intent(this, LoginActivity.class);
                 startActivity(signOutIntent);
-            case R.id.action_vendor_notif:
+            case R.id.action_notification:
                 displayVendorNotificationsIfEnabled();
             default:
                 return super.onOptionsItemSelected(item);
@@ -96,8 +98,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
          View layout = findViewById(android.R.id.content);
          int vendorCount = premiumPreferences.getInt("VENDOR_TYPE",0);
          String vendorName = premiumPreferences.getString("VENDOR_NAME","null");
-         Snackbar snackbar = Snackbar.make(layout, "There are currently "+ vendorCount +
-                 " quotes for "+ vendorName+" available.", + Snackbar.LENGTH_INDEFINITE)
+         int quoteAreaCount = premiumPreferences.getInt("QUOTE_AREA_COUNT",0);
+         String postcode = premiumPreferences.getString("POSTCODE","your postcode");
+         int distanceKm = premiumPreferences.getInt("DIST",0);
+
+         Snackbar snackbar = Snackbar.make(layout, "There are "+ vendorCount +
+                 " quotes available for an "+ vendorName+", and " + quoteAreaCount + " quotes in total within "+ distanceKm
+                         +"Km of "+postcode+".", + Snackbar.LENGTH_INDEFINITE)
                  .setAction("OK", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

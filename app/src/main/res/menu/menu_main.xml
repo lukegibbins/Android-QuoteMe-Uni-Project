@@ -11,17 +11,6 @@
         android:icon="@drawable/baseline_notification_important_white_24"
         android:title="@string/app_notif"
         app:showAsAction="always">
-
-        <menu>
-            <item
-                android:id="@+id/action_vendor_notif"
-                android:icon="@drawable/baseline_notification_important_black_36"
-                android:title="Vendor Notifications"></item>
-            <item
-                android:id="@+id/action_area_notif"
-                android:icon="@drawable/baseline_notification_important_black_36"
-                android:title="Area Notifications"></item>
-        </menu>
     </item>
 
     <!--THIS REPRESENTS THE PROFILE ICON. WHEN IT IS CLICKED A SUBMENU WILL APPEAR
