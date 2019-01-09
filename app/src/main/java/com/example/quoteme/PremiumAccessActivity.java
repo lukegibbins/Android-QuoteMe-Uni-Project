@@ -73,20 +73,38 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
         boolean doesUserHavePreferences = createSharedPrefIfUserDoesNotExist();
         //if there is a file already here
         if(doesUserHavePreferences == true){
+            //find out of notifications are enabled
             premiumPreferences = getSharedPreferences(usersEmail, MODE_PRIVATE);
-            boolean notificationsEnabled = premiumPreferences.getBoolean("VENDOR_NOTIFICATIONS",false);
-             if(notificationsEnabled == true){
-                 int vendor_selection = premiumPreferences.getInt("VENDOR_TYPE",0);
-                 chkTrade.setChecked(true);
-                 spinnerVendor.setSelection(vendor_selection);
-             }
+            boolean vendorNotificationsEnabled = premiumPreferences.getBoolean("VENDOR_NOTIFICATIONS",false);
+            boolean areaNotificationsEnabled = premiumPreferences.getBoolean("AREA_NOTIFICATIONS",false);
+
+            //get notification data for vendor
+            if(vendorNotificationsEnabled == true){
+                int vendor_selection = premiumPreferences.getInt("VENDOR_TYPE",0);
+                chkTrade.setChecked(true);
+                spinnerVendor.setSelection(vendor_selection);
+            }
+
+            //get notification data for area
+            if(areaNotificationsEnabled == true){
+                int distanceKm = premiumPreferences.getInt("DIST",0);
+                String postcode = premiumPreferences.getString("POSTCODE","Enter Postcode");
+                editPostCode.setText(postcode);
+                editDistance.setText(distanceKm);
+                chkArea.setChecked(true);
+            }
         } else{
+            //set defaults
             premiumPreferences = getSharedPreferences(usersEmail, MODE_PRIVATE);
             SharedPreferences.Editor editor = premiumPreferences.edit();
             editor.putBoolean("VENDOR_NOTIFICATIONS", false);
             editor.putInt("VENDOR_TYPE", 0);
             editor.putInt("VENDOR_COUNT", 0);
             editor.putString("VENDOR_NAME", "null");
+
+            editor.putBoolean("AREA_NOTIFICATIONS", false);
+            editor.putInt("DIST", 0);
+            editor.putString("POSTCODE", "no postcode set");
             editor.apply();
             editor.commit();
         }
@@ -95,23 +113,21 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onClick(View v) {
         if (v == buttonViewMap) {
-            if (!editPostCode.getText().toString().equals("") || !editDistance.getText().toString().equals("")) {
-                convertPostcodeToLatLng();
-                if (latitude == null || longitude == null) {
-                    Toasty.error(this, "Invalid postcode", Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent mapsIntent = new Intent(this, MapsActivity.class);
-                    mapsIntent.putExtra(LAT_KEY, latitude);
-                    mapsIntent.putExtra(LONG_KEY, longitude);
-                    int distanceInt = Integer.valueOf(editDistance.getText().toString());
-                    mapsIntent.putExtra(DISTANCE_KEY, distanceInt);
-                    startActivity(mapsIntent);
-                }
-            } else{
-                Toasty.error(this, "Input parameters are required",
-                        Toast.LENGTH_LONG).show();
-                editDistance.setError("This field can not be empty");
-                editPostCode.setError("This field can not be empty");
+            if (editPostCode.getText().toString().equals("") || editDistance.getText().toString().equals("")) {
+                editDistance.setError("Input data required");
+                editPostCode.setError("Input data required");
+            } else {
+                    convertPostcodeToLatLng();
+                    if (latitude != null || longitude != null) {
+                        Intent mapsIntent = new Intent(this, MapsActivity.class);
+                        mapsIntent.putExtra(LAT_KEY, latitude);
+                        mapsIntent.putExtra(LONG_KEY, longitude);
+                        int distanceInt = Integer.valueOf(editDistance.getText().toString());
+                        mapsIntent.putExtra(DISTANCE_KEY, distanceInt);
+                        startActivity(mapsIntent);
+                    } else {
+                        editPostCode.setError("Invalid postcode");
+                    }
             }
         }
 
@@ -183,10 +199,9 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
                 // Use the address as needed
                 latitude = String.valueOf(address.getLatitude());
                 longitude = String.valueOf(address.getLongitude());
-                Toasty.info(this, "Location Received", Toast.LENGTH_LONG).show();
             }
         } catch (IOException e) {
-            Toast.makeText(this, "Enter a correct postcode", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
     }
 
