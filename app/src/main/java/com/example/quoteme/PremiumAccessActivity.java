@@ -168,6 +168,7 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
                             editor.putInt("DIST", dist);
                             editor.apply();
                             editor.commit();
+                            Toasty.info(this,"Setting updated", Toast.LENGTH_LONG).show();
                             finish();
                         } catch (Exception e){
                             editDistance.setError("Invalid distance");
@@ -192,6 +193,7 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
                 editor.putInt("DIST", -1);
                 editor.apply();
                 editor.commit();
+                Toasty.info(this,"Setting updated", Toast.LENGTH_LONG).show();
                 finish();
             }
         }
