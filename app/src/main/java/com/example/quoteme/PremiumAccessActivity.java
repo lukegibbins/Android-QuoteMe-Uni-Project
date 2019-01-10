@@ -41,9 +41,6 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
     String latitude, longitude;
 
     private ArrayList<String> vendorList = new ArrayList<String>();
-    private ArrayList<MapObject> mapObjects = new ArrayList<>();
-    private ArrayList<MapObject> mapObjectsWithinLocation = new ArrayList<>();
-
 
     public final static String LAT_KEY = "LAT";
     public final static String LONG_KEY = "LONG";
@@ -106,11 +103,9 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
             SharedPreferences.Editor editor = premiumPreferences.edit();
             editor.putBoolean("NOTIFICATIONS", false);
             editor.putInt("VENDOR_TYPE", 0);
-            editor.putInt("VENDOR_COUNT", 0);
             editor.putString("VENDOR_NAME", "null");
             editor.putInt("DIST", -1);
             editor.putString("POSTCODE", "null");
-            editor.putInt("QUOTE_AREA_COUNT", 0);
             editor.apply();
             editor.commit();
         }
@@ -154,17 +149,11 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
                         editor.putBoolean("NOTIFICATIONS", true);
                         editor.putInt("VENDOR_TYPE", spinnerVendor.getSelectedItemPosition());
                         String vendorString = vendorList.get(spinnerVendor.getSelectedItemPosition());
-                        int totalVendorCountInArea = getQuoteCountByVendor(vendorString);
-                        editor.putInt("VENDOR_COUNT", totalVendorCountInArea);
                         editor.putString("VENDOR_NAME", vendorString);
                         editor.putString("POSTCODE", editPostCode.getText().toString());
                         String distString = editDistance.getText().toString();
                         try {
-                            getAllData();
                             int dist = Integer.valueOf(distString);
-                            filterMapDataByUsersLocation(dist, latitude, longitude);
-                            int quoteAreaCount = mapObjectsWithinLocation.size();
-                            editor.putInt("QUOTE_AREA_COUNT", quoteAreaCount);
                             editor.putInt("DIST", dist);
                             editor.apply();
                             editor.commit();
@@ -186,8 +175,6 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
                 SharedPreferences.Editor editor = premiumPreferences.edit();
                 editor.putBoolean("NOTIFICATIONS", false);
                 editor.putInt("VENDOR_TYPE", 0);
-                editor.putInt("VENDOR_COUNT", 0);
-                editor.putInt("QUOTE_AREA_COUNT", 0);
                 editor.putString("VENDOR_NAME", "null");
                 editor.putString("POSTCODE", "null");
                 editor.putInt("DIST", -1);
@@ -199,23 +186,6 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    private int getQuoteCountByVendor(String vendorString) {
-        String selection = "vendor=? AND status=?";
-        String [] selectionArgs = {vendorString, "0"};
-
-        String [] project = {
-                QuoteContract.QuoteEntry._ID,
-
-        };
-
-        Cursor cursor = getContentResolver().query(QuoteContract.QuoteEntry.CONTENT_URI,
-                project,
-                selection,
-                selectionArgs,
-                null
-        );
-        return cursor.getCount();
-    }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -252,75 +222,4 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
         }
         return fileExists;
     }
-
-
-    private void getAllData() {
-        String selection = "status=?";
-        String [] selectionArgs = {"0"};
-        String[] project = {"latitude, longitude, location_city, location_country, vendor, title"};
-        Cursor cursor = getContentResolver().query(QuoteContract.QuoteEntry.CONTENT_URI,
-                project,
-                selection,
-                selectionArgs,
-                null
-        );
-
-        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-            int latitudeColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LATITUDE);
-            int longitudeColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LONGITUDE);
-            int cityColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_CITY);
-            int countryColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_COUNTRY);
-            int vendorColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_VENDOR);
-            int titleColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE);
-
-            String latitudeString = cursor.getString(latitudeColumnIndex);
-            String longitudeString = cursor.getString(longitudeColumnIndex);
-            String cityString = cursor.getString(cityColumnIndex);
-            String countryString = cursor.getString(countryColumnIndex);
-            String vendorString = cursor.getString(vendorColumnIndex);
-            String titleString = cursor.getString(titleColumnIndex);
-
-            try {
-                double latitude = Double.parseDouble(latitudeString);
-                double longitude = Double.parseDouble(longitudeString);
-                MapObject mapObject = new MapObject(new LatLng(latitude, longitude), cityString, countryString,
-                        titleString, vendorString);
-                mapObjects.add(mapObject);
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void filterMapDataByUsersLocation(int usersDistanceKm, String latFromPostcode, String longFromPostcode){
-        //Users current known location
-        Double latDouble = Double.valueOf(latFromPostcode);
-        Double longDouble = Double.valueOf(longFromPostcode);
-        Location usersCurrentLocation = new Location("Users Location");
-        usersCurrentLocation.setLatitude(latDouble);
-        usersCurrentLocation.setLongitude(longDouble);
-
-        //Current object in iteration
-        Location mapObjectInIteration = new Location("Quote Location");
-
-        //tempVar for catching distance
-        Float totalDistance;
-
-        //Users set parameter distance. Convert Km to M
-        int userDistance = usersDistanceKm * 1000;
-
-        for(int i = 0; i < mapObjects.size(); i++){
-            mapObjectInIteration.setLatitude(mapObjects.get(i).getLatLng().latitude);
-            mapObjectInIteration.setLongitude(mapObjects.get(i).getLatLng().longitude);
-
-            //Calc distance and add values that are in range to new list
-            totalDistance = usersCurrentLocation.distanceTo(mapObjectInIteration);
-            int totalDistanceInt = Math.round(totalDistance);
-
-            if(totalDistanceInt <= userDistance){
-                mapObjectsWithinLocation.add(mapObjects.get(i));
-            }
-        }
-    }
-
 }
