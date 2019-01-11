@@ -38,8 +38,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private String firstName;
     private String surname;
 
+    //Defines vars for lat and long
     String latitude, longitude;
 
+    //Defines vars to reference shared preferences and to store queried quote data
     SharedPreferences premiumPreferences, sharedPreferences;
     private ArrayList<MapObject> mapObjects = new ArrayList<>();
     private ArrayList<MapObject> mapObjectsWithinLocation = new ArrayList<>();
@@ -50,6 +52,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        //Changes bg colour to white
         View view = this.getWindow().getDecorView();
         view.setBackgroundColor(getResources().getColor(R.color.primaryTextColor));
 
@@ -59,6 +62,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         searchWork = findViewById(R.id.buttonSearchWork);
         searchWork.setOnClickListener(this);
 
+        //Opens the shared preferences file and extract the user's first and last name
         SharedPreferences sharedPreferences  = getSharedPreferences(SHARED_PREF_FILE, MODE_PRIVATE);
         firstName = sharedPreferences.getString(FIRST_NAME, "first name");
         surname = sharedPreferences.getString(SURNAME, "surname");
@@ -89,20 +93,25 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch(item.getItemId()){
+            //Go to manage quotes
             case R.id.action_manageQuotes:
                 Intent manageQuotesIntent = new Intent(this, ManageQuoteActivity.class);
                 startActivity(manageQuotesIntent);
                 return true;
             case R.id.action_signout:
+                //Sign out
                 Intent signOutIntent = new Intent(this, LoginActivity.class);
                 startActivity(signOutIntent);
             case R.id.action_notification:
+                //Open notifications
                 displayVendorNotificationsIfEnabled();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    //Method to convert a string postcode into an address
+    //Lat and long are then extracted out of the address
     private void convertPostcodeToLatLng(String zipCode){
         final Geocoder geocoder = new Geocoder(this);
         final String zip = zipCode;
@@ -119,12 +128,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    //Displays notifications to the user if they are enabled
      public void displayVendorNotificationsIfEnabled(){
+        //Accesses shared preferences files
         sharedPreferences = getSharedPreferences(SHARED_PREF_FILE, MODE_PRIVATE);
         String usersEmail = sharedPreferences.getString(EMAIL,"email");
         premiumPreferences = getSharedPreferences(usersEmail, MODE_PRIVATE);
+
+        //Find out if users notifications are enabled
         boolean notificationsEnabled = premiumPreferences.getBoolean("NOTIFICATIONS",false);
 
+        //If enabled, get out the postcode, distanceKm and vendor name
         if(notificationsEnabled == true){
          View layout = findViewById(android.R.id.content);
          String vendorName = premiumPreferences.getString("VENDOR_NAME","null");
@@ -132,10 +146,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
          int distanceKm = premiumPreferences.getInt("DIST",0);
          int vendorCount = getQuoteCountByVendor(vendorName);
 
+         //Get all data from the quotes table, filter it then store it in a array list: MapObject
          getAllData();
          convertPostcodeToLatLng(postcode);
          filterMapDataByUsersLocation(distanceKm,latitude, longitude);
 
+         //Display the results on the snackbar if the notifications are enabled
          Snackbar snackbar = Snackbar.make(layout, "There is "+ vendorCount +
                  " quote(s) available for an "+ vendorName+", and " + mapObjectsWithinLocation.size() + " quotes in total within "+ distanceKm
                          +"Km of "+postcode+".", + Snackbar.LENGTH_INDEFINITE)
@@ -148,7 +164,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             snackbar.show();
         }
 
-
+        //Notifications are not enabled in the users shared preferences file
         else {
             View layout = findViewById(android.R.id.content);
             Snackbar snackbar = Snackbar.make(layout, "Notifications are not currently enabled. " +
@@ -164,8 +180,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
+    //Method to extract quote data
     private void getAllData() {
+
+        //Queries all quote data where the status == 0
         String selection = "status=?";
         String [] selectionArgs = {"0"};
         String[] project = {"latitude, longitude, location_city, location_country, vendor, title"};
@@ -176,6 +194,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 null
         );
 
+        //For each row in the quotes table until the last, do the following...
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             int latitudeColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LATITUDE);
             int longitudeColumnIndex = cursor.getColumnIndex(QuoteContract.QuoteEntry.COLUMN_QUOTE_LONGITUDE);
@@ -196,6 +215,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 double longitude = Double.parseDouble(longitudeString);
                 MapObject mapObject = new MapObject(new LatLng(latitude, longitude), cityString, countryString,
                         titleString, vendorString);
+
+                //Stores all quote data in this arrayList. Adds an MapObject to the list of each iteration
                 mapObjects.add(mapObject);
             } catch (Exception e){
                 e.printStackTrace();
@@ -203,7 +224,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
+    //Users to filter MapObjects where the items meet the users parameters
+    //e.g get locations with 200km on my postcode
     private void filterMapDataByUsersLocation(int usersDistanceKm, String latFromPostcode, String longFromPostcode){
         //Users current known location
         Double latDouble = Double.valueOf(latFromPostcode);
@@ -235,6 +257,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    //Gets the count of the number of vendors for plumbing/electrician or users choice
     private int getQuoteCountByVendor(String vendorString) {
         String selection = "vendor=? AND status=?";
         String [] selectionArgs = {vendorString, "0"};

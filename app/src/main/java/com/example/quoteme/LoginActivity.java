@@ -67,10 +67,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+
+    //Method to try and log user in
     private void logUserIn(){
 
+        //This boolean finds out if the user and password that the user has entered are correct
         Boolean isAuthenticated = isAuthenticated(loginUsername.getText().toString().trim());
 
+        //If the credentials are correct, pass through user data to a shared preferences file to use
+        //In the program
         if(isAuthenticated == true) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(USERNAME, loginUsername.getText().toString().trim());
@@ -89,6 +94,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+
+    //Decides whether the users credentials are correct by querying the database
+    //Using the parameters provided at login.
     private Boolean isAuthenticated(String emailAddress){
         Boolean isAuthenticated = false;
 
@@ -128,6 +136,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             usersPremiumAccessCode = premiumCodeString;
             users_Id = userIdString;
 
+            //Do the passwords match? if so, authenticated == true
             if(emailString.equals(loginUsername.getText().toString().trim()) &&
                     passwordString.equals(loginPassword.getText().toString().trim())){
                 isAuthenticated = true;

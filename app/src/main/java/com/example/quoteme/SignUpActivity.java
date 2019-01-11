@@ -66,6 +66,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         String userPasswordString = userPassword.getText().toString().trim();
         String userPasswordConfirmString = userConfirmPassword.getText().toString().trim();
 
+        //Checks for validation
         boolean valueChecker;
         if (userFirstNameString.isEmpty() ||
                 userSurnameString.isEmpty() ||
