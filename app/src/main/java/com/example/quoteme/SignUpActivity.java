@@ -78,11 +78,11 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         if (valueChecker == false) {
-            userSurname.setError("Required field");
-            userEmail.setError("Required field");
-            userPassword.setError("Required field");
-            userConfirmPassword.setError("Required field");
-            userFirstName.setError("Required field");
+            userSurname.setError("This is a required field");
+            userEmail.setError("This is a required field");
+            userPassword.setError("This is a required field");
+            userConfirmPassword.setError("This is a required field");
+            userFirstName.setError("This is a required field");
         }
 
         ContentValues values = new ContentValues();
