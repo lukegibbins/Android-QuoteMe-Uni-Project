@@ -9,6 +9,7 @@ import static com.example.quoteme.CommonUtils.DBhelper.CONTENT_AUTHORITY;
 
 public class UserContract {
 
+    //Define part of the URI for users
     public static final String PATH_USERS = "users";
 
     //Constructor

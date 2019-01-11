@@ -49,6 +49,7 @@ public class QuoteCursorAdapter extends CursorAdapter {
         titleTextView.setText(quoteTitle);
         vendorTextView.setText(quoteVendor);
 
+        //if the pending status is 1, set the title to accepted. Else set the title to pending
         if(quoteStatus.equals("1")){
             statusTextView.setText("accepted");
             statusTextView.setTextColor(Color.parseColor("#388E3C"));

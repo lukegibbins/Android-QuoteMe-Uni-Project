@@ -2,7 +2,7 @@ package com.example.quoteme.Models;
 
 import com.google.android.gms.maps.model.LatLng;
 
-    //personal map object to hold data to plot on maps
+//Class object created to hold the data required to plot markers on maps
 public class MapObject {
     LatLng latLng;
     String city;
@@ -19,10 +19,8 @@ public class MapObject {
         this.latLng = latLng;
     }
 
-    //getters to get object data
-    public LatLng getLatLng(){
-        return this.latLng;
-    }
+    //getters to get object data. This methods can be called on a instance of a MapObject to get required data
+    public LatLng getLatLng(){ return this.latLng; }
 
     public String getCity(){
         return this.city;

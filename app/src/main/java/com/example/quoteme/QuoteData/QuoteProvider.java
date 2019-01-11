@@ -16,6 +16,7 @@ import static com.example.quoteme.UserData.UserContract.UserEntry.TABLE_NAME_USE
 
 public class QuoteProvider extends ContentProvider {
 
+    //Integer values to define URI's
     private static final int ALL_QUOTES = 100;
     private static final int SINGLE_QUOTE_ID = 101;
     private static final int ALL_USERS = 200;
@@ -24,6 +25,7 @@ public class QuoteProvider extends ContentProvider {
     private QuoteDbHelper quoteDbHelper;
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
+    //Define URI paths
     static {
         sUriMatcher.addURI(CONTENT_AUTHORITY, QuoteContract.PATH_QUOTES, ALL_QUOTES);
         sUriMatcher.addURI(CONTENT_AUTHORITY,QuoteContract.PATH_QUOTES + "/#", SINGLE_QUOTE_ID);
@@ -52,7 +54,7 @@ public class QuoteProvider extends ContentProvider {
         // Figure out if the URI matcher can match the URI to a specific code
         int match = sUriMatcher.match(uri);
         switch (match) {
-            //Cursor could contain multiple rows of data
+            //Cursor could contain multiple rows of data for all quotes
             case ALL_QUOTES:
                 cursor = database.query(QuoteContract.QuoteEntry.TABLE_NAME_QUOTE,
                         projection,
@@ -78,6 +80,7 @@ public class QuoteProvider extends ContentProvider {
                 );
                 break;
 
+            //Cursor could contain multiple rows of data for all users
             case ALL_USERS:
                 cursor = database.query(TABLE_NAME_USERS,
                         projection,
@@ -89,6 +92,7 @@ public class QuoteProvider extends ContentProvider {
                 );
                 break;
 
+            //Cursor contain 1 specific row using an ID. E.g "content://com.example.android.quotes/quotes/3",
             case SINGLE_USER_ID:
                 selection = UserContract.UserEntry._ID + "=?";
                 selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
@@ -132,6 +136,7 @@ public class QuoteProvider extends ContentProvider {
         }
     }
 
+    //Overrides content provider to invoke the insertQuote method to insert a row into the database
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
@@ -146,6 +151,7 @@ public class QuoteProvider extends ContentProvider {
         }
     }
 
+    //Inserts a row into the database for a quote
     private Uri insertQuote(Uri uri, ContentValues values){
         SQLiteDatabase database = quoteDbHelper.getWritableDatabase();
         long id = database.insert(TABLE_NAME_QUOTE, null, values);
@@ -155,6 +161,7 @@ public class QuoteProvider extends ContentProvider {
         return ContentUris.withAppendedId(uri, id);
     }
 
+    //Inserts a row into the database for a user
     private Uri insertUser(Uri uri, ContentValues values){
         SQLiteDatabase database = quoteDbHelper.getWritableDatabase();
         long id = database.insert(TABLE_NAME_USERS, null, values);
@@ -209,6 +216,7 @@ public class QuoteProvider extends ContentProvider {
         return rowsDeleted;
     }
 
+    //Overrides the update method in the content provider class to update either the quotes and users table
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection,
                       @Nullable String[] selectionArgs) {

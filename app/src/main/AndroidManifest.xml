@@ -12,10 +12,13 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Enable hardware access on camera -->
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
 
+    <!-- An icon has been added to represent the icon which is displayed on an android device
+         when launching the app from start -->
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon_launcher"
@@ -35,7 +38,6 @@
         <activity
             android:name=".SignUpActivity"
             android:label="@string/app_signup">
-
             <!-- ***DEFINES PARENT ACTIVITY TO ALL YOU GO GO BACK TO WHERE YOU LAST CAME*** -->
             <!-- ***ANDROID:LABEL DEFINES THE NAME AT THE TOP OF THE APP BAR*** -->
             <!-- ***SAME APPLIES TO ALL** -->

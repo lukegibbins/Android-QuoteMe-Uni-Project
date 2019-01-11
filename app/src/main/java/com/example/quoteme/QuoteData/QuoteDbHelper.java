@@ -14,6 +14,7 @@ import static com.example.quoteme.UserData.UserContract.UserEntry.TABLE_NAME_USE
 
 public class QuoteDbHelper extends SQLiteOpenHelper {
 
+    //Constructor
     public QuoteDbHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         SQLiteDatabase db = this.getWritableDatabase(); //Need this here
@@ -21,7 +22,7 @@ public class QuoteDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Create a String that contains the SQL statement to create the pets table
+        // Create a String that contains the SQL statement to create the QUOTE table
         String SQL_CREATE_QUOTE_TABLE = "CREATE TABLE " + TABLE_NAME_QUOTE + "("
                 + QuoteContract.QuoteEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_TITLE + " TEXT NOT NULL, "
@@ -36,6 +37,7 @@ public class QuoteDbHelper extends SQLiteOpenHelper {
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_CITY + " TEXT NOT NULL, "
                 + QuoteContract.QuoteEntry.COLUMN_QUOTE_LOCATION_COUNTRY + " TEXT NOT NULL);";
 
+        // Create a String that contains the SQL statement to create the USERS table
         String SQL_CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_NAME_USERS + "("
                 + UserContract.UserEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + UserContract.UserEntry.COLUMN_USERS_FIRSTNAME + " TEXT NOT NULL, "
@@ -51,6 +53,7 @@ public class QuoteDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        //Drop the table if the table structure is modified
         db.execSQL("drop table if exists "+ TABLE_NAME_QUOTE);
         db.execSQL("drop table if exists "+ TABLE_NAME_USERS);
         onCreate(db);

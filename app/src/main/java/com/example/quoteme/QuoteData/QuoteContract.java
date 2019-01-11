@@ -9,6 +9,7 @@ import static com.example.quoteme.CommonUtils.DBhelper.CONTENT_AUTHORITY;
 
 public class QuoteContract  {
 
+    //Defines part of the URI for quote requests
     public static final String PATH_QUOTES = "quotes";
 
     //Constructor
