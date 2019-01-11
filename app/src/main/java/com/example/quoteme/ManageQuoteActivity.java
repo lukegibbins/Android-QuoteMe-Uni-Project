@@ -115,7 +115,9 @@ public class ManageQuoteActivity extends AppCompatActivity implements LoaderMana
     }
 
     private void deleteAllQuotes(){
-        int deletedCount = getContentResolver().delete(QuoteContract.QuoteEntry.CONTENT_URI,null,null);
+        String selection = "user=?";
+        String [] selectionArgs = {usersEmail};
+        int deletedCount = getContentResolver().delete(QuoteContract.QuoteEntry.CONTENT_URI,selection,selectionArgs);
         Toasty.info(this, deletedCount + " "+getString(R.string.app_deleteQuotesInfo), Toast.LENGTH_LONG).show();
     }
 
