@@ -6,8 +6,11 @@ import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -32,7 +35,7 @@ import static com.example.quoteme.LoginActivity.EMAIL;
 import static com.example.quoteme.LoginActivity.SHARED_PREF_FILE;
 
 public class PremiumAccessActivity extends AppCompatActivity implements View.OnClickListener,
-        CompoundButton.OnCheckedChangeListener {
+        CompoundButton.OnCheckedChangeListener,  GestureDetector.OnGestureListener {
 
     Button buttonViewMap, buttonSaveSettings;
     CheckBox chkTradeArea;
@@ -41,6 +44,7 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
     String latitude, longitude;
 
     private ArrayList<String> vendorList = new ArrayList<String>();
+    private GestureDetectorCompat gestureDetector;
 
     public final static String LAT_KEY = "LAT";
     public final static String LONG_KEY = "LONG";
@@ -49,6 +53,7 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
     String usersEmail;
     SharedPreferences sharedPreferences;
     SharedPreferences premiumPreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,8 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
 
         editPostCode = findViewById(R.id.editPostCode);
         editDistance = findViewById(R.id.editDistance);
+
+        gestureDetector = new GestureDetectorCompat(this,this);
 
         //Checks to see if a user has a shared preferences file
         boolean doesUserHavePreferences = createSharedPrefIfUserDoesNotExist();
@@ -221,5 +228,46 @@ public class PremiumAccessActivity extends AppCompatActivity implements View.OnC
             fileExists = true;
         }
         return fileExists;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        this.gestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        if (e2.getX() - e1.getX() > 50) {
+            Intent i = new Intent(this, SearchQuoteActivity.class);
+            startActivity(i);
+            return true;
+        } else
+            return false;
     }
 }
